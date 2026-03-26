@@ -119,14 +119,14 @@ async function loadISPPrices() {
 // ── Cell Plans — chargé dynamiquement depuis le scraper GitHub ──────────────
 // Valeurs par défaut (forfaits ~15 Go comparables, Québec)
 let CELL_PLANS = [
-    { provider:'Telus',         data_gb:15, price:95, network:'Telus',     plan_name:'15 Go', url:'https://www.telus.com/en/mobility/plans',    scraped_ok:false },
-    { provider:'Fido',          data_gb:20, price:65, network:'Rogers',    plan_name:'20 Go', url:'https://www.fido.ca/en/phones/plans',         scraped_ok:false },
-    { provider:'Koodo',         data_gb:15, price:60, network:'Telus',     plan_name:'15 Go', url:'https://www.koodomobile.com/en/plans',        scraped_ok:false },
-    { provider:'Vidéotron',     data_gb:15, price:58, network:'Vidéotron', plan_name:'15 Go', url:'https://www.videotron.com/en/mobility/plans', scraped_ok:false },
-    { provider:'Public Mobile', data_gb:15, price:55, network:'Telus',     plan_name:'15 Go', url:'https://www.publicmobile.ca/en/on/plans',     scraped_ok:false },
-    { provider:'Fizz',          data_gb:15, price:50, network:'Vidéotron', plan_name:'15 Go', url:'https://fizz.ca/en/cell-plans',               scraped_ok:false },
-    { provider:'Lucky Mobile',  data_gb:15, price:45, network:'Bell',      plan_name:'15 Go', url:'https://www.luckymobile.ca/plans',            scraped_ok:false },
-    { provider:'Chatr',         data_gb:10, price:40, network:'Rogers',    plan_name:'10 Go', url:'https://www.chatrwireless.com/plans',         scraped_ok:false },
+    { provider:'Telus',         data_gb:15, price:95, network:'Telus',     plan_name:'15 Go', url:'https://www.telus.com/en/mobility/plans',                                    scraped_ok:false },
+    { provider:'Fido',          data_gb:15, price:65, network:'Rogers',    plan_name:'15 Go', url:'https://www.fido.ca/fr/forfaits',                                             scraped_ok:false },
+    { provider:'Koodo',         data_gb:15, price:60, network:'Telus',     plan_name:'15 Go', url:'https://www.koodomobile.com/en/shop/mobility/bring-your-own-phone',           scraped_ok:false },
+    { provider:'Vidéotron',     data_gb:15, price:58, network:'Vidéotron', plan_name:'15 Go', url:'https://www.videotron.com/en/mobile/cell-phone-plans',                        scraped_ok:false },
+    { provider:'Public Mobile', data_gb:15, price:55, network:'Telus',     plan_name:'15 Go', url:'https://www.publicmobile.ca/en/plans',                                        scraped_ok:false },
+    { provider:'Fizz',          data_gb:15, price:50, network:'Vidéotron', plan_name:'15 Go', url:'https://fizz.ca/en/mobile',                                                   scraped_ok:false },
+    { provider:'Lucky Mobile',  data_gb:15, price:45, network:'Bell',      plan_name:'15 Go', url:'https://www.luckymobile.ca/shop/plans',                                       scraped_ok:false },
+    { provider:'Chatr',         data_gb:10, price:40, network:'Rogers',    plan_name:'10 Go', url:'https://www.chatrwireless.com/plans',                                         scraped_ok:false },
 ];
 
 async function loadCellPrices() {
@@ -135,13 +135,14 @@ async function loadCellPrices() {
         if (!res.ok) throw new Error('HTTP ' + res.status);
         const data = await res.json();
 
+        const cellFallbackUrls = Object.fromEntries(CELL_PLANS.map(p => [p.provider, p.url]));
         CELL_PLANS = data.plans.map(p => ({
             provider:   p.provider,
             data_gb:    p.data_gb,
             price:      p.price,
             network:    p.network || '',
             plan_name:  p.plan_name || (p.data_gb + ' Go'),
-            url:        p.url,
+            url:        cellFallbackUrls[p.provider] || p.url,
             scraped_ok: p.scraped_ok,
         }));
 
