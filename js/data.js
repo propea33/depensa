@@ -74,14 +74,13 @@ const CELL_PRICES_URL = 'https://raw.githubusercontent.com/propea33/isp-scraper/
 
 // Valeurs par défaut (utilisées si le fetch échoue ou avant chargement)
 let INTERNET_PLANS = [
-    { provider:'Vidéotron',  speed:'400 Mbps', price:85, type:'Câble', note:'',                url:'https://www.videotron.com/en/internet/internet-packages',  scraped_ok:false },
-    { provider:'Bell',       speed:'500 Mbps', price:80, type:'Fibre', note:'',                url:'https://www.bell.ca/Bell_Internet/Internet_access',         scraped_ok:false },
-    { provider:'Cogeco',     speed:'400 Mbps', price:75, type:'Câble', note:'',                url:'https://www.cogeco.ca/en/internet/packages',                scraped_ok:false },
-    { provider:'TekSavvy',   speed:'300 Mbps', price:64, type:'Câble', note:'Réseau Vidéotron', url:'https://www.teksavvy.com/services/internet/',             scraped_ok:false },
-    { provider:'Oxio',       speed:'400 Mbps', price:60, type:'Câble', note:'Réseau Vidéotron', url:'https://oxio.ca/en/internet',                             scraped_ok:false },
-    { provider:'EBOX',       speed:'250 Mbps', price:55, type:'Câble', note:'Réseau Vidéotron', url:'https://www.ebox.ca/en/quebec/residential/internet-packages/', scraped_ok:false },
-    { provider:'VMedia',     speed:'300 Mbps', price:50, type:'Câble', note:'Réseau Bell',      url:'https://www.vmedia.ca/en/homeinternet',                    scraped_ok:false },
-    { provider:'Start.ca',   speed:'200 Mbps', price:45, type:'Câble', note:'Réseau Vidéotron', url:'https://www.start.ca/services/high-speed-internet',       scraped_ok:false },
+    { provider:'Vidéotron', speed:'400 Mbps', price:85, type:'Câble', note:'',                url:'https://www.videotron.com/en/internet',                         scraped_ok:false },
+    { provider:'Bell',      speed:'500 Mbps', price:80, type:'Fibre', note:'',                url:'https://www.bell.ca/Bell_Internet/Internet_access',             scraped_ok:false },
+    { provider:'Cogeco',    speed:'400 Mbps', price:75, type:'Câble', note:'',                url:'https://www.cogeco.ca/en/internet/packages',                    scraped_ok:false },
+    { provider:'Fizz',      speed:'400 Mbps', price:60, type:'Câble', note:'Réseau Vidéotron', url:'https://fizz.ca/en/internet',                                 scraped_ok:false },
+    { provider:'EBOX',      speed:'120 Mbps', price:55, type:'Câble', note:'Réseau Vidéotron', url:'https://www.ebox.ca/en/quebec/residential/internet-packages/', scraped_ok:false },
+    { provider:'Start.ca',  speed:'200 Mbps', price:50, type:'Câble', note:'Réseau Vidéotron', url:'https://www.start.ca/services/high-speed-internet',            scraped_ok:false },
+    { provider:'VMedia',    speed:'120 Mbps', price:45, type:'Câble', note:'Réseau Bell',      url:'https://www.vmedia.ca/en/homeinternet',                        scraped_ok:false },
 ];
 
 let ispPricesUpdatedAt  = null;   // timestamp de la dernière mise à jour ISP
