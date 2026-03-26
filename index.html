@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Depensa — Finances Intelligentes</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Figtree:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./css/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <script src="./js/data.js" defer></script>
+    <script src="./js/utils.js" defer></script>
+    <script src="./js/charts.js" defer></script>
+    <script src="./js/modal.js" defer></script>
+    <script src="./js/ui.js" defer></script>
+    <script src="./js/main.js" defer></script>
+</head>
+<body>
+
+<!-- TICKER -->
+<div class="ticker-wrap">
+    <div class="ticker-bar" id="tickerBar">
+        <div class="ticker-track" id="tickerTrack"></div>
+    </div>
+    <button class="ticker-toggle" id="tickerToggle" title="Masquer/afficher">▲</button>
+</div>
+
+<div class="page-wrapper">
+
+    <!-- HEADER -->
+    <header>
+        <div class="logo">
+            <div class="logo-mark">💰</div>
+            <div class="logo-text">dep<em>ensa</em></div>
+        </div>
+        <div class="header-right">
+            <span class="header-greeting">Bonjour, Marco 👋</span>
+            <button class="sim-nav-btn" id="simNavBtn">🔬 <span class="sim-btn-label">Simulation</span></button>
+            <button class="theme-toggle" id="themeBtn" title="Changer le thème" aria-label="Changer le thème">
+                <div class="toggle-knob" id="toggleKnob">🌙</div>
+            </button>
+            <div class="avatar">MR</div>
+        </div>
+    </header>
+
+    <!-- DASHBOARD GRID -->
+    <div class="dashboard" id="dashContent">
+
+        <!-- LEFT sidebar: pie + year -->
+        <div class="sidebar">
+
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-title">Répartition</span>
+                    <span class="card-meta" id="donutMonthLabel">Mars 2026</span>
+                </div>
+                <div class="donut-wrap">
+                    <canvas id="donutChart"></canvas>
+                </div>
+                <div id="donut-tooltip"></div>
+                <div class="chart-legend" id="legend"></div>
+            </div>
+
+<div class="card year-card">
+                <div class="card-header" style="margin-bottom:10px;">
+                    <span class="card-title">Coût annuel</span>
+                    <span class="card-meta">2026</span>
+                </div>
+                <div class="year-figure" id="yearTotal">$0</div>
+                <div class="year-sub">projeté pour l'année</div>
+                <div class="savings-pill">
+                    <span>💚</span>
+                    <span id="savingsPillText">Économisez $1 248/an en optimisant</span>
+                </div>
+            </div>
+
+            <!-- ROAST CARD -->
+            <div class="card roast-card">
+                <div class="roast-header">
+                    <span class="card-title">Roast financier</span>
+                    <span class="roast-ai-badge">✦ IA</span>
+                </div>
+                <p class="roast-desc">L'IA analyse ton budget et te dit la vérité que ton comptable est trop poli pour dire.</p>
+                <button class="roast-trigger-btn" id="roastBtn">💀 Analyser mon budget</button>
+                <div class="roast-output" id="roastOutput">
+                    <div class="roast-thinking" id="roastThinking">
+                        <div class="roast-dots"><span></span><span></span><span></span></div>
+                        <span>L'IA épluche tes finances...</span>
+                    </div>
+                    <div class="roast-lines" id="roastLines"></div>
+                    <div class="roast-verdict" id="roastVerdict"></div>
+                    <div class="roast-footer" id="roastFooter" style="display:none;">
+                        <button class="roast-share-btn" id="roastShareBtn">📋 Copier le roast</button>
+                        <button class="roast-retry-btn" id="roastRetryBtn">↺ Rejouer</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SIM DONUT CARD (shown during inline simulation overlay mode) -->
+            <div class="card sim-donut-card" id="simDonutCard">
+                <div class="card-header">
+                    <span class="card-title">Répartition simulée</span>
+                    <span class="sim-card-label">🔬 Simulation</span>
+                </div>
+                <div class="donut-wrap">
+                    <canvas id="simDonutChart"></canvas>
+                </div>
+                <div id="simDonutTooltip"></div>
+                <div class="chart-legend" id="simLegend"></div>
+                <div class="sim-diff-row" id="simDiffRow"></div>
+            </div>
+
+        </div><!-- /.sidebar -->
+
+        <!-- CENTER/MAIN -->
+        <div class="expense-main">
+
+            <!-- Simulation banner (shown when simulation overlay mode is active) -->
+            <div class="sim-banner" id="simBanner">
+                <span>🔬</span>
+                <span class="sim-banner-text">Mode simulation actif — vos données réelles ne sont pas modifiées.</span>
+                <button class="sim-quit-btn" id="simQuitBtn">Quitter</button>
+            </div>
+
+            <!-- Expense header -->
+            <div class="expense-main-header">
+                <span class="expense-main-title">Dépenses mensuelles <span id="expenseCount" style="font-size:13px;font-weight:500;color:var(--text-2);"></span></span>
+                <div style="display:flex;gap:10px;align-items:center;">
+                    <button class="recurring-filter-btn" id="recurringFilter">
+                        <span>↻</span> Récurrentes seulement
+                    </button>
+                    <div class="export-wrap" id="exportWrap">
+                        <button class="export-btn" id="exportBtn">⬇ Exporter ce Mois <span class="export-chevron">▼</span></button>
+                        <div class="export-menu" id="exportMenu">
+                            <button class="export-item" id="exportPDFBtn"><span class="item-icon">📄</span> Exporter en PDF</button>
+                            <button class="export-item" id="exportCSVBtn"><span class="item-icon">📊</span> Exporter en CSV</button>
+                        </div>
+                    </div>
+                    <button class="add-btn" id="openModal">
+                        <span class="add-btn-plus">+</span> Ajouter
+                    </button>
+                </div>
+            </div>
+
+            <!-- Month selector -->
+            <div class="month-tabs" id="monthTabs">
+                <button class="month-tab" data-month="oct">Oct</button>
+                <button class="month-tab" data-month="nov">Nov</button>
+                <button class="month-tab" data-month="dec">Déc</button>
+                <button class="month-tab" data-month="jan">Jan</button>
+                <button class="month-tab" data-month="fev">Fév</button>
+                <button class="month-tab active live-tab" data-month="mars">Mars</button>
+            </div>
+
+            <div class="expense-grid" id="expenseList"></div>
+
+            <div class="total-bar">
+                <span class="total-label">Total mensuel</span>
+                <span class="total-amount" id="totalMonthly">$0</span>
+            </div>
+
+            <!-- Score d'optimisation -->
+            <div class="score-block" id="scoreBlock">
+                <div class="score-header">
+                    <span class="score-title">Score d'optimisation</span>
+                    <div class="score-goal-wrap">
+                        Objectif : <input class="score-goal-input" id="savingsGoalInput" type="number" value="150" min="0"> $/mois
+                    </div>
+                </div>
+                <div class="score-stats" id="scoreStats"></div>
+                <div class="score-bar-track"><div class="score-bar-fill" id="scoreBarFill" style="width:0%"></div></div>
+                <div class="score-caption" id="scoreCaption"></div>
+            </div>
+
+            <!-- Façons d'économiser -->
+            <div class="recs-section" style="margin-top:32px;">
+                <div class="section-header">
+                    <span class="section-title">Façons d'économiser</span>
+                    <span class="section-badge" id="recBadge">3 opportunités</span>
+                </div>
+                <div class="rec-grid" id="recGrid"></div>
+            </div>
+
+            <!-- Historique des dépenses -->
+            <div class="card" style="margin-top:20px;">
+                <div class="card-header">
+                    <span class="card-title">Historique des dépenses</span>
+                    <span class="history-trend" id="historyTrend"></span>
+                </div>
+                <div class="history-chart-wrap">
+                    <canvas id="savingsChart"></canvas>
+                </div>
+            </div>
+
+        </div><!-- /.expense-main -->
+
+    </div><!-- /.dashboard -->
+
+    <!-- ════════════════════════════════════════════ -->
+    <!--  SIMULATION SECTION                         -->
+    <!-- ════════════════════════════════════════════ -->
+    <div id="simContent" style="display:none;">
+
+        <div class="sim-zone-banner">
+            <div class="sim-zone-icon">🔬</div>
+            <div class="sim-zone-text">
+                <div class="sim-zone-title">Zone Simulation</div>
+                <div class="sim-zone-desc">
+                    Ceci est une zone simulation. Faites autant de tests que vous voulez.<br>
+                    <strong style="color:#d97706;">Ça n'affecte absolument pas vos dépenses réelles.</strong>
+                </div>
+            </div>
+            <div class="sim-zone-actions">
+                <button class="sim-reset-btn" id="simResetBtn">↺ Réinitialiser</button>
+                <button class="sim-back-btn" id="simBackBtn">← Retour au tableau de bord</button>
+            </div>
+        </div>
+
+        <div class="dashboard">
+
+            <div class="sidebar">
+                <div class="card sim-section-card">
+                    <div class="card-header">
+                        <span class="card-title">Répartition</span>
+                        <span class="sim-card-label">Simulée</span>
+                    </div>
+                    <div class="donut-wrap">
+                        <canvas id="simDonutCanvas"></canvas>
+                    </div>
+                    <div id="simDonutTip"></div>
+                    <div class="chart-legend" id="simDonutLegend"></div>
+                </div>
+                <div class="card year-card sim-section-card">
+                    <div class="card-header" style="margin-bottom:10px;">
+                        <span class="card-title">Coût annuel</span>
+                        <span class="card-meta">Simulé</span>
+                    </div>
+                    <div class="year-figure" id="simYearFigure" style="font-size:40px;">$0</div>
+                    <div class="year-sub">projection annuelle simulée</div>
+                    <div class="sim-diff-row" id="simDiffSummary" style="margin-top:14px;padding-top:12px;border-top:1px solid var(--border);justify-content:space-around;"></div>
+                </div>
+            </div>
+
+            <div class="expense-main">
+                <div class="expense-main-header">
+                    <span class="expense-main-title">Dépenses simulées <span id="simExpCount" style="font-size:13px;font-weight:500;color:var(--text-2);"></span></span>
+                    <button class="add-btn" id="simAddBtn" style="background:linear-gradient(135deg,#d97706,#f59e0b);box-shadow:0 3px 10px rgba(245,158,11,0.3);">
+                        <span class="add-btn-plus">+</span> Ajouter
+                    </button>
+                </div>
+                <div class="expense-grid" id="simExpenseGrid"></div>
+                <div class="total-bar">
+                    <span class="total-label">Total mensuel simulé</span>
+                    <span class="total-amount" id="simMonthlyTotal" style="background:linear-gradient(130deg,#d97706,#f59e0b);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">$0</span>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</div><!-- /.page-wrapper -->
+
+<!-- SIM OVERLAY MODAL -->
+<div class="modal-overlay" id="simOverlay">
+    <div class="modal">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;">
+            <div class="modal-title">🔬 Simuler cette dépense</div>
+            <button id="closeSimOverlay" style="background:none;border:none;color:var(--text-2);font-size:20px;cursor:pointer;line-height:1;">×</button>
+        </div>
+        <div id="simModalBody"></div>
+        <div class="modal-actions" style="margin-top:18px;">
+            <button type="button" class="btn-cancel" id="simModalCancel">Annuler</button>
+            <button type="button" class="btn-submit" id="simModalApply" style="background:linear-gradient(135deg,#d97706,#f59e0b);box-shadow:0 4px 14px rgba(245,158,11,0.3);">Appliquer ✓</button>
+        </div>
+    </div>
+</div>
+
+<!-- ADD EXPENSE MODAL -->
+<div class="modal-overlay" id="modalOverlay">
+    <div class="modal modal-wide">
+        <div class="modal-title" id="modal-title">Ajouter une dépense</div>
+        <form id="expenseForm" novalidate>
+            <div class="modal-cols">
+                <!-- LEFT: categories -->
+                <div class="modal-col-left">
+                    <label class="form-label">Catégorie</label>
+                    <div class="cat-grid cat-grid-left" id="catGrid"></div>
+                    <div class="custom-cat-wrap" id="customCatWrap">
+                        <input id="customCatName" class="form-input" type="text" placeholder="Nom de la catégorie…" autocomplete="off">
+                    </div>
+                </div>
+                <!-- RIGHT: details -->
+                <div class="modal-col-right">
+                    <div class="form-group">
+                        <label class="form-label" for="eName">Nom de la dépense</label>
+                        <input id="eName" class="form-input" type="text" placeholder="ex: Loyer, Netflix, Telus…" required autocomplete="off">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="eAmount" id="amountLabel">Montant ($)</label>
+                        <input id="eAmount" class="form-input" type="number" placeholder="0.00" step="0.01" min="0.01" required>
+                        <div class="amount-hint" id="amountHint"></div>
+                    </div>
+                    <div class="form-group" id="typeFreqGroup">
+                        <label class="form-label" for="eFrequency">Fréquence</label>
+                        <select id="eFrequency" class="form-input">
+                            <option value="mensuel">Mensuel</option>
+                            <option value="annuel">Annuel</option>
+                        </select>
+                    </div>
+                    <div class="form-group" id="recurringToggle" style="margin-bottom:14px;">
+                        <div class="recurring-toggle-row">
+                            <span class="recurring-toggle-label">↻ &nbsp;Dépense récurrente</span>
+                            <div class="recurring-switch"></div>
+                        </div>
+                    </div>
+                    <div class="form-group" style="margin-bottom:0;">
+                        <label class="form-label" for="eNotes">Notes (optionnel)</label>
+                        <textarea id="eNotes" class="form-input" rows="3" placeholder="Détails, rappels…"></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-actions modal-actions-centered">
+                <button type="button" class="btn-cancel" id="closeModal">Annuler</button>
+                <button type="submit" class="btn-submit" id="modal-submit">Ajouter ✓</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- HISTORY MODAL -->
+<div class="modal-overlay" id="historyOverlay">
+    <div class="modal" style="width:520px;">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:22px;">
+            <div class="modal-title" id="historyModalTitle">Dépenses — Janvier</div>
+            <button id="closeHistoryModal" style="background:none;border:none;color:var(--text-2);font-size:20px;cursor:pointer;line-height:1;">×</button>
+        </div>
+        <div id="historyTableWrap"></div>
+    </div>
+</div>
+
+
+<!-- STICKY MOBILE CTA -->
+<button class="sticky-add-btn" id="stickyAdd">
+    <span style="font-size:20px;font-weight:300;line-height:1">+</span> Ajouter une dépense
+</button>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+</body>
+</html>
