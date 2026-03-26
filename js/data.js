@@ -94,13 +94,15 @@ async function loadISPPrices() {
         if (!res.ok) throw new Error('HTTP ' + res.status);
         const data = await res.json();
 
+        // Les URLs viennent toujours des valeurs hardcodées dans data.js, jamais du JSON scrapé
+        const fallbackUrls = Object.fromEntries(INTERNET_PLANS.map(p => [p.provider, p.url]));
         INTERNET_PLANS = data.plans.map(p => ({
             provider:   p.provider,
             speed:      p.speed_down + ' Mbps',
             price:      p.price,
             type:       p.type,
             note:       p.promo ? '🔥 Promo' : (p.note || ''),
-            url:        p.url,
+            url:        fallbackUrls[p.provider] || p.url,
             scraped_ok: p.scraped_ok,
             promo:      p.promo,
             promo_note: p.promo_note || '',
