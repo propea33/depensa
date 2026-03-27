@@ -91,6 +91,7 @@ async function _dbSeedDefaults() {
 
 async function dbInsertExpense(exp) {
     if (DB_OFFLINE || !_db) return;
+    console.log('[DB] Insert →', exp.name);
     try {
         const { data, error } = await _db
             .from('expenses')
@@ -98,9 +99,10 @@ async function dbInsertExpense(exp) {
             .select('id')
             .single();
         if (error) throw error;
-        exp._dbId = data.id;  // on rattache l'id DB à l'objet JS
+        exp._dbId = data.id;
+        console.log('[DB] Insert ✓', exp.name, '→ id', data.id);
     } catch (err) {
-        console.error('[DB] Insert:', err.message);
+        console.error('[DB] Insert ✗', exp.name, ':', err.message);
     }
 }
 
