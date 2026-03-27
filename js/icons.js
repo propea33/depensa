@@ -488,11 +488,13 @@ function getExpenseIconHTML(name, catId) {
 
     const fb = cat.icon.replace(/`/g, '\\`');
 
+    const imgStyle = 'width:22px;height:22px;max-width:22px;max-height:22px;object-fit:contain;display:block;flex-shrink:0;border-radius:5px;';
+
     if (_iconLoadCache.get(url) === 'ok') {
-        return `<img src="${url}" class="expense-img-icon" width="22" height="22" alt="">`;
+        return `<img src="${url}" class="expense-img-icon" width="22" height="22" style="${imgStyle}" alt="">`;
     }
 
-    return `<img src="${url}" class="expense-img-icon" width="22" height="22" alt=""
+    return `<img src="${url}" class="expense-img-icon" width="22" height="22" style="${imgStyle}" alt=""
         onload="_iconLoadCache.set('${url}','ok')"
         onerror="_iconLoadCache.set('${url}','error');this.replaceWith(document.createTextNode(\`${fb}\`))">`;
 }

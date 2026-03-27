@@ -278,6 +278,12 @@ function _onbStepHTML(step) {
                     <span>${p.name}</span>
                 </button>
             `).join('')}
+            <button type="button"
+                class="onb-provider-btn${_onbData.internet.provider==='aucun'?' sel':''}"
+                data-name="aucun">
+                <span style="font-size:20px">🚫</span>
+                <span>Pas d'Internet</span>
+            </button>
         </div>
         ${_onbData.internet.provider && _onbData.internet.provider !== 'Autre' ? `
         <div class="onb-subsection">
@@ -333,6 +339,12 @@ function _onbStepHTML(step) {
                     <span>${p.name}</span>
                 </button>
             `).join('')}
+            <button type="button"
+                class="onb-provider-btn${_onbData.cell.provider==='aucun'?' sel':''}"
+                data-name="aucun">
+                <span style="font-size:20px">🚫</span>
+                <span>Pas de cellulaire</span>
+            </button>
         </div>
         ${_onbData.cell.provider && _onbData.cell.provider !== 'Autre' ? `
         <div class="onb-subsection">
@@ -487,11 +499,17 @@ function _onbBindStep(step) {
         document.querySelectorAll('#onbBody [data-yn]').forEach(btn => {
             btn.addEventListener('click', () => {
                 _onbData.studies.has = btn.dataset.yn === 'true';
-                _onbRender();
-                setTimeout(() => {
-                    const el = document.getElementById('onbStudiesAmt');
-                    if (el) el.focus();
-                }, 80);
+                if (!_onbData.studies.has) {
+                    // Non → passer directement à l'étape suivante
+                    _onbStep++;
+                    _onbRender();
+                } else {
+                    _onbRender();
+                    setTimeout(() => {
+                        const el = document.getElementById('onbStudiesAmt');
+                        if (el) el.focus();
+                    }, 80);
+                }
             });
         });
         break;
@@ -500,11 +518,17 @@ function _onbBindStep(step) {
         document.querySelectorAll('#onbInternetGrid .onb-provider-btn').forEach(btn => {
             btn.addEventListener('click', () => {
                 _onbData.internet.provider = btn.dataset.name;
-                _onbRender();
-                setTimeout(() => {
-                    const el = document.getElementById('onbInternetAmt');
-                    if (el) el.focus();
-                }, 80);
+                if (btn.dataset.name === 'aucun') {
+                    _onbData.internet.amount = 0;
+                    _onbStep++;
+                    _onbRender();
+                } else {
+                    _onbRender();
+                    setTimeout(() => {
+                        const el = document.getElementById('onbInternetAmt');
+                        if (el) el.focus();
+                    }, 80);
+                }
             });
         });
         break;
@@ -513,11 +537,17 @@ function _onbBindStep(step) {
         document.querySelectorAll('#onbCellGrid .onb-provider-btn').forEach(btn => {
             btn.addEventListener('click', () => {
                 _onbData.cell.provider = btn.dataset.name;
-                _onbRender();
-                setTimeout(() => {
-                    const el = document.getElementById('onbCellAmt');
-                    if (el) el.focus();
-                }, 80);
+                if (btn.dataset.name === 'aucun') {
+                    _onbData.cell.amount = 0;
+                    _onbStep++;
+                    _onbRender();
+                } else {
+                    _onbRender();
+                    setTimeout(() => {
+                        const el = document.getElementById('onbCellAmt');
+                        if (el) el.focus();
+                    }, 80);
+                }
             });
         });
         break;
@@ -764,7 +794,7 @@ function _onbBuildExpenses() {
     const iName = _onbData.internet.provider === 'Autre'
         ? (_onbData.internet._custom || 'Internet')
         : (_onbData.internet.provider || null);
-    if (iName && _onbData.internet.amount > 0) {
+    if (iName && iName !== 'aucun' && _onbData.internet.amount > 0) {
         list.push({ id: id++, name:'Internet (' + iName + ')', cat:'internet',
             amount:_onbData.internet.amount,
             recurring:true, type:'fixe', frequency:'mensuel', notes:'' });
@@ -774,7 +804,7 @@ function _onbBuildExpenses() {
     const cName = _onbData.cell.provider === 'Autre'
         ? (_onbData.cell._custom || 'Cellulaire')
         : (_onbData.cell.provider || null);
-    if (cName && _onbData.cell.amount > 0) {
+    if (cName && cName !== 'aucun' && _onbData.cell.amount > 0) {
         list.push({ id: id++, name: cName, cat:'cell',
             amount:_onbData.cell.amount,
             recurring:true, type:'fixe', frequency:'mensuel', notes:'' });
@@ -870,17 +900,12 @@ async function _authSubmit() {
     try {
         if (_authMode === 'signup') {
             const data = await authSignUp(email, password);
-            if (!data.session) {
-                // Email confirmation required
-                _authSetLoading(false);
-                _authShowMsg('✓ Vérifiez votre courriel pour confirmer votre compte, puis connectez-vous.', 'success');
-                _authMode = 'login';
-                _authRender();
-                return;
-            }
-            // Session returned = email confirm disabled, go to onboarding
-            closeAuthScreen();
-            openOnboarding();
+            // Toujours afficher le message de vérification après inscription
+            _authSetLoading(false);
+            _authShowMsg('✉️ Un email de confirmation vous a été envoyé. Vérifiez votre boîte et cliquez le lien, puis revenez vous connecter.', 'success');
+            _authMode = 'login';
+            _authRender();
+            return;
         } else {
             await authSignIn(email, password);
             closeAuthScreen();
