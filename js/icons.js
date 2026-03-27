@@ -341,8 +341,6 @@ const PROVIDER_PRESETS = {
         { name: 'Walmart',        domain: 'walmart.ca'            },
         { name: 'Costco',         domain: 'costco.ca'             },
         { name: 'Adonis',         domain: 'marcheadonis.com'      },
-        { name: 'Rachelle-Béry',  domain: 'rachelle-bery.com'     },
-        { name: 'Marché Tau',     domain: 'tau.ca'                },
         { name: 'Whole Foods',    domain: 'wholefoodsmarket.com'  },
         { name: 'Autre',          domain: null                    },
     ],
