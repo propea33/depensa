@@ -5,6 +5,25 @@
 // Categories that are inherently one-time (no type/fréquence needed)
 const ONE_TIME_CATS = new Set(['epicerie', 'cafe', 'restaurant', 'linge', 'voyage']);
 
+// Placeholder personnalisé par catégorie
+const CAT_PLACEHOLDERS = {
+    habitation:  'ex: Loyer, Hypothèque, Condo…',
+    electricite: 'ex: Hydro-Québec, Énergir…',
+    internet:    'ex: Vidéotron, Bell, Fizz…',
+    cell:        'ex: Telus, Fido, Koodo…',
+    auto:        'ex: Honda, Toyota, Assurance auto…',
+    epicerie:    'ex: IGA, Maxi, Metro…',
+    cafe:        'ex: Starbucks, Tim Hortons…',
+    streaming:   'ex: Netflix, Crave, Disney+…',
+    assurance:   'ex: Intact, Desjardins, Belair…',
+    gym:         'ex: Éconofitness, YMCA…',
+    loisir:      'ex: Cinéma, Activité sportive…',
+    restaurant:  'ex: Restaurant, Livraison…',
+    linge:       'ex: Vêtements, Chaussures…',
+    voyage:      'ex: Billet d\'avion, Hôtel…',
+    autre:       'ex: Nom de votre dépense…',
+};
+
 // ─── Sélecteur de fournisseur ──────────────────────────────────────────────
 
 function showProviderPicker(catId) {
@@ -101,6 +120,10 @@ function buildCatGrid() {
 
 function updateFormForCat(catId) {
     const isOneTime = ONE_TIME_CATS.has(catId);
+    // Placeholder personnalisé
+    const ph = CAT_PLACEHOLDERS[catId] || 'ex: Nom de la dépense…';
+    $('eName').placeholder = ph;
+
     $('typeFreqGroup').style.display = isOneTime ? 'none' : '';
     $('amountLabel').textContent = isOneTime
         ? 'Montant ($)'
