@@ -253,6 +253,15 @@ const ICON_MAP = {
     'goodfood':        'makegoodfood.ca',
     'amazon':          'amazon.ca',
 
+    // ─ Pharmacie ─
+    'jean coutu':      'jeancoutu.com',
+    'pharmaprix':      'pharmaprix.ca',
+    'brunet':          'brunet.ca',
+    'uniprix':         'uniprix.ca',
+    'proxim':          'proxim.ca',
+    'walmart pharmacie': 'walmart.ca',
+    'costco pharmacie':  'costco.ca',
+
     // ─ Santé ─
     'clicsanté':       'clic-sante.ca',
     'dialogue':        'dialogue.co',
@@ -296,6 +305,14 @@ const PROVIDER_PRESETS = {
         { name: 'Fido',          domain: 'fido.ca'              },
         { name: 'Chatr',         domain: 'chatrwireless.com'    },
         { name: 'Autre',         domain: null                   },
+    ],
+    pharmacie: [
+        { name: 'Jean Coutu',   domain: 'jeancoutu.com'  },
+        { name: 'Pharmaprix',   domain: 'pharmaprix.ca'  },
+        { name: 'Brunet',       domain: 'brunet.ca'      },
+        { name: 'Uniprix',      domain: 'uniprix.ca'     },
+        { name: 'Proxim',       domain: 'proxim.ca'      },
+        { name: 'Autre',        domain: null             },
     ],
     gaz: [
         { name: 'Petro-Canada',  domain: 'petro-canada.ca'   },
