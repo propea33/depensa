@@ -3,7 +3,7 @@
 // ═══════════════════════════════════════════════════════
 
 // Categories that are inherently one-time (no type/fréquence needed)
-const ONE_TIME_CATS = new Set(['epicerie', 'cafe', 'restaurant', 'linge', 'voyage']);
+const ONE_TIME_CATS = new Set(['epicerie', 'cafe', 'restaurant', 'linge', 'voyage', 'transport']);
 
 // Placeholder personnalisé par catégorie
 const CAT_PLACEHOLDERS = {
@@ -15,6 +15,7 @@ const CAT_PLACEHOLDERS = {
     epicerie:    'ex: IGA, Maxi, Metro…',
     cafe:        'ex: Starbucks, Tim Hortons…',
     streaming:   'ex: Netflix, Crave, Disney+…',
+    transport:   'ex: Uber, Taxi, STM…',
     assurance:   'ex: Intact, Desjardins, Belair…',
     gym:         'ex: Éconofitness, YMCA…',
     loisir:      'ex: Cinéma, Activité sportive…',
