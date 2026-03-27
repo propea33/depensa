@@ -221,7 +221,7 @@ function openHistoryModal(monthLabel, expList) {
         const cat = getCAT(exp.cat);
         return `
             <tr>
-                <td><div class="td-icon" style="background:${cat.color}1a">${cat.icon}</div></td>
+                <td><div class="td-icon" style="background:${cat.color}1a">${getExpenseIconHTML(exp.name, exp.cat)}</div></td>
                 <td>${exp.name}</td>
                 <td><span class="td-amount">${fmt(exp.amount)}</span><br><span class="td-yearly">${fmt(exp.amount * 12)}/an</span></td>
             </tr>

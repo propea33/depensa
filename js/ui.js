@@ -661,10 +661,14 @@ function exportPDF() {
         </tr>`).join('');
 
     const expRows = source.map(exp => {
-        const cat = getCAT(exp.cat);
-        const m   = monthlyAmount(exp);
+        const cat      = getCAT(exp.cat);
+        const m        = monthlyAmount(exp);
+        const iconUrl  = getExpenseIcon(exp.name, exp.cat);
+        const iconHTML = iconUrl
+            ? `<img src="${iconUrl}" width="14" height="14" style="border-radius:3px;vertical-align:middle;margin-right:5px;" onerror="this.replaceWith(document.createTextNode('${cat.icon}'))">`
+            : `${cat.icon} `;
         return `<tr>
-            <td>${exp.name}</td>
+            <td>${iconHTML}${exp.name}</td>
             <td><span class="pill" style="background:${cat.color}20;color:${cat.color}">${cat.icon} ${cat.name}</span></td>
             <td class="amt">${fmt(m)}<span class="per">/mois</span></td>
             <td class="dim">${fmt(m*12)}/an</td>
