@@ -5,16 +5,11 @@
 //    → données en mémoire, aucun appel réseau
 //  • Mode CLOUD   : sur Sevalla (https://)
 //    → données stockées dans Supabase PostgreSQL
-//
-//  NOTE: device_id fixe jusqu'à l'implémentation de l'auth.
-//  Sera remplacé par auth.uid() lors de l'étape onboarding.
+//    → filtrées par user_id (auth.uid())
 // ═══════════════════════════════════════════════════════
 
 const SUPABASE_URL      = 'https://wmgrztzkgbrquaadwgjb.supabase.co';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndtZ3J6dHprZ2JycXVhYWR3Z2piIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ1NzgyMjUsImV4cCI6MjA5MDE1NDIyNX0.FhauKqMs2E9c5dgnGiabdTdhyFg1hCewv0skI6J3T2g';
-
-// ID fixe jusqu'à l'auth (localStorage non fiable sur certains CDN)
-const DB_USER_ID = 'marco';
 
 // Mode offline si on ouvre le fichier directement (file://)
 const DB_OFFLINE = location.protocol === 'file:';
@@ -29,66 +24,44 @@ function dbInit() {
         return;
     }
     _db = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-    console.log('[DB] Mode cloud · user:', DB_USER_ID);
+    console.log('[DB] Mode cloud initialisé');
 }
 
 // ── Bootstrap : charge les données au démarrage ───────────────────────────────
 
 async function dbBootstrap() {
     if (DB_OFFLINE || !_db) return null;
+    const uid = authUserId();
+    if (!uid) return null;
 
     try {
         const { data, error } = await _db
             .from('expenses')
             .select('*')
-            .eq('device_id', DB_USER_ID)
+            .eq('user_id', uid)
             .order('created_at', { ascending: true });
 
         if (error) throw error;
-
-        if (data.length === 0) {
-            // Première utilisation : sauvegarder les données démo
-            const seeded = await _dbSeedDefaults();
-            if (!seeded || seeded.length === 0) {
-                console.warn('[DB] Seed échoué — données par défaut');
-                return null;
-            }
-            return seeded;
-        }
 
         console.log('[DB] Chargé —', data.length, 'dépenses');
         return data.map(_rowToExp);
 
     } catch (err) {
-        console.warn('[DB] Bootstrap échoué, mode offline:', err.message);
+        console.warn('[DB] Bootstrap échoué:', err.message);
         return null;
     }
-}
-
-// ── Seed données démo (première connexion) ────────────────────────────────────
-
-async function _dbSeedDefaults() {
-    const rows = expenses.map(exp => _expToRow(exp));
-    const { data, error } = await _db
-        .from('expenses')
-        .insert(rows)
-        .select('*');
-    if (error) {
-        console.error('[DB] Seed échoué:', error.message);
-        return null;
-    }
-    console.log('[DB] Seed réussi —', data.length, 'dépenses insérées');
-    return data.map(_rowToExp);
 }
 
 // ── CRUD ──────────────────────────────────────────────────────────────────────
 
 async function dbInsertExpense(exp) {
     if (DB_OFFLINE || !_db) return;
+    const uid = authUserId();
+    if (!uid) return;
     try {
         const { data, error } = await _db
             .from('expenses')
-            .insert(_expToRow(exp))
+            .insert(_expToRow(exp, uid))
             .select('id')
             .single();
         if (error) throw error;
@@ -133,11 +106,50 @@ async function dbDeleteExpense(exp) {
     }
 }
 
+// ── Insertion en lot (onboarding) ─────────────────────────────────────────────
+
+async function dbInsertBulk(expList) {
+    if (DB_OFFLINE || !_db) return null;
+    const uid = authUserId();
+    if (!uid) return null;
+    try {
+        const rows = expList.map(exp => _expToRow(exp, uid));
+        const { data, error } = await _db
+            .from('expenses')
+            .insert(rows)
+            .select('*');
+        if (error) throw error;
+        console.log('[DB] Bulk insert ✓', data.length, 'dépenses');
+        return data.map(_rowToExp);
+    } catch (err) {
+        console.error('[DB] Bulk insert ✗:', err.message);
+        return null;
+    }
+}
+
+// ── Suppression de toutes les dépenses d'un utilisateur ──────────────────────
+
+async function dbDeleteAllForUser() {
+    if (DB_OFFLINE || !_db) return;
+    const uid = authUserId();
+    if (!uid) return;
+    try {
+        const { error } = await _db
+            .from('expenses')
+            .delete()
+            .eq('user_id', uid);
+        if (error) throw error;
+        console.log('[DB] Toutes les dépenses supprimées pour l\'utilisateur');
+    } catch (err) {
+        console.error('[DB] Delete all ✗:', err.message);
+    }
+}
+
 // ── Helpers privés ────────────────────────────────────────────────────────────
 
-function _expToRow(exp) {
+function _expToRow(exp, uid) {
     return {
-        device_id: DB_USER_ID,
+        user_id:   uid || authUserId(),
         name:      exp.name,
         cat:       exp.cat,
         amount:    exp.amount,

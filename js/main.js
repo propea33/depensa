@@ -185,6 +185,37 @@ $('simAddBtn').addEventListener('click', openSimAddModal);
 
 $('stickyAdd').addEventListener('click', openAddModal);
 
+// ─── Auth screen ──────────────────────────────────────
+
+$('tabLogin').addEventListener('click', () => {
+    _authMode = 'login';
+    _authRender();
+});
+$('tabSignup').addEventListener('click', () => {
+    _authMode = 'signup';
+    _authRender();
+});
+$('authSkipBtn').addEventListener('click', async () => {
+    closeAuthScreen();
+    // Pas de compte → données démo en mémoire + bannière
+    showDemoBanner();
+    renderExpenses();
+    renderRecs();
+    renderTicker();
+    requestAnimationFrame(() => { initDonut(); initSavings(); });
+});
+
+// ─── Onboarding wizard ────────────────────────────────
+
+$('onbNextBtn').addEventListener('click', _onbNext);
+$('onbBackBtn').addEventListener('click', _onbBack);
+$('onbSkipBtn').addEventListener('click', _onbSkip);
+
+// ─── Demo banner ──────────────────────────────────────
+
+$('demoEraseBtn').addEventListener('click', eraseAllData);
+$('demoDismissBtn').addEventListener('click', hideDemoBanner);
+
 // ═══════════════════════════════════════════════════════
 //  INIT
 // ═══════════════════════════════════════════════════════
@@ -193,23 +224,44 @@ $('stickyAdd').addEventListener('click', openAddModal);
     // Initialise le client Supabase (no-op en mode offline)
     dbInit();
 
-    // Tente de charger les données depuis la DB
-    const dbData = await dbBootstrap();
-    if (dbData !== null) {
-        expenses = dbData;
-        nextId   = dbData.length > 0 ? Math.max(...dbData.map(e => e.id)) + 1 : 1;
+    // Charge les prix ISP + Cell en arrière-plan
+    loadISPPrices();
+    loadCellPrices();
+
+    // ── Mode offline (file://) → dashboard directement ──
+    if (DB_OFFLINE) {
+        renderExpenses();
+        renderRecs();
+        renderTicker();
+        requestAnimationFrame(() => { initDonut(); initSavings(); });
+        return;
     }
 
+    // ── Mode cloud → vérifier la session Supabase Auth ──
+    const session = await authGetSession();
+
+    if (!session) {
+        // Pas de session → afficher l'écran de connexion / inscription
+        openAuthScreen();
+        return;
+    }
+
+    // Session active → vérifier si l'onboarding est fait
+    if (!authHasCompletedOnboarding()) {
+        openOnboarding();
+        return;
+    }
+
+    // Onboarding terminé → charger les données
+    const dbData = await dbBootstrap();
+    if (dbData !== null && dbData.length > 0) {
+        expenses = dbData;
+        nextId   = Math.max(...dbData.map(e => e.id)) + 1;
+    }
+
+    updateHeaderName();
     renderExpenses();
     renderRecs();
     renderTicker();
-
-    requestAnimationFrame(() => {
-        initDonut();
-        initSavings();
-    });
-
-    // Charge les prix ISP + Cell depuis le scraper GitHub (async, non-bloquant)
-    loadISPPrices();
-    loadCellPrices();
+    requestAnimationFrame(() => { initDonut(); initSavings(); });
 })();

@@ -8,18 +8,79 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Figtree:wght@300;400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="./css/style.css">
+    <link rel="stylesheet" href="./css/onboarding.css?v=20260328">
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="./js/data.js?v=20260327" defer></script>
-    <script src="./js/utils.js?v=20260327" defer></script>
-    <script src="./js/icons.js?v=20260327" defer></script>
-    <script src="./js/db.js?v=20260327" defer></script>
-    <script src="./js/charts.js?v=20260327" defer></script>
-    <script src="./js/modal.js?v=20260327" defer></script>
-    <script src="./js/ui.js?v=20260327" defer></script>
-    <script src="./js/main.js?v=20260327" defer></script>
+    <script src="./js/data.js?v=20260328" defer></script>
+    <script src="./js/utils.js?v=20260328" defer></script>
+    <script src="./js/icons.js?v=20260328" defer></script>
+    <script src="./js/db.js?v=20260328" defer></script>
+    <script src="./js/auth.js?v=20260328" defer></script>
+    <script src="./js/charts.js?v=20260328" defer></script>
+    <script src="./js/modal.js?v=20260328" defer></script>
+    <script src="./js/ui.js?v=20260328" defer></script>
+    <script src="./js/onboarding.js?v=20260328" defer></script>
+    <script src="./js/main.js?v=20260328" defer></script>
 </head>
 <body>
+
+<!-- ════════════════════════════════════════════ -->
+<!--  AUTH SCREEN                                -->
+<!-- ════════════════════════════════════════════ -->
+<div class="auth-overlay" id="authOverlay">
+    <div class="auth-card">
+        <div class="auth-logo">💰 dep<em>ensa</em></div>
+        <div class="auth-tagline">Vos finances, simplifiées.</div>
+
+        <div class="auth-tabs">
+            <button class="auth-tab active" id="tabLogin">Connexion</button>
+            <button class="auth-tab" id="tabSignup">Créer un compte</button>
+        </div>
+
+        <form id="authForm" novalidate onsubmit="event.preventDefault(); _authSubmit();">
+            <div class="auth-field">
+                <label for="authEmail">Courriel</label>
+                <input id="authEmail" class="auth-input" type="email" placeholder="votre@email.com" autocomplete="email">
+            </div>
+            <div class="auth-field">
+                <label for="authPassword">Mot de passe</label>
+                <input id="authPassword" class="auth-input" type="password" placeholder="••••••••" autocomplete="current-password">
+            </div>
+            <div class="auth-field" id="authConfirmField" style="display:none;">
+                <label for="authConfirm">Confirmer le mot de passe</label>
+                <input id="authConfirm" class="auth-input" type="password" placeholder="••••••••" autocomplete="new-password">
+            </div>
+            <button type="submit" class="auth-submit-btn" id="authSubmitBtn">Se connecter</button>
+        </form>
+
+        <div class="auth-msg" id="authMsg"></div>
+
+        <div class="auth-divider">ou</div>
+
+        <button class="auth-skip-btn" id="authSkipBtn">Continuer sans compte →</button>
+    </div>
+</div>
+
+<!-- ════════════════════════════════════════════ -->
+<!--  ONBOARDING WIZARD                         -->
+<!-- ════════════════════════════════════════════ -->
+<div class="onb-overlay" id="onboardingOverlay">
+    <div class="onb-card">
+        <div class="onb-header">
+            <div class="onb-logo">💰 dep<em>ensa</em></div>
+            <div class="onb-progress">
+                <div class="onb-progress-bar" id="onbProgressBar" style="width:0%"></div>
+            </div>
+        </div>
+        <div class="onb-body onb-fade" id="onbBody"></div>
+        <div class="onb-footer">
+            <button class="onb-skip-btn" id="onbSkipBtn">Passer →</button>
+            <div class="onb-spacer"></div>
+            <button class="onb-back-btn" id="onbBackBtn" style="display:none;">← Retour</button>
+            <button class="onb-next-btn" id="onbNextBtn">Continuer →</button>
+        </div>
+    </div>
+</div>
 
 <!-- TICKER -->
 <div class="ticker-wrap">
@@ -93,6 +154,19 @@
 
         <!-- CENTER/MAIN -->
         <div class="expense-main">
+
+            <!-- Demo banner (shown when user skipped onboarding) -->
+            <div class="demo-banner" id="demoBanner">
+                <div class="demo-banner-icon">💡</div>
+                <div class="demo-banner-content">
+                    <div class="demo-banner-title">Données de démonstration</div>
+                    <div class="demo-banner-sub">Voici des données rentrées au hasard. Maintenant c'est à vous d'entrer vos vraies dépenses.</div>
+                    <div class="demo-banner-actions">
+                        <button class="demo-erase-btn" id="demoEraseBtn">🗑 Effacer toutes les données</button>
+                        <button class="demo-dismiss-btn" id="demoDismissBtn">Masquer</button>
+                    </div>
+                </div>
+            </div>
 
             <!-- Simulation banner (shown when simulation overlay mode is active) -->
             <div class="sim-banner" id="simBanner">
