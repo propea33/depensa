@@ -125,6 +125,19 @@ const ICON_MAP = {
     'orange theory':   'orangetheory.com',
     'f45':             'f45training.com',
 
+    // ─ Gaz / Stations d'essence ─
+    'petro-canada':    'petro-canada.ca',
+    'petrocanada':     'petro-canada.ca',
+    'shell':           'shell.ca',
+    'esso':            'esso.ca',
+    'ultramar':        'ultramar.ca',
+    'irving':          'irvinggas.com',
+    'couche-tard':     'couche-tard.com',
+    'pioneer':         'pioneer.ca',
+    'costco':          'costco.ca',
+    'canadian tire':   'canadiantire.ca',
+    'race trac':       'racetrac.com',
+
     // ─ Transport ─
     'uber':            'uber.com',
     'lyft':            'lyft.com',
@@ -266,6 +279,18 @@ const PROVIDER_PRESETS = {
         { name: 'Fido',          domain: 'fido.ca'              },
         { name: 'Chatr',         domain: 'chatrwireless.com'    },
         { name: 'Autre',         domain: null                   },
+    ],
+    gaz: [
+        { name: 'Petro-Canada',  domain: 'petro-canada.ca'   },
+        { name: 'Shell',         domain: 'shell.ca'           },
+        { name: 'Esso',          domain: 'esso.ca'            },
+        { name: 'Ultramar',      domain: 'ultramar.ca'        },
+        { name: 'Irving',        domain: 'irvinggas.com'      },
+        { name: 'Couche-Tard',   domain: 'couche-tard.com'    },
+        { name: 'Pioneer',       domain: 'pioneer.ca'         },
+        { name: 'Costco',        domain: 'costco.ca'          },
+        { name: 'Canadian Tire', domain: 'canadiantire.ca'    },
+        { name: 'Autre',         domain: null                 },
     ],
     transport: [
         { name: 'Uber',          domain: 'uber.com'         },

@@ -9,6 +9,7 @@ const CATS = [
     { id:'internet',    name:'Internet',    icon:'🌐', color:'#06b6d4' },
     { id:'cell',        name:'Téléphone',   icon:'📱', color:'#ec4899' },
     { id:'auto',        name:'Auto',        icon:'🚗', color:'#8b5cf6' },
+    { id:'gaz',         name:'Gaz',         icon:'⛽', color:'#ef4444' },
     { id:'epicerie',    name:'Épicerie',    icon:'🛒', color:'#10b981' },
     { id:'streaming',   name:'Streaming',   icon:'📺', color:'#ef4444' },
     { id:'assurance',   name:'Assurance',   icon:'🛡️', color:'#14b8a6' },
