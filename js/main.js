@@ -220,10 +220,13 @@ $('demoDismissBtn').addEventListener('click', hideDemoBanner);
 
 $('userAvatar').addEventListener('click', e => {
     e.stopPropagation();
-    $('avatarMenu').classList.toggle('open');
+    const menu = $('avatarMenu');
+    menu.style.display = menu.style.display === 'none' ? 'block' : 'none';
 });
-document.addEventListener('click', () => $('avatarMenu').classList.remove('open'));
+document.addEventListener('click', () => { $('avatarMenu').style.display = 'none'; });
+$('avatarMenu').addEventListener('click', e => e.stopPropagation());
 $('logoutBtn').addEventListener('click', async () => {
+    $('avatarMenu').style.display = 'none';
     await authSignOut();
     location.reload();
 });

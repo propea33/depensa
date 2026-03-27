@@ -1023,9 +1023,12 @@ function updateHeaderName() {
     if (avatar) avatar.textContent = authUserInitials();
 
     const identity = document.getElementById('avatarIdentity');
+    const divider  = document.getElementById('avatarDivider');
     if (identity) {
         const fullName = authUserFullName() || firstName;
         const email    = authUserEmail()    || '';
         identity.innerHTML = `<strong>${_esc(fullName)}</strong>${email ? _esc(email) : ''}`;
+        identity.style.display = 'block';
+        if (divider) divider.style.display = 'block';
     }
 }
