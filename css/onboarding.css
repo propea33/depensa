@@ -747,6 +747,65 @@
 }
 .demo-dismiss-btn:hover { color: var(--text-2); }
 
+/* ═══════════════════════════════════════════════════════
+   AVATAR MENU (logout dropdown)
+   ═══════════════════════════════════════════════════════ */
+
+.avatar-wrap {
+    position: relative;
+}
+
+.avatar-menu {
+    display: none;
+    position: absolute;
+    right: 0;
+    top: calc(100% + 10px);
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 6px;
+    min-width: 200px;
+    box-shadow: 0 12px 32px rgba(0,0,0,.45);
+    z-index: 150;
+}
+.avatar-menu.open { display: block; }
+
+.avatar-menu-identity {
+    padding: 10px 12px 8px;
+    font-size: 13px;
+    color: var(--text-2);
+    line-height: 1.5;
+}
+.avatar-menu-identity strong {
+    display: block;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 1px;
+}
+
+.avatar-menu-divider {
+    height: 1px;
+    background: var(--border);
+    margin: 4px 0;
+}
+
+.avatar-menu-item {
+    width: 100%;
+    padding: 10px 12px;
+    background: none;
+    border: none;
+    border-radius: 9px;
+    color: var(--text);
+    font-size: 14px;
+    cursor: pointer;
+    text-align: left;
+    font-family: 'Figtree', sans-serif;
+    transition: background .15s;
+    display: block;
+}
+.avatar-menu-item:hover { background: var(--bg-input); }
+
 /* ─── Responsive ──────────────────────────────────────── */
 @media (max-width: 600px) {
     .auth-card { padding: 28px 22px; }

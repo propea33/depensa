@@ -57,16 +57,37 @@ function authUserFirstName() {
     return _authUser?.user_metadata?.first_name || null;
 }
 
+function authUserLastName() {
+    return _authUser?.user_metadata?.last_name || null;
+}
+
+function authUserFullName() {
+    const f = authUserFirstName() || '';
+    const l = authUserLastName()  || '';
+    return (f + (l ? ' ' + l : '')).trim() || null;
+}
+
+function authUserInitials() {
+    const f = authUserFirstName() || '';
+    const l = authUserLastName()  || '';
+    return ((f[0] || '') + (l[0] || '')).toUpperCase() || '?';
+}
+
+function authUserEmail() {
+    return _authUser?.email || null;
+}
+
 function authHasCompletedOnboarding() {
     return !!_authUser?.user_metadata?.onboarding_done;
 }
 
 // ── Sauvegarde métadonnées ────────────────────────────────────────────────────
 
-async function authMarkOnboardingDone(firstName) {
+async function authMarkOnboardingDone(firstName, lastName) {
     if (!_db || !_authUser) return;
     const metadata = { onboarding_done: true };
     if (firstName) metadata.first_name = firstName;
+    if (lastName  !== undefined) metadata.last_name = lastName || '';
     const { data, error } = await _db.auth.updateUser({ data: metadata });
     if (!error && data?.user) _authUser = data.user;
 }

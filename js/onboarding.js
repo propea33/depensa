@@ -9,6 +9,7 @@ const ONB_TOTAL_STEPS = 8;
 let _onbStep = 1;
 let _onbData = {
     firstName: '',
+    lastName:  '',
     housing:   { type: null,  amount: null  }, // 'loyer' | 'hypotheque'
     transport: { mode: null,  brand: null, amount: null }, // 'auto' | 'transit' | 'actif'
     studies:   { has: null,   amount: null  }, // true | false
@@ -59,6 +60,7 @@ function openOnboarding() {
     _onbStep = 1;
     _onbData = {
         firstName: '',
+        lastName:  '',
         housing:   { type: null,  amount: null },
         transport: { mode: null,  brand: null, amount: null },
         studies:   { has: null,   amount: null },
@@ -105,20 +107,37 @@ function _onbRender() {
 function _onbStepHTML(step) {
     switch (step) {
 
-    // ─── Étape 1 : Prénom ────────────────────────────────────────────────────
+    // ─── Étape 1 : Prénom + Nom ──────────────────────────────────────────────
     case 1: return `
         <div class="onb-step-label">Étape 1 / ${ONB_TOTAL_STEPS}</div>
         <div class="onb-title">Bienvenue dans Depensa! 👋</div>
         <div class="onb-subtitle">Commençons par nous présenter. Comment vous appelez-vous?</div>
-        <input
-            id="onbFirstName"
-            class="onb-input"
-            type="text"
-            placeholder="Votre prénom…"
-            maxlength="40"
-            autocomplete="given-name"
-            value="${_esc(_onbData.firstName)}"
-        >
+        <div style="display:flex;gap:12px;margin-bottom:4px;">
+            <div style="flex:1;">
+                <div style="font-size:12px;color:var(--text-2);font-weight:500;margin-bottom:7px;">Prénom</div>
+                <input
+                    id="onbFirstName"
+                    class="onb-input"
+                    type="text"
+                    placeholder="Marco"
+                    maxlength="40"
+                    autocomplete="given-name"
+                    value="${_esc(_onbData.firstName)}"
+                >
+            </div>
+            <div style="flex:1;">
+                <div style="font-size:12px;color:var(--text-2);font-weight:500;margin-bottom:7px;">Nom de famille</div>
+                <input
+                    id="onbLastName"
+                    class="onb-input"
+                    type="text"
+                    placeholder="Rodi"
+                    maxlength="60"
+                    autocomplete="family-name"
+                    value="${_esc(_onbData.lastName)}"
+                >
+            </div>
+        </div>
     `;
 
     // ─── Étape 2 : Logement ──────────────────────────────────────────────────
@@ -454,8 +473,10 @@ function _onbBindStep(step) {
     switch (step) {
 
     case 1:
-        const nameInput = document.getElementById('onbFirstName');
-        if (nameInput) nameInput.addEventListener('keydown', e => {
+        document.getElementById('onbFirstName')?.addEventListener('keydown', e => {
+            if (e.key === 'Enter') { e.preventDefault(); document.getElementById('onbLastName')?.focus(); }
+        });
+        document.getElementById('onbLastName')?.addEventListener('keydown', e => {
             if (e.key === 'Enter') _onbNext();
         });
         break;
@@ -588,6 +609,7 @@ function _onbCollectStep(step) {
     switch (step) {
     case 1:
         _onbData.firstName = (document.getElementById('onbFirstName')?.value || '').trim();
+        _onbData.lastName  = (document.getElementById('onbLastName')?.value  || '').trim();
         break;
     case 2:
         const housingAmt = document.getElementById('onbHousingAmt');
@@ -722,7 +744,7 @@ async function _onbFinish() {
             } else {
                 expenses = newExpenses;
             }
-            await authMarkOnboardingDone(firstName);
+            await authMarkOnboardingDone(firstName, _onbData.lastName);
         } else {
             expenses = newExpenses;
         }
@@ -993,6 +1015,17 @@ async function eraseAllData() {
 function updateHeaderName() {
     const firstName = authUserFirstName();
     if (!firstName) return;
-    const el = document.querySelector('.header-greeting');
-    if (el) el.textContent = `Bonjour, ${firstName} 👋`;
+
+    const greeting = document.querySelector('.header-greeting');
+    if (greeting) greeting.textContent = `Bonjour, ${firstName} 👋`;
+
+    const avatar = document.getElementById('userAvatar');
+    if (avatar) avatar.textContent = authUserInitials();
+
+    const identity = document.getElementById('avatarIdentity');
+    if (identity) {
+        const fullName = authUserFullName() || firstName;
+        const email    = authUserEmail()    || '';
+        identity.innerHTML = `<strong>${_esc(fullName)}</strong>${email ? _esc(email) : ''}`;
+    }
 }

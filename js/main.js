@@ -216,6 +216,18 @@ $('onbSkipBtn').addEventListener('click', _onbSkip);
 $('demoEraseBtn').addEventListener('click', eraseAllData);
 $('demoDismissBtn').addEventListener('click', hideDemoBanner);
 
+// ─── Avatar menu (logout) ─────────────────────────────
+
+$('userAvatar').addEventListener('click', e => {
+    e.stopPropagation();
+    $('avatarMenu').classList.toggle('open');
+});
+document.addEventListener('click', () => $('avatarMenu').classList.remove('open'));
+$('logoutBtn').addEventListener('click', async () => {
+    await authSignOut();
+    location.reload();
+});
+
 // ═══════════════════════════════════════════════════════
 //  INIT
 // ═══════════════════════════════════════════════════════
