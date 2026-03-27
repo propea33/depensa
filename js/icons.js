@@ -254,6 +254,14 @@ const PROVIDER_PRESETS = {
         { name: 'Chatr',         domain: 'chatrwireless.com'    },
         { name: 'Autre',         domain: null                   },
     ],
+    cafe: [
+        { name: 'Starbucks',    domain: 'starbucks.com'   },
+        { name: 'Tim Hortons',  domain: 'timhortons.com'  },
+        { name: 'Second Cup',   domain: 'secondcup.com'   },
+        { name: 'Van Houtte',   domain: 'vanhoutte.com'   },
+        { name: 'Café Dépôt',   domain: 'cafedepot.ca'    },
+        { name: 'Autre',        domain: null              },
+    ],
     streaming: [
         { name: 'Netflix',              domain: 'netflix.com'        },
         { name: 'Amazon Prime Video',   domain: 'primevideo.com'     },
