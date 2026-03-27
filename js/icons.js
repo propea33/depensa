@@ -489,10 +489,10 @@ function getExpenseIconHTML(name, catId) {
     const fb = cat.icon.replace(/`/g, '\\`');
 
     if (_iconLoadCache.get(url) === 'ok') {
-        return `<img src="${url}" class="expense-img-icon" alt="">`;
+        return `<img src="${url}" class="expense-img-icon" width="22" height="22" alt="">`;
     }
 
-    return `<img src="${url}" class="expense-img-icon" alt=""
+    return `<img src="${url}" class="expense-img-icon" width="22" height="22" alt=""
         onload="_iconLoadCache.set('${url}','ok')"
         onerror="_iconLoadCache.set('${url}','error');this.replaceWith(document.createTextNode(\`${fb}\`))">`;
 }
