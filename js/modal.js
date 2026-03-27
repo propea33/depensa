@@ -18,6 +18,7 @@ function buildCatGrid() {
             grid.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('sel'));
             btn.classList.add('sel');
             updateFormForCat(cat.id);
+            refreshIconPreview();
             // Show/hide custom name input
             const wrap = $('customCatWrap');
             if (cat.custom) {
@@ -80,7 +81,7 @@ function openAddModal() {
     buildCatGrid();
     updateFormForCat(selCat);
     $('modalOverlay').classList.add('open');
-    setTimeout(() => $('eName').focus(), 120);
+    setTimeout(() => { $('eName').focus(); refreshIconPreview(); }, 120);
 }
 
 function openEditModal(id) {
@@ -99,7 +100,7 @@ function openEditModal(id) {
     updateFormForCat(exp.cat);
     updateAmountLabel();
     $('modalOverlay').classList.add('open');
-    setTimeout(() => $('eName').focus(), 120);
+    setTimeout(() => { $('eName').focus(); refreshIconPreview(); }, 120);
 }
 
 function closeModal() {

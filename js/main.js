@@ -4,6 +4,13 @@
 
 // ─── Modal form event listeners ───────────────────────
 
+// ─── Icon preview — debounce sur le champ nom ──────────
+let _iconDebounce = null;
+$('eName').addEventListener('input', () => {
+    clearTimeout(_iconDebounce);
+    _iconDebounce = setTimeout(refreshIconPreview, 180);
+});
+
 $('recurringToggle').addEventListener('click', () => setRecurring(!isRecurring));
 
 $('eFrequency').addEventListener('change', updateAmountLabel);

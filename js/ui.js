@@ -88,7 +88,7 @@ function renderExpenses() {
             </div>` : '';
 
         el.innerHTML = `
-            <div class="expense-icon" style="background:${cat.color}1a">${cat.icon}</div>
+            <div class="expense-icon" style="background:${cat.color}1a">${getExpenseIconHTML(exp.name, exp.cat)}</div>
             <div class="expense-info">
                 <div class="expense-name">${exp.name}${simTag}${hikeTag}</div>
                 ${amountDisplay}
@@ -512,7 +512,7 @@ function renderSimGrid() {
         const effAmt = monthlyAmount(exp);
         const isAnnual = exp.frequency === 'annuel';
         el.innerHTML = `
-            <div class="expense-icon" style="background:${cat.color}1a">${cat.icon}</div>
+            <div class="expense-icon" style="background:${cat.color}1a">${getExpenseIconHTML(exp.name, exp.cat)}</div>
             <div class="expense-info">
                 <div class="expense-name">${exp.name}</div>
                 <div class="expense-monthly" style="color:#f59e0b">${fmt(effAmt)}<span style="font-size:10px;font-weight:400;color:var(--text-2)">/mois</span></div>
