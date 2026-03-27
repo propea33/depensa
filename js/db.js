@@ -5,16 +5,21 @@
 //    → données en mémoire, aucun appel réseau
 //  • Mode CLOUD   : sur Sevalla (https://)
 //    → données stockées dans Supabase PostgreSQL
+//
+//  NOTE: device_id fixe jusqu'à l'implémentation de l'auth.
+//  Sera remplacé par auth.uid() lors de l'étape onboarding.
 // ═══════════════════════════════════════════════════════
 
 const SUPABASE_URL      = 'https://wmgrztzkgbrquaadwgjb.supabase.co';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndtZ3J6dHprZ2JycXVhYWR3Z2piIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ1NzgyMjUsImV4cCI6MjA5MDE1NDIyNX0.FhauKqMs2E9c5dgnGiabdTdhyFg1hCewv0skI6J3T2g';
 
+// ID fixe jusqu'à l'auth (localStorage non fiable sur certains CDN)
+const DB_USER_ID = 'marco';
+
 // Mode offline si on ouvre le fichier directement (file://)
 const DB_OFFLINE = location.protocol === 'file:';
 
-let _db       = null;
-let _deviceId = null;
+let _db = null;
 
 // ── Initialisation ────────────────────────────────────────────────────────────
 
@@ -23,23 +28,11 @@ function dbInit() {
         console.log('[DB] Mode offline — données en mémoire');
         return;
     }
-
     _db = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
-    // Identifiant unique par appareil (sera remplacé par auth.uid() lors de l'onboarding)
-    _deviceId = localStorage.getItem('depensa_device');
-    if (!_deviceId) {
-        _deviceId = 'dev_' + Date.now().toString(36) + Math.random().toString(36).slice(2);
-        localStorage.setItem('depensa_device', _deviceId);
-    }
-
-    console.log('[DB] Mode cloud · device:', _deviceId.slice(0, 12) + '…');
+    console.log('[DB] Mode cloud · user:', DB_USER_ID);
 }
 
 // ── Bootstrap : charge les données au démarrage ───────────────────────────────
-// Retourne null → utiliser les données JS par défaut (offline ou erreur)
-// Retourne []   → première utilisation, seed automatique
-// Retourne [...] → données de l'utilisateur
 
 async function dbBootstrap() {
     if (DB_OFFLINE || !_db) return null;
@@ -48,21 +41,22 @@ async function dbBootstrap() {
         const { data, error } = await _db
             .from('expenses')
             .select('*')
-            .eq('device_id', _deviceId)
+            .eq('device_id', DB_USER_ID)
             .order('created_at', { ascending: true });
 
         if (error) throw error;
 
         if (data.length === 0) {
-            // Première utilisation : sauvegarder les données démo dans la DB
+            // Première utilisation : sauvegarder les données démo
             const seeded = await _dbSeedDefaults();
             if (!seeded || seeded.length === 0) {
-                console.warn('[DB] Seed vide ou échoué — utilisation données par défaut');
+                console.warn('[DB] Seed échoué — données par défaut');
                 return null;
             }
             return seeded;
         }
 
+        console.log('[DB] Chargé —', data.length, 'dépenses');
         return data.map(_rowToExp);
 
     } catch (err) {
@@ -91,7 +85,6 @@ async function _dbSeedDefaults() {
 
 async function dbInsertExpense(exp) {
     if (DB_OFFLINE || !_db) return;
-    console.log('[DB] Insert →', exp.name);
     try {
         const { data, error } = await _db
             .from('expenses')
@@ -144,7 +137,7 @@ async function dbDeleteExpense(exp) {
 
 function _expToRow(exp) {
     return {
-        device_id: _deviceId,
+        device_id: DB_USER_ID,
         name:      exp.name,
         cat:       exp.cat,
         amount:    exp.amount,
@@ -157,7 +150,7 @@ function _expToRow(exp) {
 
 function _rowToExp(row) {
     return {
-        id:        row.id,           // DB bigserial = JS id
+        id:        row.id,
         _dbId:     row.id,
         name:      row.name,
         cat:       row.cat,
