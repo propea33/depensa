@@ -54,6 +54,12 @@ const ICON_MAP = {
     'crunchyroll':     'crunchyroll.com',
     'peacock':         'peacocktv.com',
     'discovery+':      'discoveryplus.com',
+    'tubi':            'tubitv.com',
+    'britbox':         'britbox.com',
+    'kanopy':          'kanopy.com',
+    'illico+':         'illico.tv',
+    'amazon prime video': 'primevideo.com',
+    'apple tv+':       'tv.apple.com',
 
     // ─ Streaming musique ─
     'spotify':         'spotify.com',
@@ -236,6 +242,20 @@ const PROVIDER_PRESETS = {
         { name: 'Fido',          domain: 'fido.ca'              },
         { name: 'Chatr',         domain: 'chatrwireless.com'    },
         { name: 'Autre',         domain: null                   },
+    ],
+    streaming: [
+        { name: 'Netflix',              domain: 'netflix.com'        },
+        { name: 'Amazon Prime Video',   domain: 'primevideo.com'     },
+        { name: 'Crave',                domain: 'crave.ca'           },
+        { name: 'Disney+',              domain: 'disneyplus.com'     },
+        { name: 'Illico+',              domain: 'illico.tv'          },
+        { name: 'Tou.tv',               domain: 'tou.tv'             },
+        { name: 'Apple TV+',            domain: 'tv.apple.com'       },
+        { name: 'Paramount+',           domain: 'paramountplus.com'  },
+        { name: 'Tubi',                 domain: 'tubitv.com'         },
+        { name: 'BritBox',              domain: 'britbox.com'        },
+        { name: 'Kanopy',               domain: 'kanopy.com'         },
+        { name: 'Autre',                domain: null                 },
     ],
     auto: [
         { name: 'Toyota',       domain: 'toyota.com'        },
