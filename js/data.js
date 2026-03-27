@@ -18,6 +18,8 @@ const CATS = [
     { id:'transport',   name:'Transport',   icon:'🚕', color:'#f59e0b' },
     { id:'cafe',        name:'Café',        icon:'☕', color:'#92400e' },
     { id:'restaurant',  name:'Restaurant',  icon:'🍽️', color:'#fb7185' },
+    { id:'ecole',       name:'École',       icon:'🎓', color:'#3b82f6' },
+    { id:'garderie',    name:'Garderie',    icon:'🧒', color:'#f472b6' },
     { id:'linge',       name:'Linge',       icon:'👕', color:'#a78bfa' },
     { id:'voyage',      name:'Voyage',      icon:'✈️', color:'#38bdf8' },
     { id:'autre',       name:'Autre…',      icon:'✏️', color:'#64748b', custom:true },

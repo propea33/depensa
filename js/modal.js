@@ -15,6 +15,8 @@ const CAT_PLACEHOLDERS = {
     epicerie:    'ex: IGA, Maxi, Metro…',
     cafe:        'ex: Starbucks, Tim Hortons…',
     streaming:   'ex: Netflix, Crave, Disney+…',
+    ecole:       'ex: Frais de scolarité, Matériel…',
+    garderie:    'ex: CPE, Garderie privée…',
     gaz:         'ex: Petro-Canada, Shell, Ultramar…',
     transport:   'ex: Uber, Taxi, STM…',
     assurance:   'ex: Intact, Desjardins, Belair…',
