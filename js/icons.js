@@ -64,6 +64,8 @@ const ICON_MAP = {
     'soundcloud':      'soundcloud.com',
 
     // ─ Électricité / Énergie ─
+    'électricité':     'hydroquebec.com',
+    'electricite':     'hydroquebec.com',
     'hydro-québec':    'hydroquebec.com',
     'hydro québec':    'hydroquebec.com',
     'hydro':           'hydroquebec.com',
@@ -232,6 +234,19 @@ function _lookupDomain(name) {
 
     // Correspondance exacte
     if (ICON_MAP[norm]) return ICON_MAP[norm];
+
+    // Cherche d'abord dans le contenu des parenthèses
+    // ex: "Internet (Vidéotron)" → essaie "vidéotron" → videotron.com
+    const parenMatch = (name || '').match(/\(([^)]+)\)/);
+    if (parenMatch) {
+        const parenNorm = parenMatch[1].toLowerCase().trim();
+        if (ICON_MAP[parenNorm]) return ICON_MAP[parenNorm];
+        for (const [key, domain] of Object.entries(ICON_MAP)) {
+            if (parenNorm.includes(key) || (key.length > 3 && key.includes(parenNorm))) {
+                return domain;
+            }
+        }
+    }
 
     // Correspondance partielle : la clé est dans le nom ou vice-versa
     for (const [key, domain] of Object.entries(ICON_MAP)) {
