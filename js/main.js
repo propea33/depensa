@@ -241,6 +241,9 @@ $('logoutBtn').addEventListener('click', async () => {
 
 // ─── Settings modal ───────────────────────────────────
 
+// Forcer hidden au démarrage (indépendant du CSS/cache)
+$('settingsOverlay').style.display = 'none';
+
 function _openSettings() {
     _avatarMenuOpen = false;
     $('avatarMenu').style.display = 'none';
@@ -252,13 +255,17 @@ function _openSettings() {
     $('settingsNameMsg').className = 'settings-msg';
     $('settingsPasswordMsg').textContent = '';
     $('settingsPasswordMsg').className = 'settings-msg';
-    $('settingsOverlay').classList.add('open');
+    $('settingsOverlay').style.display = 'flex';
+}
+
+function _closeSettings() {
+    $('settingsOverlay').style.display = 'none';
 }
 
 $('settingsBtn').addEventListener('click', _openSettings);
-$('settingsClose').addEventListener('click', () => $('settingsOverlay').classList.remove('open'));
+$('settingsClose').addEventListener('click', _closeSettings);
 $('settingsOverlay').addEventListener('click', e => {
-    if (e.target === $('settingsOverlay')) $('settingsOverlay').classList.remove('open');
+    if (e.target === $('settingsOverlay')) _closeSettings();
 });
 
 $('settingsNameForm').addEventListener('submit', async e => {
