@@ -73,6 +73,38 @@ const ICON_MAP = {
     'énergir':         'energir.com',
     'energir':         'energir.com',
 
+    // ─ Auto ─
+    'toyota':          'toyota.com',
+    'honda':           'honda.com',
+    'ford':            'ford.com',
+    'hyundai':         'hyundai.com',
+    'kia':             'kia.com',
+    'mazda':           'mazda.com',
+    'nissan':          'nissan.com',
+    'chevrolet':       'chevrolet.com',
+    'chevy':           'chevrolet.com',
+    'volkswagen':      'volkswagen.com',
+    'vw':              'volkswagen.com',
+    'subaru':          'subaru.com',
+    'tesla':           'tesla.com',
+    'bmw':             'bmw.com',
+    'mercedes':        'mercedes-benz.com',
+    'mercedes-benz':   'mercedes-benz.com',
+    'audi':            'audi.com',
+    'lexus':           'lexus.com',
+    'jeep':            'jeep.com',
+    'dodge':           'dodge.com',
+    'ram':             'ramtrucks.com',
+    'gmc':             'gmc.com',
+    'buick':           'buick.com',
+    'cadillac':        'cadillac.com',
+    'volvo':           'volvocars.com',
+    'mitsubishi':      'mitsubishi.com',
+    'acura':           'acura.com',
+    'infiniti':        'infinitiusa.com',
+    'porsche':         'porsche.com',
+    'lincoln':         'lincoln.com',
+
     // ─ Gym / Fitness ─
     'éconofitness':    'econofitness.ca',
     'econofitness':    'econofitness.ca',
@@ -205,10 +237,32 @@ const PROVIDER_PRESETS = {
         { name: 'Chatr',         domain: 'chatrwireless.com'    },
         { name: 'Autre',         domain: null                   },
     ],
+    auto: [
+        { name: 'Toyota',       domain: 'toyota.com'        },
+        { name: 'Honda',        domain: 'honda.com'         },
+        { name: 'Ford',         domain: 'ford.com'          },
+        { name: 'Hyundai',      domain: 'hyundai.com'       },
+        { name: 'Kia',          domain: 'kia.com'           },
+        { name: 'Mazda',        domain: 'mazda.com'         },
+        { name: 'Nissan',       domain: 'nissan.com'        },
+        { name: 'Chevrolet',    domain: 'chevrolet.com'     },
+        { name: 'Volkswagen',   domain: 'volkswagen.com'    },
+        { name: 'Subaru',       domain: 'subaru.com'        },
+        { name: 'Tesla',        domain: 'tesla.com'         },
+        { name: 'BMW',          domain: 'bmw.com'           },
+        { name: 'Mercedes',     domain: 'mercedes-benz.com' },
+        { name: 'Audi',         domain: 'audi.com'          },
+        { name: 'Jeep',         domain: 'jeep.com'          },
+        { name: 'Dodge',        domain: 'dodge.com'         },
+        { name: 'RAM',          domain: 'ramtrucks.com'     },
+        { name: 'GMC',          domain: 'gmc.com'           },
+        { name: 'Volvo',        domain: 'volvocars.com'     },
+        { name: 'Autre',        domain: null                },
+    ],
 };
 
 // ── Catégories pour lesquelles on peut tenter un domaine deviné ─────────────
-const _FAVICON_CATS = new Set(['streaming', 'cell', 'internet', 'gym', 'loisir', 'electricite']);
+const _FAVICON_CATS = new Set(['streaming', 'cell', 'internet', 'gym', 'loisir', 'electricite', 'auto']);
 
 // ── Cache d'état : url → 'ok' | 'error' ─────────────────────────────────────
 const _iconLoadCache = new Map();
