@@ -152,32 +152,6 @@ $('exportMenu').addEventListener('click', e => e.stopPropagation());
 $('exportPDFBtn').addEventListener('click', () => { $('exportWrap').classList.remove('open'); exportPDF(); });
 $('exportCSVBtn').addEventListener('click', () => { $('exportWrap').classList.remove('open'); exportCSV(); });
 
-// ─── Roast financier ──────────────────────────────────
-
-$('roastBtn').addEventListener('click', runRoast);
-$('roastRetryBtn').addEventListener('click', () => {
-    $('roastLines').innerHTML = '';
-    $('roastVerdict').className = 'roast-verdict';
-    $('roastOutput').style.display = 'none';
-    $('roastFooter').style.display = 'none';
-    runRoast();
-});
-$('roastShareBtn').addEventListener('click', () => {
-    const lines = [...$('roastLines').querySelectorAll('.roast-line')].map(el => el.innerText).join('\n');
-    const verdict = $('roastVerdict').textContent;
-    const text = `🔥 Mon Roast Financier (Depensa)\n\n${lines}\n\n${verdict}`;
-    navigator.clipboard.writeText(text).then(() => {
-        $('roastShareBtn').textContent = '✓ Copié!';
-        setTimeout(() => { $('roastShareBtn').textContent = '📋 Copier le roast'; }, 2000);
-    });
-});
-
-// ─── Savings goal input ───────────────────────────────
-
-$('savingsGoalInput').addEventListener('input', () => {
-    savingsGoal = parseFloat($('savingsGoalInput').value) || 0;
-    renderScoreBlock();
-});
 
 // ─── Simulation overlay modal ─────────────────────────
 

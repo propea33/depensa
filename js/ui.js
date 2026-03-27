@@ -156,7 +156,6 @@ function renderLegend() {
 function renderRecs() {
     const grid   = $('recGrid');
     const totalSave = RECS.reduce((s, r) => s + r.saveYearly, 0);
-    $('savingsPillText').textContent = `Économisez ${fmt(totalSave)}/an en optimisant`;
     grid.innerHTML = '';
 
     RECS.forEach(rec => {
@@ -403,36 +402,7 @@ function applyRec(rec, card) {
     renderRecs();
 }
 
-// ═══════════════════════════════════════════════════════
-//  SCORE BLOCK
-// ═══════════════════════════════════════════════════════
-
-function renderScoreBlock() {
-    const potential = potentialSavingsMonthly();
-    const applied   = appliedSavingsMonthly();
-    const total     = potential + applied;
-    const pct       = total > 0 ? Math.round(applied / total * 100) : 0;
-    const goalPct   = savingsGoal > 0 ? Math.min(100, Math.round(applied / savingsGoal * 100)) : 0;
-
-    $('scoreStats').innerHTML = `
-        <div class="score-stat">
-            <div class="score-stat-val" style="color:var(--green)">${fmt(applied)}</div>
-            <div class="score-stat-lbl">Économies réalisées/mois</div>
-        </div>
-        <div class="score-stat">
-            <div class="score-stat-val" style="color:var(--amber)">${fmt(potential)}</div>
-            <div class="score-stat-lbl">Potentiel restant/mois</div>
-        </div>
-        <div class="score-stat">
-            <div class="score-stat-val" style="color:var(--accent-2)">${goalPct}%</div>
-            <div class="score-stat-lbl">Objectif atteint</div>
-        </div>
-    `;
-    $('scoreBarFill').style.width = goalPct + '%';
-    $('scoreCaption').textContent = applied > 0
-        ? `Tu as réalisé ${pct}% de ton potentiel d'optimisation · ${fmt(applied * 12)} économisés/an`
-        : `Applique les recommandations ci-dessous pour commencer à économiser`;
-}
+function renderScoreBlock() {}
 
 // ═══════════════════════════════════════════════════════
 //  TICKER
@@ -626,46 +596,7 @@ function deactivateSimulation() {
     refresh();
 }
 
-// ═══════════════════════════════════════════════════════
-//  ROAST FINANCIER
-// ═══════════════════════════════════════════════════════
-
-function runRoast() {
-    const btn     = $('roastBtn');
-    const output  = $('roastOutput');
-    const thinking = $('roastThinking');
-    const linesEl = $('roastLines');
-    const verdict = $('roastVerdict');
-    const footer  = $('roastFooter');
-
-    btn.disabled = true;
-    linesEl.innerHTML = '';
-    verdict.className = 'roast-verdict';
-    verdict.textContent = '';
-    footer.style.display = 'none';
-    thinking.style.display = 'flex';
-    output.style.display = 'block';
-
-    const lines = generateRoastLines();
-    const verdictText = generateVerdict();
-
-    setTimeout(() => {
-        thinking.style.display = 'none';
-        lines.forEach((line, i) => {
-            const el = document.createElement('div');
-            el.className = 'roast-line';
-            el.innerHTML = `<span class="roast-line-icon">${line.icon}</span><span>${line.text}</span>`;
-            linesEl.appendChild(el);
-            setTimeout(() => el.classList.add('visible'), i * 350);
-        });
-        setTimeout(() => {
-            verdict.textContent = verdictText;
-            verdict.classList.add('visible');
-            footer.style.display = 'flex';
-            btn.disabled = false;
-        }, lines.length * 350 + 400);
-    }, 1600);
-}
+function runRoast() {}
 
 // ═══════════════════════════════════════════════════════
 //  EXPORT
