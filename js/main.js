@@ -216,7 +216,7 @@ $('onbSkipBtn').addEventListener('click', _onbSkip);
 $('demoEraseBtn').addEventListener('click', eraseAllData);
 $('demoDismissBtn').addEventListener('click', hideDemoBanner);
 
-// ─── Avatar menu (logout) ─────────────────────────────
+// ─── Avatar menu (logout + settings) ─────────────────
 
 // Forcer hidden au démarrage (indépendant du CSS/cache)
 $('avatarMenu').style.display = 'none';
@@ -237,6 +237,84 @@ $('logoutBtn').addEventListener('click', async () => {
     $('avatarMenu').style.display = 'none';
     await authSignOut();
     location.reload();
+});
+
+// ─── Settings modal ───────────────────────────────────
+
+function _openSettings() {
+    _avatarMenuOpen = false;
+    $('avatarMenu').style.display = 'none';
+    $('sFirstName').value = authUserFirstName() || '';
+    $('sLastName').value  = authUserLastName()  || '';
+    $('sNewPassword').value = '';
+    $('sConfirmPassword').value = '';
+    $('settingsNameMsg').textContent = '';
+    $('settingsNameMsg').className = 'settings-msg';
+    $('settingsPasswordMsg').textContent = '';
+    $('settingsPasswordMsg').className = 'settings-msg';
+    $('settingsOverlay').classList.add('open');
+}
+
+$('settingsBtn').addEventListener('click', _openSettings);
+$('settingsClose').addEventListener('click', () => $('settingsOverlay').classList.remove('open'));
+$('settingsOverlay').addEventListener('click', e => {
+    if (e.target === $('settingsOverlay')) $('settingsOverlay').classList.remove('open');
+});
+
+$('settingsNameForm').addEventListener('submit', async e => {
+    e.preventDefault();
+    const firstName = $('sFirstName').value.trim();
+    const lastName  = $('sLastName').value.trim();
+    if (!firstName) { $('sFirstName').focus(); return; }
+    const btn = $('settingsNameBtn');
+    const msg = $('settingsNameMsg');
+    btn.disabled = true;
+    msg.textContent = '';
+    msg.className = 'settings-msg';
+    try {
+        await authUpdateProfile(firstName, lastName);
+        updateHeaderName();
+        msg.textContent = 'Nom mis à jour.';
+        msg.className = 'settings-msg ok';
+    } catch (err) {
+        msg.textContent = err.message || 'Erreur.';
+        msg.className = 'settings-msg err';
+    } finally {
+        btn.disabled = false;
+    }
+});
+
+$('settingsPasswordForm').addEventListener('submit', async e => {
+    e.preventDefault();
+    const pw1 = $('sNewPassword').value;
+    const pw2 = $('sConfirmPassword').value;
+    const msg = $('settingsPasswordMsg');
+    const btn = $('settingsPasswordBtn');
+    msg.className = 'settings-msg';
+    if (pw1.length < 6) {
+        msg.textContent = 'Minimum 6 caractères.';
+        msg.className = 'settings-msg err';
+        return;
+    }
+    if (pw1 !== pw2) {
+        msg.textContent = 'Les mots de passe ne correspondent pas.';
+        msg.className = 'settings-msg err';
+        return;
+    }
+    btn.disabled = true;
+    msg.textContent = '';
+    try {
+        await authUpdatePassword(pw1);
+        msg.textContent = 'Mot de passe mis à jour.';
+        msg.className = 'settings-msg ok';
+        $('sNewPassword').value = '';
+        $('sConfirmPassword').value = '';
+    } catch (err) {
+        msg.textContent = err.message || 'Erreur.';
+        msg.className = 'settings-msg err';
+    } finally {
+        btn.disabled = false;
+    }
 });
 
 // ═══════════════════════════════════════════════════════

@@ -109,6 +109,8 @@
                 <div class="avatar-menu" id="avatarMenu" style="display:none;">
                     <div class="avatar-menu-identity" id="avatarIdentity" style="display:none;"></div>
                     <div class="avatar-menu-divider" id="avatarDivider" style="display:none;"></div>
+                    <button class="avatar-menu-item" id="settingsBtn">⚙&nbsp; Paramètres</button>
+                    <div class="avatar-menu-divider"></div>
                     <button class="avatar-menu-item" id="logoutBtn">⎋&nbsp; Se déconnecter</button>
                 </div>
             </div>
@@ -400,6 +402,42 @@
 
 <!-- TOAST -->
 <div class="toast" id="toast"></div>
+
+<!-- ════════════════════════════════════════════ -->
+<!--  SETTINGS MODAL                             -->
+<!-- ════════════════════════════════════════════ -->
+<div class="settings-overlay" id="settingsOverlay">
+    <div class="settings-card">
+        <div class="settings-header">
+            <span class="settings-title">Paramètres</span>
+            <button class="settings-close" id="settingsClose">✕</button>
+        </div>
+
+        <div class="settings-section">
+            <div class="settings-section-label">Identité</div>
+            <form id="settingsNameForm" autocomplete="off">
+                <div class="settings-row">
+                    <input type="text" id="sFirstName" class="settings-input" placeholder="Prénom" autocomplete="given-name">
+                    <input type="text" id="sLastName" class="settings-input" placeholder="Nom de famille" autocomplete="family-name">
+                </div>
+                <button type="submit" class="settings-save-btn" id="settingsNameBtn">Enregistrer</button>
+                <div class="settings-msg" id="settingsNameMsg"></div>
+            </form>
+        </div>
+
+        <div class="settings-divider"></div>
+
+        <div class="settings-section">
+            <div class="settings-section-label">Mot de passe</div>
+            <form id="settingsPasswordForm" autocomplete="off">
+                <input type="password" id="sNewPassword" class="settings-input" placeholder="Nouveau mot de passe" autocomplete="new-password">
+                <input type="password" id="sConfirmPassword" class="settings-input" placeholder="Confirmer le mot de passe" autocomplete="new-password">
+                <button type="submit" class="settings-save-btn" id="settingsPasswordBtn">Changer le mot de passe</button>
+                <div class="settings-msg" id="settingsPasswordMsg"></div>
+            </form>
+        </div>
+    </div>
+</div>
 
 </body>
 </html>

@@ -91,3 +91,19 @@ async function authMarkOnboardingDone(firstName, lastName) {
     const { data, error } = await _db.auth.updateUser({ data: metadata });
     if (!error && data?.user) _authUser = data.user;
 }
+
+async function authUpdateProfile(firstName, lastName) {
+    if (!_db || !_authUser) return;
+    const metadata = {};
+    if (firstName !== undefined) metadata.first_name = firstName || '';
+    if (lastName  !== undefined) metadata.last_name  = lastName  || '';
+    const { data, error } = await _db.auth.updateUser({ data: metadata });
+    if (error) throw error;
+    if (data?.user) _authUser = data.user;
+}
+
+async function authUpdatePassword(newPassword) {
+    if (!_db || !_authUser) return;
+    const { error } = await _db.auth.updateUser({ password: newPassword });
+    if (error) throw error;
+}
