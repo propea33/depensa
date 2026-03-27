@@ -111,7 +111,9 @@ function renderExpenses() {
         grid.querySelectorAll('.action-btn-del').forEach(btn => {
             btn.addEventListener('click', e => {
                 e.stopPropagation();
-                const id   = parseInt(btn.dataset.id);
+                const id       = parseInt(btn.dataset.id);
+                const expToDel = expenses.find(x => x.id === id);
+                if (expToDel) dbDeleteExpense(expToDel);
                 const card = btn.closest('.expense-card');
                 card.style.transition = 'opacity 0.22s, transform 0.22s';
                 card.style.opacity = '0'; card.style.transform = 'scale(0.92)';

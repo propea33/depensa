@@ -48,10 +48,12 @@ $('expenseForm').addEventListener('submit', e => {
 
     if (editingId !== null) {
         const exp = expenses.find(e => e.id === editingId);
-        if (exp) { exp.name = name; exp.cat = finalCat; exp.amount = amount; exp.recurring = isRecurring; exp.frequency = frequency; exp.notes = notes; }
+        if (exp) { exp.name = name; exp.cat = finalCat; exp.amount = amount; exp.recurring = isRecurring; exp.frequency = frequency; exp.notes = notes; dbUpdateExpense(exp); }
         showToast(`✓ ${name} mis à jour — ${fmt(monthly)}/mois`);
     } else {
-        expenses.push({ id: nextId++, name, cat: finalCat, amount, recurring: isRecurring, frequency, notes });
+        const exp = { id: nextId++, name, cat: finalCat, amount, recurring: isRecurring, frequency, notes };
+        expenses.push(exp);
+        dbInsertExpense(exp);
         showToast(`✓ ${name} ajouté — ${fmt(monthly)}/mois`);
     }
 
@@ -187,15 +189,27 @@ $('stickyAdd').addEventListener('click', openAddModal);
 //  INIT
 // ═══════════════════════════════════════════════════════
 
-renderExpenses();
-renderRecs();
-renderTicker();
+(async () => {
+    // Initialise le client Supabase (no-op en mode offline)
+    dbInit();
 
-requestAnimationFrame(() => {
-    initDonut();
-    initSavings();
-});
+    // Tente de charger les données depuis la DB
+    const dbData = await dbBootstrap();
+    if (dbData !== null) {
+        expenses = dbData;
+        nextId   = dbData.length > 0 ? Math.max(...dbData.map(e => e.id)) + 1 : 1;
+    }
 
-// Charge les prix ISP + Cell depuis le scraper GitHub (async, non-bloquant)
-loadISPPrices();
-loadCellPrices();
+    renderExpenses();
+    renderRecs();
+    renderTicker();
+
+    requestAnimationFrame(() => {
+        initDonut();
+        initSavings();
+    });
+
+    // Charge les prix ISP + Cell depuis le scraper GitHub (async, non-bloquant)
+    loadISPPrices();
+    loadCellPrices();
+})();
