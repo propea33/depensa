@@ -55,14 +55,12 @@ async function dbBootstrap() {
 
         if (data.length === 0) {
             // Première utilisation : sauvegarder les données démo dans la DB
-            await _dbSeedDefaults();
-            const { data: seeded, error: e2 } = await _db
-                .from('expenses')
-                .select('*')
-                .eq('device_id', _deviceId)
-                .order('created_at', { ascending: true });
-            if (e2) throw e2;
-            return seeded.map(_rowToExp);
+            const seeded = await _dbSeedDefaults();
+            if (!seeded || seeded.length === 0) {
+                console.warn('[DB] Seed vide ou échoué — utilisation données par défaut');
+                return null;
+            }
+            return seeded;
         }
 
         return data.map(_rowToExp);
@@ -77,8 +75,16 @@ async function dbBootstrap() {
 
 async function _dbSeedDefaults() {
     const rows = expenses.map(exp => _expToRow(exp));
-    const { error } = await _db.from('expenses').insert(rows);
-    if (error) console.error('[DB] Seed échoué:', error.message);
+    const { data, error } = await _db
+        .from('expenses')
+        .insert(rows)
+        .select('*');
+    if (error) {
+        console.error('[DB] Seed échoué:', error.message);
+        return null;
+    }
+    console.log('[DB] Seed réussi —', data.length, 'dépenses insérées');
+    return data.map(_rowToExp);
 }
 
 // ── CRUD ──────────────────────────────────────────────────────────────────────
