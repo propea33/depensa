@@ -218,14 +218,22 @@ $('demoDismissBtn').addEventListener('click', hideDemoBanner);
 
 // ─── Avatar menu (logout) ─────────────────────────────
 
+// Forcer hidden au démarrage (indépendant du CSS/cache)
+$('avatarMenu').style.display = 'none';
+let _avatarMenuOpen = false;
+
 $('userAvatar').addEventListener('click', e => {
     e.stopPropagation();
-    const menu = $('avatarMenu');
-    menu.style.display = menu.style.display === 'none' ? 'block' : 'none';
+    _avatarMenuOpen = !_avatarMenuOpen;
+    $('avatarMenu').style.display = _avatarMenuOpen ? 'block' : 'none';
 });
-document.addEventListener('click', () => { $('avatarMenu').style.display = 'none'; });
+document.addEventListener('click', () => {
+    _avatarMenuOpen = false;
+    $('avatarMenu').style.display = 'none';
+});
 $('avatarMenu').addEventListener('click', e => e.stopPropagation());
 $('logoutBtn').addEventListener('click', async () => {
+    _avatarMenuOpen = false;
     $('avatarMenu').style.display = 'none';
     await authSignOut();
     location.reload();
