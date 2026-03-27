@@ -293,9 +293,12 @@
                 </div>
                 <!-- RIGHT: details -->
                 <div class="modal-col-right">
+                    <!-- Sélecteur de fournisseur (affiché selon la catégorie) -->
+                    <div id="providerPicker" class="provider-picker" style="display:none;"></div>
+
                     <div class="form-group">
                         <div class="icon-name-row">
-                            <label class="form-label" for="eName">Nom de la dépense</label>
+                            <label class="form-label" for="eName" id="eNameLabel">Nom de la dépense</label>
                             <div class="icon-preview" id="iconPreview"></div>
                         </div>
                         <input id="eName" class="form-input" type="text" placeholder="ex: Loyer, Netflix, Telus…" required autocomplete="off">

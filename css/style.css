@@ -520,6 +520,76 @@
         }
         .icon-preview-emoji { line-height: 1; }
 
+        /* ── Sélecteur de fournisseur ── */
+        .provider-picker {
+            margin-bottom: 12px;
+        }
+
+        .provider-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
+            gap: 7px;
+        }
+
+        .provider-btn {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+            padding: 8px 4px 7px;
+            border-radius: 10px;
+            border: 1.5px solid var(--border);
+            background: var(--surface-1);
+            cursor: pointer;
+            transition: border-color 0.15s, background 0.15s, transform 0.1s;
+            min-width: 0;
+        }
+
+        .provider-btn:hover {
+            border-color: var(--accent);
+            background: color-mix(in srgb, var(--accent) 12%, transparent);
+            transform: translateY(-1px);
+        }
+
+        .provider-btn.sel {
+            border-color: var(--accent);
+            background: color-mix(in srgb, var(--accent) 18%, transparent);
+            box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent) 25%, transparent);
+        }
+
+        .provider-logo-wrap {
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .provider-logo {
+            width: 28px;
+            height: 28px;
+            border-radius: 6px;
+            object-fit: contain;
+            display: block;
+        }
+
+        .provider-other-icon { font-size: 20px; line-height: 1; }
+
+        .provider-name {
+            font-size: 10px;
+            font-weight: 500;
+            color: var(--text-2);
+            text-align: center;
+            line-height: 1.2;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 66px;
+            width: 100%;
+        }
+
+        .provider-btn.sel .provider-name { color: var(--text); font-weight: 600; }
+
         .expense-info { flex: 1; min-width: 0; }
 
         .expense-name {

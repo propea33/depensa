@@ -164,6 +164,47 @@ const ICON_MAP = {
     'dialogue':        'dialogue.co',
 };
 
+// ── Presets fournisseurs par catégorie ───────────────────────────────────────
+// Affiché comme grille de sélection dans le modal pour certaines catégories.
+// domain: null → option "Autre" (affiche ✏️, vide le champ nom)
+const PROVIDER_PRESETS = {
+    electricite: [
+        { name: 'Hydro-Québec', domain: 'hydroquebec.com' },
+        { name: 'Énergir (gaz)',domain: 'energir.com'     },
+        { name: 'Autre',        domain: null               },
+    ],
+    gym: [
+        { name: 'Éconofitness', domain: 'econofitness.ca'   },
+        { name: 'Pro Gym',      domain: 'progym.ca'          },
+        { name: 'YMCA',         domain: 'ymca.ca'            },
+        { name: 'World Gym',    domain: 'worldgym.com'       },
+        { name: 'Energie Cardio',domain:'energiecardio.com'  },
+        { name: 'Autre',        domain: null                 },
+    ],
+    internet: [
+        { name: 'Vidéotron',    domain: 'videotron.com'  },
+        { name: 'Bell',         domain: 'bell.ca'         },
+        { name: 'VMedia',       domain: 'vmedia.ca'       },
+        { name: 'Cogeco',       domain: 'cogeco.ca'       },
+        { name: 'EBOX',         domain: 'ebox.ca'         },
+        { name: 'Fizz',         domain: 'fizz.ca'         },
+        { name: 'Start.ca',     domain: 'start.ca'        },
+        { name: 'Autre',        domain: null              },
+    ],
+    cell: [
+        { name: 'Telus',         domain: 'telus.com'           },
+        { name: 'Public Mobile', domain: 'publicmobile.ca'      },
+        { name: 'Fizz',          domain: 'fizz.ca'              },
+        { name: 'Rogers',        domain: 'rogers.com'           },
+        { name: 'Koodo',         domain: 'koodomobile.com'      },
+        { name: 'Vidéotron',     domain: 'videotron.com'        },
+        { name: 'Lucky Mobile',  domain: 'luckymobile.ca'       },
+        { name: 'Fido',          domain: 'fido.ca'              },
+        { name: 'Chatr',         domain: 'chatrwireless.com'    },
+        { name: 'Autre',         domain: null                   },
+    ],
+};
+
 // ── Catégories pour lesquelles on peut tenter un domaine deviné ─────────────
 const _FAVICON_CATS = new Set(['streaming', 'cell', 'internet', 'gym', 'loisir', 'electricite']);
 

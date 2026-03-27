@@ -5,6 +5,69 @@
 // Categories that are inherently one-time (no type/fréquence needed)
 const ONE_TIME_CATS = new Set(['epicerie', 'restaurant', 'linge', 'voyage']);
 
+// ─── Sélecteur de fournisseur ──────────────────────────────────────────────
+
+function showProviderPicker(catId) {
+    const picker    = $('providerPicker');
+    const nameLabel = $('eNameLabel');
+    if (!picker) return;
+
+    const presets = PROVIDER_PRESETS[catId];
+    if (!presets) {
+        picker.style.display = 'none';
+        if (nameLabel) nameLabel.textContent = 'Nom de la dépense';
+        return;
+    }
+
+    picker.style.display = '';
+    if (nameLabel) nameLabel.textContent = 'Fournisseur';
+
+    const currentName = ($('eName').value || '').trim();
+
+    picker.innerHTML = `
+        <div class="provider-grid">
+            ${presets.map(p => {
+                const isSel = p.name === currentName;
+                const isOther = !p.domain;
+                const logo = isOther
+                    ? `<span class="provider-other-icon">✏️</span>`
+                    : `<img src="https://www.google.com/s2/favicons?domain=${p.domain}&sz=64"
+                              class="provider-logo" alt="${p.name}"
+                              onerror="this.outerHTML='<span class=provider-other-icon>📦</span>'">`;
+                return `<button type="button"
+                                class="provider-btn${isSel ? ' sel' : ''}"
+                                data-name="${p.name}">
+                            <div class="provider-logo-wrap">${logo}</div>
+                            <span class="provider-name">${p.name}</span>
+                        </button>`;
+            }).join('')}
+        </div>`;
+
+    // Auto-remplissage si une seule option réelle (ex: Électricité → Hydro-Québec)
+    const realPresets = presets.filter(p => p.domain);
+    if (realPresets.length === 1 && !currentName) {
+        $('eName').value = realPresets[0].name;
+        picker.querySelector(`[data-name="${realPresets[0].name}"]`)?.classList.add('sel');
+        refreshIconPreview();
+    }
+
+    picker.querySelectorAll('.provider-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            picker.querySelectorAll('.provider-btn').forEach(b => b.classList.remove('sel'));
+            btn.classList.add('sel');
+            const name = btn.dataset.name;
+            if (name === 'Autre') {
+                $('eName').value = '';
+                $('eName').focus();
+            } else {
+                $('eName').value = name;
+                $('eAmount').focus();
+            }
+            refreshIconPreview();
+        });
+    });
+}
+
 function buildCatGrid() {
     const grid = $('catGrid');
     grid.innerHTML = '';
@@ -18,6 +81,7 @@ function buildCatGrid() {
             grid.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('sel'));
             btn.classList.add('sel');
             updateFormForCat(cat.id);
+            showProviderPicker(cat.id);
             refreshIconPreview();
             // Show/hide custom name input
             const wrap = $('customCatWrap');
@@ -80,8 +144,14 @@ function openAddModal() {
     $('amountHint').classList.remove('visible');
     buildCatGrid();
     updateFormForCat(selCat);
+    showProviderPicker(selCat);
     $('modalOverlay').classList.add('open');
-    setTimeout(() => { $('eName').focus(); refreshIconPreview(); }, 120);
+    setTimeout(() => {
+        refreshIconPreview();
+        // Focus sur le montant si un fournisseur est déjà pré-sélectionné
+        if ($('eName').value) $('eAmount').focus();
+        else $('eName').focus();
+    }, 120);
 }
 
 function openEditModal(id) {
@@ -99,6 +169,7 @@ function openEditModal(id) {
     $('eAmount').value = exp.amount;
     updateFormForCat(exp.cat);
     updateAmountLabel();
+    showProviderPicker(exp.cat);
     $('modalOverlay').classList.add('open');
     setTimeout(() => { $('eName').focus(); refreshIconPreview(); }, 120);
 }
