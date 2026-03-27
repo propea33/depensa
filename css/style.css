@@ -527,56 +527,61 @@
 
         .provider-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
-            gap: 7px;
+            grid-template-columns: repeat(auto-fill, minmax(54px, 1fr));
+            gap: 5px;
+            max-height: 156px;
+            overflow-y: auto;
+            overflow-x: hidden;
+            scrollbar-width: thin;
+            scrollbar-color: var(--border) transparent;
+            padding-right: 2px; /* évite que la scrollbar coupe les bordures */
         }
 
         .provider-btn {
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 5px;
-            padding: 8px 4px 7px;
-            border-radius: 10px;
+            gap: 3px;
+            padding: 6px 2px 5px;
+            border-radius: 8px;
             border: 1.5px solid var(--border);
             background: var(--surface-1);
             cursor: pointer;
-            transition: border-color 0.15s, background 0.15s, transform 0.1s;
+            transition: border-color 0.15s, background 0.15s;
             min-width: 0;
         }
 
         .provider-btn:hover {
             border-color: var(--accent);
-            background: color-mix(in srgb, var(--accent) 12%, transparent);
-            transform: translateY(-1px);
+            background: color-mix(in srgb, var(--accent) 10%, transparent);
         }
 
         .provider-btn.sel {
             border-color: var(--accent);
-            background: color-mix(in srgb, var(--accent) 18%, transparent);
-            box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent) 25%, transparent);
+            background: color-mix(in srgb, var(--accent) 16%, transparent);
+            box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent) 22%, transparent);
         }
 
         .provider-logo-wrap {
-            width: 30px;
-            height: 30px;
+            width: 24px;
+            height: 24px;
             display: flex;
             align-items: center;
             justify-content: center;
         }
 
         .provider-logo {
-            width: 28px;
-            height: 28px;
-            border-radius: 6px;
+            width: 22px;
+            height: 22px;
+            border-radius: 5px;
             object-fit: contain;
             display: block;
         }
 
-        .provider-other-icon { font-size: 20px; line-height: 1; }
+        .provider-other-icon { font-size: 16px; line-height: 1; }
 
         .provider-name {
-            font-size: 10px;
+            font-size: 9px;
             font-weight: 500;
             color: var(--text-2);
             text-align: center;
@@ -584,7 +589,7 @@
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
-            max-width: 66px;
+            max-width: 52px;
             width: 100%;
         }
 

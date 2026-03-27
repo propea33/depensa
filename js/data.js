@@ -28,7 +28,7 @@ let expenses = [
     { id:2,  name:'Électricité',         cat:'electricite', amount:95,   recurring:true,  type:'variable', frequency:'mensuel', notes:'' },
     { id:3,  name:'Internet (Vidéotron)',cat:'internet',    amount:85,   recurring:true,  type:'fixe',     frequency:'mensuel', notes:'' },
     { id:4,  name:'Telus',               cat:'cell',        amount:95,   recurring:true,  type:'fixe',     frequency:'mensuel', notes:'' },
-    { id:5,  name:'Auto',                cat:'auto',        amount:380,  recurring:true,  type:'variable', frequency:'mensuel', notes:'Assurance + essence' },
+    { id:5,  name:'Honda',               cat:'auto',        amount:380,  recurring:true,  type:'variable', frequency:'mensuel', notes:'Assurance + essence' },
     { id:6,  name:'Épicerie',            cat:'epicerie',    amount:600,  recurring:false, type:'variable', frequency:'mensuel', notes:'' },
     { id:7,  name:'Netflix',             cat:'streaming',   amount:23,   recurring:true,  type:'fixe',     frequency:'mensuel', notes:'' },
     { id:8,  name:'Disney+',             cat:'streaming',   amount:14,   recurring:true,  type:'fixe',     frequency:'mensuel', notes:'' },
