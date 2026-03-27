@@ -14,6 +14,7 @@ const CATS = [
     { id:'assurance',   name:'Assurance',   icon:'🛡️', color:'#14b8a6' },
     { id:'gym',         name:'Gym',         icon:'💪', color:'#f97316' },
     { id:'loisir',      name:'Loisir',      icon:'🎮', color:'#818cf8' },
+    { id:'cafe',        name:'Café',        icon:'☕', color:'#92400e' },
     { id:'restaurant',  name:'Restaurant',  icon:'🍽️', color:'#fb7185' },
     { id:'linge',       name:'Linge',       icon:'👕', color:'#a78bfa' },
     { id:'voyage',      name:'Voyage',      icon:'✈️', color:'#38bdf8' },

@@ -3,7 +3,7 @@
 // ═══════════════════════════════════════════════════════
 
 // Categories that are inherently one-time (no type/fréquence needed)
-const ONE_TIME_CATS = new Set(['epicerie', 'restaurant', 'linge', 'voyage']);
+const ONE_TIME_CATS = new Set(['epicerie', 'cafe', 'restaurant', 'linge', 'voyage']);
 
 // ─── Sélecteur de fournisseur ──────────────────────────────────────────────
 

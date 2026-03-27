@@ -191,6 +191,17 @@ const ICON_MAP = {
     'linear':          'linear.app',
     'figma':           'figma.com',
 
+    // ─ Café ─
+    'starbucks':       'starbucks.com',
+    'tim hortons':     'timhortons.com',
+    'tim':             'timhortons.com',
+    'second cup':      'secondcup.com',
+    'van houtte':      'vanhoutte.com',
+    'café dépôt':      'cafedepot.ca',
+    'cafe depot':      'cafedepot.ca',
+    'mcdonalds':       'mcdonalds.com',
+    "mcdonald's":      'mcdonalds.com',
+
     // ─ Livraison ─
     'doordash':        'doordash.com',
     'uber eats':       'ubereats.com',
