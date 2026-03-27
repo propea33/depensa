@@ -70,33 +70,8 @@
                 </div>
                 <div class="year-figure" id="yearTotal">$0</div>
                 <div class="year-sub">projeté pour l'année</div>
-                <div class="savings-pill">
-                    <span>💚</span>
-                    <span id="savingsPillText">Économisez $1 248/an en optimisant</span>
-                </div>
             </div>
 
-            <!-- ROAST CARD -->
-            <div class="card roast-card">
-                <div class="roast-header">
-                    <span class="card-title">Roast financier</span>
-                    <span class="roast-ai-badge">✦ IA</span>
-                </div>
-                <p class="roast-desc">L'IA analyse ton budget et te dit la vérité que ton comptable est trop poli pour dire.</p>
-                <button class="roast-trigger-btn" id="roastBtn">💀 Analyser mon budget</button>
-                <div class="roast-output" id="roastOutput">
-                    <div class="roast-thinking" id="roastThinking">
-                        <div class="roast-dots"><span></span><span></span><span></span></div>
-                        <span>L'IA épluche tes finances...</span>
-                    </div>
-                    <div class="roast-lines" id="roastLines"></div>
-                    <div class="roast-verdict" id="roastVerdict"></div>
-                    <div class="roast-footer" id="roastFooter" style="display:none;">
-                        <button class="roast-share-btn" id="roastShareBtn">📋 Copier le roast</button>
-                        <button class="roast-retry-btn" id="roastRetryBtn">↺ Rejouer</button>
-                    </div>
-                </div>
-            </div>
 
             <!-- SIM DONUT CARD (shown during inline simulation overlay mode) -->
             <div class="card sim-donut-card" id="simDonutCard">
@@ -161,18 +136,6 @@
                 <span class="total-amount" id="totalMonthly">$0</span>
             </div>
 
-            <!-- Score d'optimisation -->
-            <div class="score-block" id="scoreBlock">
-                <div class="score-header">
-                    <span class="score-title">Score d'optimisation</span>
-                    <div class="score-goal-wrap">
-                        Objectif : <input class="score-goal-input" id="savingsGoalInput" type="number" value="150" min="0"> $/mois
-                    </div>
-                </div>
-                <div class="score-stats" id="scoreStats"></div>
-                <div class="score-bar-track"><div class="score-bar-fill" id="scoreBarFill" style="width:0%"></div></div>
-                <div class="score-caption" id="scoreCaption"></div>
-            </div>
 
             <!-- Façons d'économiser -->
             <div class="recs-section" style="margin-top:32px;">
