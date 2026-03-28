@@ -7,6 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Figtree:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -822,6 +823,148 @@ footer {
 .reveal-delay-2 { transition-delay: .16s; }
 .reveal-delay-3 { transition-delay: .24s; }
 
+/* ── HISTORY CHART ──────────────────────────────────── */
+.mockup-history {
+  margin-top: 14px;
+  background: rgba(13,17,32,.9);
+  border: 1px solid var(--border-2);
+  border-radius: 16px;
+  padding: 20px 20px 14px;
+}
+.mockup-history-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+.mockup-history-title {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text-2);
+  letter-spacing: .04em;
+  text-transform: uppercase;
+}
+.mockup-history-hint {
+  font-size: 11px;
+  color: var(--text-3);
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.mockup-history-hint::before {
+  content: '👆';
+  font-size: 12px;
+}
+.chart-wrap {
+  position: relative;
+  height: 140px;
+}
+
+/* ── HISTORY MODAL ──────────────────────────────────── */
+.hist-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.65);
+  z-index: 500;
+  align-items: center;
+  justify-content: center;
+  padding: 24px 16px;
+  backdrop-filter: blur(6px);
+}
+.hist-overlay.open { display: flex; }
+.hist-modal {
+  background: #0d1120;
+  border: 1px solid var(--border-2);
+  border-radius: 22px;
+  padding: 32px;
+  width: 100%;
+  max-width: 440px;
+  box-shadow: 0 32px 80px rgba(0,0,0,.6);
+  animation: slideUp .25s cubic-bezier(.16,1,.3,1);
+}
+@keyframes slideUp {
+  from { transform: translateY(20px); opacity: 0; }
+  to   { transform: none; opacity: 1; }
+}
+.hist-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 22px;
+}
+.hist-modal-title {
+  font-family: 'Outfit', sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text);
+  letter-spacing: -.4px;
+}
+.hist-modal-close {
+  background: none;
+  border: none;
+  color: var(--text-3);
+  font-size: 18px;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 8px;
+  transition: background .15s, color .15s;
+  font-family: 'Figtree', sans-serif;
+  line-height: 1;
+}
+.hist-modal-close:hover { background: rgba(255,255,255,.07); color: var(--text); }
+.hist-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+.hist-table thead th {
+  text-align: left;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: .07em;
+  color: var(--text-3);
+  padding: 0 0 10px;
+  border-bottom: 1px solid var(--border);
+}
+.hist-table thead th:last-child { text-align: right; }
+.hist-table tbody tr {
+  border-bottom: 1px solid var(--border);
+  transition: background .15s;
+}
+.hist-table tbody tr:last-child { border-bottom: none; }
+.hist-table tbody tr:hover { background: rgba(255,255,255,.03); }
+.hist-table td {
+  padding: 10px 0;
+  color: var(--text);
+  vertical-align: middle;
+}
+.hist-table td:last-child { text-align: right; font-weight: 600; color: var(--text); }
+.hist-table tfoot td {
+  padding-top: 14px;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text);
+  border-top: 1px solid var(--border-2);
+}
+.hist-table tfoot td:last-child {
+  background: linear-gradient(135deg, var(--accent), var(--accent-2));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-size: 16px;
+}
+.hist-exp-icon {
+  width: 28px; height: 28px;
+  border-radius: 7px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px;
+  margin-right: 10px;
+  flex-shrink: 0;
+}
+.hist-exp-cell { display: flex; align-items: center; }
+
 /* ── RESPONSIVE ─────────────────────────────────────── */
 @media (max-width: 900px) {
   .features-grid { grid-template-columns: 1fr; }
@@ -948,8 +1091,30 @@ footer {
         </div>
       </div>
     </div>
+
+    <!-- History chart -->
+    <div class="mockup-history">
+      <div class="mockup-history-header">
+        <span class="mockup-history-title">Historique des dépenses</span>
+        <span class="mockup-history-hint">Cliquez sur un mois</span>
+      </div>
+      <div class="chart-wrap">
+        <canvas id="landingHistoryChart"></canvas>
+      </div>
+    </div>
   </div>
 </section>
+
+<!-- ══ HISTORY MODAL ══ -->
+<div class="hist-overlay" id="histOverlay">
+  <div class="hist-modal">
+    <div class="hist-modal-header">
+      <span class="hist-modal-title" id="histModalTitle">Dépenses — Octobre</span>
+      <button class="hist-modal-close" id="histModalClose">✕</button>
+    </div>
+    <div id="histModalBody"></div>
+  </div>
+</div>
 
 <!-- ══ SOCIAL PROOF ══ -->
 <div id="proof">
@@ -1203,6 +1368,184 @@ document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 window.addEventListener('scroll', () => {
   document.getElementById('navbar').style.background =
     window.scrollY > 20 ? 'rgba(8,11,18,.92)' : 'rgba(8,11,18,.7)';
+});
+
+// ── HISTORY CHART ────────────────────────────────────
+
+const HIST_DATA = [
+  { month: 'Oct', total: 2620, expenses: [
+    { name: 'Loyer',          icon: '🏠', color: '#7c5af6', amount: 1450 },
+    { name: 'Électricité',    icon: '⚡', color: '#f59e0b', amount: 80   },
+    { name: 'Bell Internet',  icon: '📶', color: '#4fa3f7', amount: 85   },
+    { name: 'Cellulaire',     icon: '📱', color: '#34d399', amount: 95   },
+    { name: 'Netflix',        icon: '📺', color: '#ef4444', amount: 22   },
+    { name: 'Gym',            icon: '🏋️', color: '#f59e0b', amount: 25   },
+    { name: 'Auto',           icon: '🚗', color: '#a78bfa', amount: 420  },
+    { name: 'Épicerie',       icon: '🛒', color: '#34d399', amount: 443  },
+  ]},
+  { month: 'Nov', total: 2755, expenses: [
+    { name: 'Loyer',          icon: '🏠', color: '#7c5af6', amount: 1450 },
+    { name: 'Électricité',    icon: '⚡', color: '#f59e0b', amount: 105  },
+    { name: 'Bell Internet',  icon: '📶', color: '#4fa3f7', amount: 85   },
+    { name: 'Cellulaire',     icon: '📱', color: '#34d399', amount: 95   },
+    { name: 'Netflix',        icon: '📺', color: '#ef4444', amount: 22   },
+    { name: 'Gym',            icon: '🏋️', color: '#f59e0b', amount: 25   },
+    { name: 'Auto',           icon: '🚗', color: '#a78bfa', amount: 420  },
+    { name: 'Épicerie',       icon: '🛒', color: '#34d399', amount: 553  },
+  ]},
+  { month: 'Déc', total: 3180, expenses: [
+    { name: 'Loyer',          icon: '🏠', color: '#7c5af6', amount: 1450 },
+    { name: 'Électricité',    icon: '⚡', color: '#f59e0b', amount: 145  },
+    { name: 'Bell Internet',  icon: '📶', color: '#4fa3f7', amount: 85   },
+    { name: 'Cellulaire',     icon: '📱', color: '#34d399', amount: 95   },
+    { name: 'Netflix',        icon: '📺', color: '#ef4444', amount: 22   },
+    { name: 'Gym',            icon: '🏋️', color: '#f59e0b', amount: 25   },
+    { name: 'Auto',           icon: '🚗', color: '#a78bfa', amount: 420  },
+    { name: 'Épicerie',       icon: '🛒', color: '#34d399', amount: 815  },
+    { name: 'Cadeaux des fêtes', icon: '🎁', color: '#a855f7', amount: 123 },
+  ]},
+  { month: 'Jan', total: 2540, expenses: [
+    { name: 'Loyer',          icon: '🏠', color: '#7c5af6', amount: 1600 },
+    { name: 'Bell Internet',  icon: '📶', color: '#4fa3f7', amount: 85   },
+    { name: 'Netflix',        icon: '📺', color: '#ef4444', amount: 22   },
+    { name: 'Éconofitness',   icon: '🏋️', color: '#f59e0b', amount: 20   },
+    { name: 'Fizz',           icon: '📱', color: '#34d399', amount: 20   },
+    { name: 'Épicerie',       icon: '🛒', color: '#34d399', amount: 793  },
+  ]},
+  { month: 'Fév', total: 2808, expenses: [
+    { name: 'Loyer',          icon: '🏠', color: '#7c5af6', amount: 1600 },
+    { name: 'Bell Internet',  icon: '📶', color: '#4fa3f7', amount: 85   },
+    { name: 'Netflix',        icon: '📺', color: '#ef4444', amount: 22   },
+    { name: 'Éconofitness',   icon: '🏋️', color: '#f59e0b', amount: 20   },
+    { name: 'Fizz',           icon: '📱', color: '#34d399', amount: 20   },
+    { name: 'Épicerie',       icon: '🛒', color: '#34d399', amount: 1061 },
+  ]},
+  { month: 'Mars ●', total: 1747, expenses: [
+    { name: 'Loyer',          icon: '🏠', color: '#7c5af6', amount: 1600 },
+    { name: 'Bell Internet',  icon: '📶', color: '#4fa3f7', amount: 85   },
+    { name: 'Netflix',        icon: '📺', color: '#ef4444', amount: 22   },
+    { name: 'Éconofitness',   icon: '🏋️', color: '#f59e0b', amount: 20   },
+    { name: 'Fizz',           icon: '📱', color: '#34d399', amount: 20   },
+  ]},
+];
+
+function fmtAmt(n) {
+  return '$\u00a0' + n.toLocaleString('fr-CA');
+}
+
+function openHistModal(idx) {
+  const entry = HIST_DATA[idx];
+  const label = entry.month.replace(' ●', '');
+  document.getElementById('histModalTitle').textContent = 'Dépenses — ' + label;
+  const total = entry.expenses.reduce((s, e) => s + e.amount, 0);
+  const rows = entry.expenses.map(e => `
+    <tr>
+      <td><div class="hist-exp-cell">
+        <div class="hist-exp-icon" style="background:${e.color}22;">${e.icon}</div>
+        ${e.name}
+      </div></td>
+      <td>${fmtAmt(e.amount)}</td>
+    </tr>`).join('');
+  document.getElementById('histModalBody').innerHTML = `
+    <table class="hist-table">
+      <thead><tr><th>Dépense</th><th style="text-align:right;">Montant</th></tr></thead>
+      <tbody>${rows}</tbody>
+      <tfoot><tr><td>Total mensuel</td><td>${fmtAmt(total)}</td></tr></tfoot>
+    </table>`;
+  document.getElementById('histOverlay').classList.add('open');
+}
+
+document.getElementById('histModalClose').addEventListener('click', () =>
+  document.getElementById('histOverlay').classList.remove('open'));
+document.getElementById('histOverlay').addEventListener('click', e => {
+  if (e.target === document.getElementById('histOverlay'))
+    document.getElementById('histOverlay').classList.remove('open');
+});
+
+// Build chart after Chart.js is loaded
+window.addEventListener('load', () => {
+  const ctx = document.getElementById('landingHistoryChart').getContext('2d');
+  const labels = HIST_DATA.map(d => d.month);
+  const values = HIST_DATA.map(d => d.total);
+
+  const grad = ctx.createLinearGradient(0, 0, 0, 140);
+  grad.addColorStop(0, 'rgba(124,90,246,0.3)');
+  grad.addColorStop(1, 'rgba(124,90,246,0)');
+
+  const pointR  = values.map((_, i) => i === values.length - 1 ? 5 : 3);
+  const pointBg = values.map((_, i) => i === values.length - 1 ? '#a855f7' : '#7c5af6');
+  const pointBorder = values.map((_, i) => i === values.length - 1 ? '#fff' : 'transparent');
+  const pointBorderW = values.map((_, i) => i === values.length - 1 ? 2 : 0);
+
+  new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels,
+      datasets: [{
+        data: values,
+        borderColor: '#7c5af6',
+        backgroundColor: grad,
+        borderWidth: 2,
+        fill: true,
+        tension: 0.4,
+        pointRadius: pointR,
+        pointBackgroundColor: pointBg,
+        pointBorderColor: pointBorder,
+        pointBorderWidth: pointBorderW,
+        pointHoverRadius: 6,
+        pointHoverBackgroundColor: '#a855f7',
+        pointHoverBorderColor: '#fff',
+        pointHoverBorderWidth: 2,
+      }],
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      animation: { duration: 1200, easing: 'easeInOutQuart' },
+      scales: {
+        x: {
+          grid: { display: false },
+          border: { display: false },
+          ticks: { color: '#4d5a72', font: { size: 11, family: 'Figtree' } },
+        },
+        y: {
+          grid: { color: 'rgba(255,255,255,0.04)', drawTicks: false },
+          border: { display: false },
+          ticks: {
+            color: '#4d5a72',
+            font: { size: 10, family: 'Figtree' },
+            callback: v => '$' + v.toLocaleString('fr-CA'),
+            maxTicksLimit: 4,
+          },
+        },
+      },
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          backgroundColor: '#0d1120',
+          borderColor: 'rgba(255,255,255,.12)',
+          borderWidth: 1,
+          titleColor: '#8892aa',
+          bodyColor: '#f0f2f8',
+          titleFont: { family: 'Figtree', size: 11 },
+          bodyFont: { family: 'Figtree', size: 13, weight: '600' },
+          padding: 10,
+          cornerRadius: 10,
+          callbacks: {
+            title: items => items[0].label.replace(' ●', ' (en cours)'),
+            label: c => ' Total : ' + fmtAmt(c.parsed.y) + '/mois',
+          },
+        },
+      },
+      onClick: (e, elements) => {
+        if (!elements.length) return;
+        openHistModal(elements[0].index);
+      },
+      onHover: (e, elements) => {
+        e.native.target.style.cursor = elements.length ? 'pointer' : 'default';
+      },
+    },
+  });
 });
 </script>
 </body>
