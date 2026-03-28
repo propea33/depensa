@@ -81,6 +81,39 @@ function detectPriceHikes() {
     return hikes;
 }
 
+function detectSavings() {
+    const prevMonth = HISTORY[HISTORY.length - 1]; // mois précédent
+    if (!prevMonth) return [];
+    const savings = [];
+    expenses.forEach(curr => {
+        if (!curr.recurring) return;
+        const prev = prevMonth.expenses.find(p => p.name === curr.name);
+        if (!prev) return;
+        const currAmt = monthlyAmount(curr);
+        const prevAmt = prev.frequency === 'annuel' ? prev.amount / 12 : prev.amount;
+        const saved = prevAmt - currAmt;
+        if (saved >= 2) savings.push({ id: curr.id, name: curr.name, cat: curr.cat, currAmt, prevAmt, saved });
+    });
+    return savings;
+}
+
+function savingsMessage(s) {
+    const saved  = fmt(s.saved);
+    const yearly = fmt(s.saved * 12);
+    let intro = '';
+    switch (s.cat) {
+        case 'restaurant': intro = `Vous êtes allés moins souvent au resto ce mois-ci 🍽️`; break;
+        case 'streaming':  intro = `Vous avez réduit vos abonnements streaming 📺`; break;
+        case 'cell':       intro = `Votre forfait cellulaire vous coûte moins cher 📱`; break;
+        case 'internet':   intro = `Votre forfait Internet est moins cher ce mois-ci 📶`; break;
+        case 'gym':        intro = `Votre abonnement gym vous coûte moins cher 🏋️`; break;
+        case 'auto':       intro = `Vos dépenses auto ont diminué ce mois-ci 🚗`; break;
+        case 'electricite':intro = `Votre facture d'électricité est moins élevée ⚡`; break;
+        default:           intro = `<strong>${s.name}</strong> vous coûte moins cher ce mois-ci 💚`;
+    }
+    return `${intro} — <strong>Vous avez économisé ${saved}/mois</strong> vs le mois passé. En maintenant ce rythme : <strong>+${yearly} épargnés sur 1 an</strong> 🎉`;
+}
+
 function buildDonutDataFrom(expList) {
     const grouped = {};
     expList.forEach(e => { grouped[e.cat] = (grouped[e.cat] || 0) + effectiveMonthly(e); });

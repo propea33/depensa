@@ -53,6 +53,31 @@ function renderExpenses() {
         hikeBanner.innerHTML = '';
     }
 
+    // Savings congratulation banners (current month only)
+    let savingsBanner = $('savingsBanner');
+    if (!savingsBanner) {
+        savingsBanner = document.createElement('div');
+        savingsBanner.id = 'savingsBanner';
+        grid.parentElement.insertBefore(savingsBanner, hikeBanner);
+    }
+    if (!isPast) {
+        const pendingSavings = detectSavings().filter(s => !dismissedSavingsIds.has(s.id));
+        savingsBanner.innerHTML = pendingSavings.map(s => `
+            <div class="savings-alert-banner" data-savings-id="${s.id}">
+                <span class="savings-icon">🎉</span>
+                <div class="savings-text">${savingsMessage(s)}</div>
+                <button class="savings-dismiss-btn" data-savings-id="${s.id}">✓ Merci!</button>
+            </div>`).join('');
+        savingsBanner.querySelectorAll('.savings-dismiss-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                dismissedSavingsIds.add(Number(btn.dataset.savingsId));
+                renderExpenses();
+            });
+        });
+    } else {
+        savingsBanner.innerHTML = '';
+    }
+
     filtered.forEach((exp, idx) => {
         const cat = getCAT(exp.cat);
         const el  = document.createElement('div');

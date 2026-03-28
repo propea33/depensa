@@ -236,7 +236,8 @@ const MONTH_LABELS = { oct:'Octobre 2025', nov:'Novembre 2025', dec:'Décembre 2
 // Optimization score state
 let savingsGoal = 150;
 let appliedRecs  = new Set();
-let dismissedHikeIds = new Set(); // hike alert IDs dismissed by user
+let dismissedHikeIds    = new Set(); // hike alert IDs dismissed by user
+let dismissedSavingsIds = new Set(); // savings alert IDs dismissed by user
 
 // Simulation state
 let simulationMode = false;
