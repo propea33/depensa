@@ -66,12 +66,69 @@ function renderExpenses() {
             <div class="savings-alert-banner" data-savings-id="${s.id}">
                 <span class="savings-icon">🎉</span>
                 <div class="savings-text">${savingsMessage(s)}</div>
-                <button class="savings-dismiss-btn" data-savings-id="${s.id}">✓ Merci!</button>
+                <div class="savings-actions">
+                    <button class="savings-share-btn" data-savings-id="${s.id}" title="Partager">
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+                        Partager
+                    </button>
+                    <button class="savings-dismiss-btn" data-savings-id="${s.id}">✓ Merci!</button>
+                </div>
             </div>`).join('');
+
         savingsBanner.querySelectorAll('.savings-dismiss-btn').forEach(btn => {
             btn.addEventListener('click', () => {
                 dismissedSavingsIds.add(Number(btn.dataset.savingsId));
                 renderExpenses();
+            });
+        });
+
+        savingsBanner.querySelectorAll('.savings-share-btn').forEach(btn => {
+            btn.addEventListener('click', e => {
+                e.stopPropagation();
+                const sid = Number(btn.dataset.savingsId);
+                const s   = detectSavings().find(x => x.id === sid);
+                if (!s) return;
+
+                const shareText = buildShareText(s);
+                const shareUrl  = window.location.origin + '/landing.html';
+
+                // Native share on mobile
+                if (navigator.share) {
+                    navigator.share({ title: 'Depensa', text: shareText + ' → ' + shareUrl });
+                    return;
+                }
+
+                // Toggle popover on desktop
+                const existing = btn.parentElement.querySelector('.share-popover');
+                if (existing) { existing.remove(); return; }
+
+                const encText = encodeURIComponent(shareText + ' → ');
+                const encUrl  = encodeURIComponent(shareUrl);
+                const encMail = encodeURIComponent(shareText + '\n\n→ ' + shareUrl);
+                const popover = document.createElement('div');
+                popover.className = 'share-popover';
+                popover.innerHTML = `
+                    <a href="https://www.facebook.com/sharer/sharer.php?u=${encUrl}&quote=${encText}" target="_blank" class="share-link share-fb" title="Facebook">
+                        <svg viewBox="0 0 24 24" width="15" height="15" fill="currentColor"><path d="M24 12.07C24 5.41 18.63 0 12 0S0 5.41 0 12.07C0 18.1 4.39 23.1 10.13 24v-8.44H7.08v-3.49h3.04V9.41c0-3.02 1.8-4.7 4.54-4.7 1.31 0 2.68.24 2.68.24v2.97h-1.5c-1.5 0-1.96.93-1.96 1.89v2.26h3.32l-.53 3.49h-2.79V24C19.61 23.1 24 18.1 24 12.07z"/></svg>
+                        Facebook
+                    </a>
+                    <a href="https://twitter.com/intent/tweet?text=${encText}&url=${encUrl}" target="_blank" class="share-link share-x" title="X (Twitter)">
+                        <svg viewBox="0 0 24 24" width="15" height="15" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                        X (Twitter)
+                    </a>
+                    <a href="mailto:?subject=J'ai économisé avec Depensa!&body=${encMail}" class="share-link share-email" title="Courriel">
+                        <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                        Courriel
+                    </a>
+                `;
+                btn.parentElement.style.position = 'relative';
+                btn.parentElement.appendChild(popover);
+                setTimeout(() => {
+                    document.addEventListener('click', function closePopover() {
+                        popover.remove();
+                        document.removeEventListener('click', closePopover);
+                    });
+                }, 0);
             });
         });
     } else {

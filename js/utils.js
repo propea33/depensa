@@ -114,6 +114,12 @@ function savingsMessage(s) {
     return `${intro} — <strong>Vous avez économisé ${saved}/mois</strong> vs le mois passé. En maintenant ce rythme : <strong>+${yearly} épargnés sur 1 an</strong> 🎉`;
 }
 
+function buildShareText(s) {
+    const saved  = Math.round(s.saved);
+    const yearly = Math.round(s.saved * 12);
+    return `Youpi! 🎉 Depensa m'a fait économiser ${saved}$/mois sur mes dépenses récurrentes. En maintenant ce rythme, c'est ${yearly}$ de plus dans mes poches sur 1 an!`;
+}
+
 function buildDonutDataFrom(expList) {
     const grouped = {};
     expList.forEach(e => { grouped[e.cat] = (grouped[e.cat] || 0) + effectiveMonthly(e); });

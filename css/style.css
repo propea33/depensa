@@ -1884,6 +1884,38 @@
             margin-top: 2px;
         }
         .savings-dismiss-btn:hover { background: rgba(52,211,153,0.22); }
+        .savings-actions {
+            display: flex; align-items: center; gap: 6px; flex-shrink: 0; flex-wrap: wrap;
+        }
+        .savings-share-btn {
+            display: inline-flex; align-items: center; gap: 5px;
+            padding: 3px 10px; font-size: 11px; font-weight: 600;
+            color: #34d399; background: rgba(52,211,153,0.1);
+            border: 1px solid rgba(52,211,153,0.25); border-radius: 100px;
+            cursor: pointer; transition: background 0.15s; white-space: nowrap;
+            font-family: 'Figtree', sans-serif;
+        }
+        .savings-share-btn:hover { background: rgba(52,211,153,0.2); }
+        .share-popover {
+            position: absolute; bottom: calc(100% + 8px); right: 0;
+            background: var(--bg-card); border: 1px solid var(--border-2);
+            border-radius: 12px; padding: 6px;
+            display: flex; flex-direction: column; gap: 2px;
+            box-shadow: 0 8px 24px rgba(0,0,0,.4);
+            z-index: 50; min-width: 150px;
+            animation: fadeSlideIn .2s ease;
+        }
+        .share-link {
+            display: flex; align-items: center; gap: 9px;
+            padding: 8px 12px; border-radius: 8px;
+            font-size: 13px; font-weight: 500; text-decoration: none;
+            color: var(--text); transition: background .15s;
+            font-family: 'Figtree', sans-serif;
+        }
+        .share-link:hover { background: rgba(255,255,255,.06); }
+        .share-fb    { color: #4f9cf9; }
+        .share-x     { color: var(--text); }
+        .share-email { color: #a78bfa; }
 
         /* ─── APPLIED REC ─────────────────────────────── */
         .rec-card.applied { border-color: var(--green-border); }
