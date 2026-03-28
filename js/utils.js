@@ -71,6 +71,7 @@ function detectPriceHikes() {
     const hikes = [];
     expenses.forEach(curr => {
         if (!curr.recurring) return;
+        if (curr.alerts === false) return;
         const prev = prevMonth.expenses.find(p => p.name === curr.name);
         if (!prev) return;
         const currAmt = monthlyAmount(curr);
@@ -87,6 +88,7 @@ function detectSavings() {
     const savings = [];
     expenses.forEach(curr => {
         if (!curr.recurring) return;
+        if (curr.alerts === false) return;
         const prev = prevMonth.expenses.find(p => p.name === curr.name);
         if (!prev) return;
         const currAmt = monthlyAmount(curr);

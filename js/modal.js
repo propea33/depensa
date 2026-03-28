@@ -2,6 +2,14 @@
 //  MODAL (add + edit + history + sim)
 // ═══════════════════════════════════════════════════════
 
+let isAlerts = true;
+
+function setAlerts(val) {
+    isAlerts = val;
+    const row = $('alertsToggle').querySelector('.alerts-toggle-row');
+    if (row) row.classList.toggle('active', val);
+}
+
 // Categories that are inherently one-time (no type/fréquence needed)
 const ONE_TIME_CATS = new Set(['epicerie', 'cafe', 'restaurant', 'linge', 'voyage', 'transport', 'gaz']);
 
@@ -169,6 +177,7 @@ function openAddModal() {
     $('modal-title').textContent  = 'Ajouter une dépense';
     $('modal-submit').textContent = 'Ajouter ✓';
     setRecurring(false);
+    setAlerts(true);
     $('eFrequency').value = 'mensuel';
     $('amountHint').classList.remove('visible');
     buildCatGrid();
@@ -191,6 +200,7 @@ function openEditModal(id) {
     $('modal-title').textContent  = 'Modifier la dépense';
     $('modal-submit').textContent = 'Enregistrer ✓';
     setRecurring(exp.recurring ?? false);
+    setAlerts(exp.alerts !== false);
     $('eFrequency').value = exp.frequency || 'mensuel';
     $('eNotes').value     = exp.notes     || '';
     buildCatGrid();

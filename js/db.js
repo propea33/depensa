@@ -157,6 +157,7 @@ function _expToRow(exp, uid) {
         type:      exp.type      || 'fixe',
         frequency: exp.frequency || 'mensuel',
         notes:     exp.notes     || '',
+        alerts:    exp.alerts !== false,
     };
 }
 
@@ -171,5 +172,6 @@ function _rowToExp(row) {
         type:      row.type      || 'fixe',
         frequency: row.frequency || 'mensuel',
         notes:     row.notes     || '',
+        alerts:    row.alerts !== false,
     };
 }

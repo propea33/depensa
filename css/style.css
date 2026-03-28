@@ -1361,6 +1361,42 @@
             background: var(--accent-2);
         }
 
+        /* Alerts toggle (modal) — same pattern as recurring */
+        .alerts-toggle-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13.5px;
+            font-weight: 500;
+            cursor: pointer;
+        }
+        .alerts-toggle-label { flex: 1; }
+        .alerts-switch {
+            width: 36px;
+            height: 20px;
+            background: var(--border);
+            border-radius: 100px;
+            position: relative;
+            transition: background 0.25s;
+            flex-shrink: 0;
+            pointer-events: none;
+        }
+        .alerts-switch::after {
+            content: '';
+            position: absolute;
+            top: 3px; left: 3px;
+            width: 14px; height: 14px;
+            border-radius: 50%;
+            background: #fff;
+            transition: transform 0.25s cubic-bezier(0.34,1.56,0.64,1);
+        }
+        .alerts-toggle-row.active .alerts-switch { background: #34d399; }
+        .alerts-toggle-row.active .alerts-switch::after { transform: translateX(16px); }
+
+        /* Alerts button on expense card */
+        .action-btn-alerts { font-size: 14px; padding: 4px 8px; min-width: 32px; }
+        .action-btn-alerts.alerts-off { opacity: .4; }
+
         .recurring-toggle-row.active .recurring-switch::after {
             transform: translateX(16px);
         }

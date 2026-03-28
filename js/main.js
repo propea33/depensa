@@ -12,6 +12,7 @@ $('eName').addEventListener('input', () => {
 });
 
 $('recurringToggle').addEventListener('click', () => setRecurring(!isRecurring));
+$('alertsToggle').addEventListener('click', () => setAlerts(!isAlerts));
 
 $('eFrequency').addEventListener('change', updateAmountLabel);
 $('eAmount').addEventListener('input', updateAmountLabel);
@@ -48,10 +49,10 @@ $('expenseForm').addEventListener('submit', e => {
 
     if (editingId !== null) {
         const exp = expenses.find(e => e.id === editingId);
-        if (exp) { exp.name = name; exp.cat = finalCat; exp.amount = amount; exp.recurring = isRecurring; exp.frequency = frequency; exp.notes = notes; dbUpdateExpense(exp); }
+        if (exp) { exp.name = name; exp.cat = finalCat; exp.amount = amount; exp.recurring = isRecurring; exp.frequency = frequency; exp.notes = notes; exp.alerts = isAlerts; dbUpdateExpense(exp); }
         showToast(`✓ ${name} mis à jour — ${fmt(monthly)}/mois`);
     } else {
-        const exp = { id: nextId++, name, cat: finalCat, amount, recurring: isRecurring, frequency, notes };
+        const exp = { id: nextId++, name, cat: finalCat, amount, recurring: isRecurring, frequency, notes, alerts: isAlerts };
         expenses.push(exp);
         dbInsertExpense(exp);
         showToast(`✓ ${name} ajouté — ${fmt(monthly)}/mois`);

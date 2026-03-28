@@ -163,8 +163,10 @@ function renderExpenses() {
         const simTag  = isSimOverridden ? `<span class="sim-active-tag">🔬 Sim</span>` : '';
         const hikeTag = hasHike ? `<span class="hike-badge">⚠ +${Math.round(hikeMap.get(exp.id).pct * 100)}%</span>` : '';
 
+        const alertsOn = exp.alerts !== false;
         const actions = !isPast ? `
             <div class="card-actions">
+                <button class="action-btn action-btn-alerts ${alertsOn ? '' : 'alerts-off'}" data-id="${exp.id}" title="${alertsOn ? 'Alertes actives — cliquer pour désactiver' : 'Alertes désactivées — cliquer pour activer'}">${alertsOn ? '🔔' : '🔕'}</button>
                 <button class="action-btn action-btn-edit" data-id="${exp.id}">✏️ Modifier</button>
                 <button class="action-btn action-btn-del"  data-id="${exp.id}">✕ Supprimer</button>
             </div>` : '';
@@ -187,6 +189,16 @@ function renderExpenses() {
     }
 
     if (!isPast) {
+        grid.querySelectorAll('.action-btn-alerts').forEach(btn => {
+            btn.addEventListener('click', e => {
+                e.stopPropagation();
+                const exp = expenses.find(x => x.id === parseInt(btn.dataset.id));
+                if (!exp) return;
+                exp.alerts = exp.alerts === false;
+                dbUpdateExpense(exp);
+                renderExpenses();
+            });
+        });
         grid.querySelectorAll('.action-btn-edit').forEach(btn => {
             btn.addEventListener('click', e => { e.stopPropagation(); openEditModal(parseInt(btn.dataset.id)); });
         });
