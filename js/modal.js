@@ -154,6 +154,7 @@ function setRecurring(val) {
     isRecurring = val;
     const row = $('recurringToggle').querySelector('.recurring-toggle-row');
     if (row) row.classList.toggle('active', val);
+    $('alertsToggle').style.display = val ? 'none' : '';
 }
 
 function updateAmountLabel() {
