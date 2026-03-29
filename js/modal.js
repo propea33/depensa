@@ -156,6 +156,9 @@ function setRecurring(val) {
     const row = $('recurringToggle').querySelector('.recurring-toggle-row');
     if (row) row.classList.toggle('active', val);
     $('alertsToggle').style.display = val ? 'none' : '';
+    // En mode ajout, synchroniser le défaut des alertes :
+    // récurrent ON → alertes OFF (variation sans sens), récurrent OFF → alertes ON
+    if (editingId === null && simEditingId === null) setAlerts(!val);
 }
 
 function updateAmountLabel() {
