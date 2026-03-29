@@ -136,21 +136,61 @@ document.getElementById('histOverlay').addEventListener('click', e => {
 // ─── History chart ────────────────────────────────────
 
 window.addEventListener('load', () => {
-  const ctx = document.getElementById('landingHistoryChart').getContext('2d');
-  const labels = HIST_DATA.map(d => d.month);
+  const canvas = document.getElementById('landingHistoryChart');
+  const ctx    = canvas.getContext('2d');
+  const wrap   = document.getElementById('landingChartWrap');
+  const tip    = document.getElementById('landingChartTip');
+
   const values = HIST_DATA.map(d => d.total);
+  const labels = HIST_DATA.map(d => d.month);
 
   const grad = ctx.createLinearGradient(0, 0, 0, 140);
-  grad.addColorStop(0, 'rgba(124,90,246,0.3)');
+  grad.addColorStop(0, 'rgba(124,90,246,0.28)');
   grad.addColorStop(1, 'rgba(124,90,246,0)');
 
-  const pointR       = values.map((_, i) => i === values.length - 1 ? 5 : 3);
+  const pointRadius  = values.map((_, i) => i === values.length - 1 ? 5 : 3);
   const pointBg      = values.map((_, i) => i === values.length - 1 ? '#a855f7' : '#7c5af6');
   const pointBorder  = values.map((_, i) => i === values.length - 1 ? '#fff' : 'transparent');
   const pointBorderW = values.map((_, i) => i === values.length - 1 ? 2 : 0);
 
-  new Chart(ctx, {
+  let _hoverIdx = -1;
+
+  // ── Hairline plugin ────────────────────────────────
+  const hairlinePlugin = {
+    id: 'hairline',
+    afterDraw(chart) {
+      if (_hoverIdx < 0) return;
+      const meta = chart.getDatasetMeta(0);
+      if (!meta.data[_hoverIdx]) return;
+      const x = meta.data[_hoverIdx].x;
+      const { top, bottom } = chart.chartArea;
+      const c = chart.ctx;
+      c.save();
+      const g = c.createLinearGradient(0, top, 0, bottom);
+      g.addColorStop(0, 'rgba(168,85,247,0.85)');
+      g.addColorStop(1, 'rgba(168,85,247,0)');
+      c.beginPath();
+      c.moveTo(x, top);
+      c.lineTo(x, bottom);
+      c.strokeStyle = g;
+      c.lineWidth = 1.5;
+      c.stroke();
+      // Dot on data point
+      const ptY = meta.data[_hoverIdx].y;
+      c.beginPath();
+      c.arc(x, ptY, 5, 0, Math.PI * 2);
+      c.fillStyle = '#a855f7';
+      c.fill();
+      c.strokeStyle = '#fff';
+      c.lineWidth = 2;
+      c.stroke();
+      c.restore();
+    }
+  };
+
+  const chart = new Chart(ctx, {
     type: 'line',
+    plugins: [hairlinePlugin],
     data: {
       labels,
       datasets: [{
@@ -160,14 +200,13 @@ window.addEventListener('load', () => {
         borderWidth: 2,
         fill: true,
         tension: 0.4,
-        pointRadius: pointR,
+        pointRadius,
         pointBackgroundColor: pointBg,
         pointBorderColor: pointBorder,
         pointBorderWidth: pointBorderW,
-        pointHoverRadius: 6,
-        pointHoverBackgroundColor: '#a855f7',
-        pointHoverBorderColor: '#fff',
-        pointHoverBorderWidth: 2,
+        pointHoverRadius: 0,
+        pointHoverBackgroundColor: 'transparent',
+        pointHoverBorderColor: 'transparent',
       }],
     },
     options: {
@@ -193,29 +232,85 @@ window.addEventListener('load', () => {
       },
       plugins: {
         legend: { display: false },
-        tooltip: {
-          backgroundColor: '#0d1120',
-          borderColor: 'rgba(255,255,255,.12)',
-          borderWidth: 1,
-          titleColor: '#8892aa',
-          bodyColor: '#f0f2f8',
-          titleFont: { family: 'Figtree', size: 11 },
-          bodyFont: { family: 'Figtree', size: 13, weight: '600' },
-          padding: 10,
-          cornerRadius: 10,
-          callbacks: {
-            title: items => items[0].label.replace(' ●', ' (en cours)'),
-            label: c => ' Total : ' + fmtAmt(c.parsed.y) + '/mois',
-          },
-        },
-      },
-      onClick: (e, elements) => {
-        if (!elements.length) return;
-        openHistModal(elements[0].index);
-      },
-      onHover: (e, elements) => {
-        e.native.target.style.cursor = elements.length ? 'pointer' : 'default';
+        tooltip: { enabled: false },
       },
     },
+  });
+
+  // ── Nearest-point helper ───────────────────────────
+  function getNearestIdx(mouseX) {
+    const meta = chart.getDatasetMeta(0);
+    let minDist = Infinity, nearest = -1;
+    meta.data.forEach((pt, i) => {
+      const d = Math.abs(pt.x - mouseX);
+      if (d < minDist) { minDist = d; nearest = i; }
+    });
+    return nearest;
+  }
+
+  // ── Show tooltip ───────────────────────────────────
+  function showTip(idx) {
+    if (idx === _hoverIdx) return;
+    _hoverIdx = idx;
+    chart.update('none');
+
+    const entry = HIST_DATA[idx];
+    const label = entry.month.replace(' ●', '');
+    const top3  = [...entry.expenses].sort((a, b) => b.amount - a.amount).slice(0, 3);
+
+    const pills = top3.map(e => {
+      const iconHTML = e.domain
+        ? `<img src="https://www.google.com/s2/favicons?domain=${e.domain}&sz=64" width="16" height="16" style="width:16px;height:16px;object-fit:contain;display:block;border-radius:3px;" alt="${e.name}">`
+        : `<span style="font-size:13px;">${e.icon || '💰'}</span>`;
+      return `<div class="landing-ctip-pill">
+        <div class="landing-ctip-pill-icon">${iconHTML}</div>
+        <span class="landing-ctip-pill-name">${e.name}</span>
+        <span class="landing-ctip-pill-amount">${fmtAmt(e.amount)}</span>
+      </div>`;
+    }).join('');
+
+    tip.innerHTML = `
+      <div class="landing-ctip-month">${label}</div>
+      <div class="landing-ctip-total">${fmtAmt(entry.total)}</div>
+      <div class="landing-ctip-pills">${pills}</div>
+      <div class="landing-ctip-hint">Cliquez pour voir le détail →</div>
+    `;
+
+    tip.style.display = 'block';
+    const meta       = chart.getDatasetMeta(0);
+    const ptX        = meta.data[idx].x;
+    const canvasRect = canvas.getBoundingClientRect();
+    const wrapRect   = wrap.getBoundingClientRect();
+    const relX       = ptX + (canvasRect.left - wrapRect.left);
+    const tipW       = tip.offsetWidth || 190;
+    const wrapW      = wrap.offsetWidth;
+    let left         = relX - tipW / 2;
+    left = Math.max(6, Math.min(left, wrapW - tipW - 6));
+    tip.style.left = left + 'px';
+    requestAnimationFrame(() => tip.classList.add('visible'));
+  }
+
+  function hideTip() {
+    _hoverIdx = -1;
+    tip.classList.remove('visible');
+    chart.update('none');
+    setTimeout(() => { if (_hoverIdx < 0) tip.style.display = 'none'; }, 180);
+  }
+
+  // ── Mouse events ───────────────────────────────────
+  canvas.addEventListener('mousemove', e => {
+    const rect   = canvas.getBoundingClientRect();
+    const mouseX = e.clientX - rect.left;
+    canvas.style.cursor = 'pointer';
+    showTip(getNearestIdx(mouseX));
+  });
+
+  canvas.addEventListener('mouseleave', hideTip);
+
+  canvas.addEventListener('click', e => {
+    const rect   = canvas.getBoundingClientRect();
+    const mouseX = e.clientX - rect.left;
+    const idx    = getNearestIdx(mouseX);
+    if (idx >= 0) openHistModal(idx);
   });
 });
