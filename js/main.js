@@ -287,6 +287,41 @@ $('settingsOverlay').addEventListener('click', e => {
     if (e.target === $('settingsOverlay')) _closeSettings();
 });
 
+// ─── Help overlay ─────────────────────────────────────
+
+$('helpOverlay').style.display = 'none';
+
+function _openHelp() {
+    _avatarMenuOpen = false;
+    $('avatarMenu').style.display = 'none';
+    $('helpOverlay').style.display = 'flex';
+}
+
+function _closeHelp() {
+    $('helpOverlay').style.display = 'none';
+}
+
+$('helpBtn').addEventListener('click', _openHelp);
+$('helpClose').addEventListener('click', _closeHelp);
+$('helpOverlay').addEventListener('click', e => {
+    if (e.target === $('helpOverlay')) _closeHelp();
+});
+
+// Accordion toggle for help sections
+$('helpOverlay').addEventListener('click', e => {
+    const header = e.target.closest('.help-section-header');
+    if (header) {
+        const section = header.closest('.help-section');
+        section.classList.toggle('open');
+        return;
+    }
+    const faqQ = e.target.closest('.help-faq-q');
+    if (faqQ) {
+        const item = faqQ.closest('.help-faq-item');
+        item.classList.toggle('open');
+    }
+});
+
 $('settingsNameForm').addEventListener('submit', async e => {
     e.preventDefault();
     const firstName = $('sFirstName').value.trim();

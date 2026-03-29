@@ -7,7 +7,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Figtree:wght@300;400;500;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="./css/style.css?v=20260345">
+    <link rel="stylesheet" href="./css/style.css?v=20260347">
     <link rel="stylesheet" href="./css/onboarding.css?v=20260345">
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -21,7 +21,7 @@
     <script src="./js/modal.js?v=20260346" defer></script>
     <script src="./js/ui.js?v=20260346" defer></script>
     <script src="./js/onboarding.js?v=20260345" defer></script>
-    <script src="./js/main.js?v=20260345" defer></script>
+    <script src="./js/main.js?v=20260347" defer></script>
 </head>
 <body>
 
@@ -111,8 +111,9 @@
                     <div class="avatar-menu-identity" id="avatarIdentity" style="display:none;"></div>
                     <div class="avatar-menu-divider" id="avatarDivider" style="display:none;"></div>
                     <button class="avatar-menu-item" id="settingsBtn">⚙&nbsp; Paramètres</button>
+                    <button class="avatar-menu-item" id="helpBtn">?&nbsp; Aide</button>
                     <div class="avatar-menu-divider"></div>
-                    <button class="avatar-menu-item" id="logoutBtn">⎋&nbsp; Se déconnecter</button>
+                    <button class="avatar-menu-item danger" id="logoutBtn">⎋&nbsp; Se déconnecter</button>
                 </div>
             </div>
         </div>
@@ -465,6 +466,234 @@
             </form>
         </div>
     </div>
+</div>
+
+<!-- ════════════════════════════════════════════ -->
+<!--  HELP OVERLAY                               -->
+<!-- ════════════════════════════════════════════ -->
+<div class="help-overlay" id="helpOverlay" style="display:none;">
+    <div class="help-card">
+
+        <div class="help-header">
+            <div class="help-header-left">
+                <div class="help-label">Guide</div>
+                <div class="help-title">Comment utiliser Depensa</div>
+            </div>
+            <button class="help-close" id="helpClose">✕</button>
+        </div>
+
+        <div class="help-body">
+
+            <!-- ── 1. Ajouter une dépense ── -->
+            <div class="help-section" data-section="add">
+                <div class="help-section-header">
+                    <div class="help-section-icon" style="background:rgba(124,58,237,0.15);">➕</div>
+                    <div class="help-section-meta">
+                        <div class="help-section-title">Ajouter une dépense</div>
+                        <div class="help-section-sub">Saisir, catégoriser et enregistrer</div>
+                    </div>
+                    <div class="help-section-chevron">▼</div>
+                </div>
+                <div class="help-section-body">
+                    <div class="help-step">
+                        <div class="help-step-num">1</div>
+                        <div class="help-step-text">Cliquez sur <strong>+ Ajouter</strong> en haut de la liste de dépenses (ou sur le bouton flottant sur mobile).</div>
+                    </div>
+                    <div class="help-step">
+                        <div class="help-step-num">2</div>
+                        <div class="help-step-text">Tapez le <strong>nom</strong> — Depensa suggère automatiquement le logo du fournisseur si reconnu (Netflix, Vidéotron, Spotify…).</div>
+                    </div>
+                    <div class="help-step">
+                        <div class="help-step-num">3</div>
+                        <div class="help-step-text">Choisissez une <strong>catégorie</strong> dans la grille, entrez le <strong>montant</strong> et la <strong>fréquence</strong> (mensuel ou annuel).</div>
+                    </div>
+                    <div class="help-step">
+                        <div class="help-step-num">4</div>
+                        <div class="help-step-text">Cliquez <strong>Ajouter ✓</strong>. La dépense apparaît dans la liste et les totaux se mettent à jour immédiatement.</div>
+                    </div>
+                    <div class="help-tip">
+                        <span class="help-tip-icon">💡</span>
+                        Un montant annuel (ex. assurance) est automatiquement divisé par 12 pour afficher l'équivalent mensuel.
+                    </div>
+                </div>
+            </div>
+
+            <!-- ── 2. Dépenses récurrentes ── -->
+            <div class="help-section" data-section="recurring">
+                <div class="help-section-header">
+                    <div class="help-section-icon" style="background:rgba(16,185,129,0.12);">🔁</div>
+                    <div class="help-section-meta">
+                        <div class="help-section-title">Dépenses récurrentes</div>
+                        <div class="help-section-sub">Abonnements, loyer, factures fixes</div>
+                    </div>
+                    <div class="help-section-chevron">▼</div>
+                </div>
+                <div class="help-section-body">
+                    <p>Activez <strong>Dépense récurrente</strong> lors de l'ajout pour indiquer qu'elle se répète chaque mois (loyer, abonnements, assurances…).</p>
+                    <p>Au <strong>1er de chaque mois à minuit</strong>, toutes vos dépenses récurrentes sont automatiquement copiées dans le nouveau mois. Aucune action requise de votre part.</p>
+                    <div class="help-tip">
+                        <span class="help-tip-icon">🔔</span>
+                        Les dépenses récurrentes affichent une clochette barrée (🔕) — les alertes de variation ne s'appliquent pas aux montants fixes.
+                    </div>
+                </div>
+            </div>
+
+            <!-- ── 3. Historique des mois ── -->
+            <div class="help-section" data-section="history">
+                <div class="help-section-header">
+                    <div class="help-section-icon" style="background:rgba(56,189,248,0.12);">📅</div>
+                    <div class="help-section-meta">
+                        <div class="help-section-title">Navigation par mois</div>
+                        <div class="help-section-sub">Parcourir l'historique et le mois en cours</div>
+                    </div>
+                    <div class="help-section-chevron">▼</div>
+                </div>
+                <div class="help-section-body">
+                    <p>Les onglets en haut de la liste affichent les <strong>6 derniers mois</strong> plus le mois courant (marqué <strong>●</strong>).</p>
+                    <p>Cliquez sur un mois passé pour consulter son historique en lecture seule. Cliquez sur le <strong>mois actif</strong> pour revenir en mode édition.</p>
+                    <div class="help-tip">
+                        <span class="help-tip-icon">📊</span>
+                        Le graphique <em>Historique</em> en bas de page reflète l'évolution de vos dépenses totales mois par mois.
+                    </div>
+                </div>
+            </div>
+
+            <!-- ── 4. Alertes de variation ── -->
+            <div class="help-section" data-section="alerts">
+                <div class="help-section-header">
+                    <div class="help-section-icon" style="background:rgba(245,158,11,0.12);">🔔</div>
+                    <div class="help-section-meta">
+                        <div class="help-section-title">Alertes de variation</div>
+                        <div class="help-section-sub">Détecter les hausses de prix</div>
+                    </div>
+                    <div class="help-section-chevron">▼</div>
+                </div>
+                <div class="help-section-body">
+                    <p>Depensa surveille vos dépenses actives et signale toute <strong>hausse de prix</strong> détectée chez les fournisseurs connus (FAI, cellulaire, streaming…).</p>
+                    <p>Quand une hausse est détectée, une bannière d'alerte rouge apparaît avec le pourcentage d'augmentation. Cliquez <strong>Ignorer</strong> pour masquer ou consultez les alternatives dans la section <em>Façons d'économiser</em>.</p>
+                    <div class="help-tip">
+                        <span class="help-tip-icon">💡</span>
+                        Vous pouvez désactiver les alertes pour une dépense spécifique en cliquant sur l'icône 🔔 dans sa carte.
+                    </div>
+                </div>
+            </div>
+
+            <!-- ── 5. Score financier ── -->
+            <div class="help-section" data-section="score">
+                <div class="help-section-header">
+                    <div class="help-section-icon" style="background:rgba(124,58,237,0.12);">🎯</div>
+                    <div class="help-section-meta">
+                        <div class="help-section-title">Score financier</div>
+                        <div class="help-section-sub">Mesurer la santé de vos finances</div>
+                    </div>
+                    <div class="help-section-chevron">▼</div>
+                </div>
+                <div class="help-section-body">
+                    <p>Le score (0–100) reflète le rapport entre vos dépenses mensuelles et votre <strong>objectif budgétaire</strong> personnel. Plus vos dépenses sont proches ou sous l'objectif, plus le score est élevé.</p>
+                    <p>Modifiez votre objectif directement dans la carte <em>Score financier</em> — il est sauvegardé automatiquement.</p>
+                </div>
+            </div>
+
+            <!-- ── 6. Simulation ── -->
+            <div class="help-section" data-section="sim">
+                <div class="help-section-header">
+                    <div class="help-section-icon" style="background:rgba(245,158,11,0.1);">🔬</div>
+                    <div class="help-section-meta">
+                        <div class="help-section-title">Mode Simulation</div>
+                        <div class="help-section-sub">Tester des scénarios sans affecter vos données</div>
+                    </div>
+                    <div class="help-section-chevron">▼</div>
+                </div>
+                <div class="help-section-body">
+                    <p>La <strong>Simulation</strong> vous permet de tester l'impact d'un changement (annuler un abonnement, changer de forfait…) sans modifier vos vraies données.</p>
+                    <div class="help-step">
+                        <div class="help-step-num">1</div>
+                        <div class="help-step-text">Cliquez sur <strong>Simulation</strong> dans la barre principale pour ouvrir la zone de simulation.</div>
+                    </div>
+                    <div class="help-step">
+                        <div class="help-step-num">2</div>
+                        <div class="help-step-text">Modifiez ou masquez des dépenses existantes, ajoutez-en de nouvelles via <strong>+ Ajouter (sim)</strong>.</div>
+                    </div>
+                    <div class="help-step">
+                        <div class="help-step-num">3</div>
+                        <div class="help-step-text">Cliquez <strong>Appliquer</strong> pour voir l'impact sur le total. Quittez la simulation avec <strong>Quitter</strong> — vos vraies données restent intactes.</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ── 7. Façons d'économiser ── -->
+            <div class="help-section" data-section="savings">
+                <div class="help-section-header">
+                    <div class="help-section-icon" style="background:rgba(16,185,129,0.1);">💸</div>
+                    <div class="help-section-meta">
+                        <div class="help-section-title">Façons d'économiser</div>
+                        <div class="help-section-sub">Recommandations personnalisées</div>
+                    </div>
+                    <div class="help-section-chevron">▼</div>
+                </div>
+                <div class="help-section-body">
+                    <p>Cette section analyse vos dépenses et compare vos forfaits internet/cellulaire aux <strong>meilleurs prix du marché</strong> en temps réel.</p>
+                    <p>Chaque recommandation affiche le montant d'économie mensuel et annuel possible. Cliquez sur l'offre pour être redirigé vers le fournisseur.</p>
+                    <div class="help-tip">
+                        <span class="help-tip-icon">✓</span>
+                        Marquez une recommandation comme <strong>Appliquée</strong> pour la suivre et la retrouver facilement.
+                    </div>
+                </div>
+            </div>
+
+            <!-- ── 8. Export ── -->
+            <div class="help-section" data-section="export">
+                <div class="help-section-header">
+                    <div class="help-section-icon" style="background:rgba(56,189,248,0.1);">📤</div>
+                    <div class="help-section-meta">
+                        <div class="help-section-title">Exporter vos données</div>
+                        <div class="help-section-sub">PDF et CSV disponibles</div>
+                    </div>
+                    <div class="help-section-chevron">▼</div>
+                </div>
+                <div class="help-section-body">
+                    <p>Cliquez sur <strong>Exporter</strong> en haut à droite de la liste pour accéder aux options :</p>
+                    <p><strong>PDF</strong> — rapport visuel prêt à imprimer ou partager, avec le récapitulatif du mois sélectionné.</p>
+                    <p><strong>CSV</strong> — fichier tableur compatible Excel/Google Sheets pour analyser vos données librement.</p>
+                </div>
+            </div>
+
+            <!-- ── 9. FAQ ── -->
+            <div class="help-section" data-section="faq">
+                <div class="help-section-header">
+                    <div class="help-section-icon" style="background:rgba(168,85,247,0.1);">❓</div>
+                    <div class="help-section-meta">
+                        <div class="help-section-title">Questions fréquentes</div>
+                        <div class="help-section-sub">FAQ</div>
+                    </div>
+                    <div class="help-section-chevron">▼</div>
+                </div>
+                <div class="help-section-body">
+                    <div class="help-faq-item">
+                        <div class="help-faq-q">Mes données sont-elles sauvegardées en ligne ?<span class="help-faq-chevron">▼</span></div>
+                        <div class="help-faq-a">Oui. Lorsque vous êtes connecté avec un compte, vos dépenses sont synchronisées dans le nuage via Supabase. En mode invité (sans compte), les données restent uniquement en mémoire et sont perdues à la fermeture.</div>
+                    </div>
+                    <div class="help-faq-item">
+                        <div class="help-faq-q">Peut-on utiliser Depensa sans créer de compte ?<span class="help-faq-chevron">▼</span></div>
+                        <div class="help-faq-a">Oui. Cliquez sur <strong>Continuer sans compte</strong> sur l'écran de connexion. Vous pourrez explorer toutes les fonctionnalités, mais vos données ne seront pas sauvegardées d'une session à l'autre.</div>
+                    </div>
+                    <div class="help-faq-item">
+                        <div class="help-faq-q">Comment fonctionne le changement de mois automatique ?<span class="help-faq-chevron">▼</span></div>
+                        <div class="help-faq-a">Chaque 1er du mois à minuit, Depensa archive le mois écoulé, supprime les dépenses non récurrentes et reporte automatiquement les dépenses récurrentes dans le nouveau mois. Un nouvel onglet de mois apparaît dans la navigation.</div>
+                    </div>
+                    <div class="help-faq-item">
+                        <div class="help-faq-q">Les prix des fournisseurs sont-ils mis à jour en temps réel ?<span class="help-faq-chevron">▼</span></div>
+                        <div class="help-faq-a">Les prix internet et cellulaire sont récupérés depuis notre API à chaque ouverture de l'application. En cas d'indisponibilité du serveur, des valeurs de référence sont utilisées comme repli.</div>
+                    </div>
+                    <div class="help-faq-item">
+                        <div class="help-faq-q">Comment supprimer toutes mes données ?<span class="help-faq-chevron">▼</span></div>
+                        <div class="help-faq-a">En mode invité, une bannière en bas de page propose le bouton <strong>Effacer les données</strong>. Pour un compte connecté, la suppression des données se fait via les Paramètres ou en supprimant votre compte.</div>
+                    </div>
+                </div>
+            </div>
+
+        </div><!-- /.help-body -->
+    </div><!-- /.help-card -->
 </div>
 
 </body>
