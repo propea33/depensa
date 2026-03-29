@@ -7,20 +7,20 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Figtree:wght@300;400;500;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="./css/style.css?v=20260342">
-    <link rel="stylesheet" href="./css/onboarding.css?v=20260342">
+    <link rel="stylesheet" href="./css/style.css?v=20260343">
+    <link rel="stylesheet" href="./css/onboarding.css?v=20260343">
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="./js/data.js?v=20260342" defer></script>
-    <script src="./js/utils.js?v=20260342" defer></script>
-    <script src="./js/icons.js?v=20260342" defer></script>
-    <script src="./js/db.js?v=20260342" defer></script>
-    <script src="./js/auth.js?v=20260342" defer></script>
-    <script src="./js/charts.js?v=20260342" defer></script>
-    <script src="./js/modal.js?v=20260342" defer></script>
-    <script src="./js/ui.js?v=20260342" defer></script>
-    <script src="./js/onboarding.js?v=20260342" defer></script>
-    <script src="./js/main.js?v=20260342" defer></script>
+    <script src="./js/data.js?v=20260343" defer></script>
+    <script src="./js/utils.js?v=20260343" defer></script>
+    <script src="./js/icons.js?v=20260343" defer></script>
+    <script src="./js/db.js?v=20260343" defer></script>
+    <script src="./js/auth.js?v=20260343" defer></script>
+    <script src="./js/charts.js?v=20260343" defer></script>
+    <script src="./js/modal.js?v=20260343" defer></script>
+    <script src="./js/ui.js?v=20260343" defer></script>
+    <script src="./js/onboarding.js?v=20260343" defer></script>
+    <script src="./js/main.js?v=20260343" defer></script>
 </head>
 <body>
 
@@ -239,17 +239,8 @@
             </div>
 
 
-            <!-- Façons d'économiser -->
-            <div class="recs-section" style="margin-top:32px;">
-                <div class="section-header">
-                    <span class="section-title">Façons d'économiser</span>
-                    <span class="section-badge" id="recBadge">3 opportunités</span>
-                </div>
-                <div class="rec-grid" id="recGrid"></div>
-            </div>
-
             <!-- Historique des dépenses -->
-            <div class="card" style="margin-top:20px;">
+            <div class="card" style="margin-top:32px;">
                 <div class="card-header">
                     <span class="card-title">Historique des dépenses</span>
                     <span class="history-trend" id="historyTrend"></span>
@@ -258,6 +249,15 @@
                     <div class="ctip-card" id="chartTooltipCard"></div>
                     <canvas id="savingsChart"></canvas>
                 </div>
+            </div>
+
+            <!-- Façons d'économiser -->
+            <div class="recs-section" style="margin-top:20px;">
+                <div class="section-header">
+                    <span class="section-title">Façons d'économiser</span>
+                    <span class="section-badge" id="recBadge">3 opportunités</span>
+                </div>
+                <div class="rec-grid" id="recGrid"></div>
             </div>
 
         </div><!-- /.expense-main -->
