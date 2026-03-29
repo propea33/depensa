@@ -116,14 +116,14 @@ $('recurringFilter').addEventListener('click', () => {
 
 // ─── Month selector ───────────────────────────────────
 
-document.querySelectorAll('.month-tab').forEach(tab => {
-    tab.addEventListener('click', () => {
-        selectedMonth = tab.dataset.month;
-        document.querySelectorAll('.month-tab').forEach(t => t.classList.remove('active'));
-        tab.classList.add('active');
-        renderExpenses();
-        updateDonut();
-    });
+$('monthTabs').addEventListener('click', e => {
+    const tab = e.target.closest('.month-tab');
+    if (!tab) return;
+    selectedMonth = tab.dataset.month;
+    document.querySelectorAll('.month-tab').forEach(t => t.classList.remove('active'));
+    tab.classList.add('active');
+    renderExpenses();
+    updateDonut();
 });
 
 // ─── Ticker toggle ────────────────────────────────────

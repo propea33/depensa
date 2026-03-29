@@ -7,20 +7,20 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Figtree:wght@300;400;500;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="./css/style.css?v=20260337">
-    <link rel="stylesheet" href="./css/onboarding.css?v=20260337">
+    <link rel="stylesheet" href="./css/style.css?v=20260338">
+    <link rel="stylesheet" href="./css/onboarding.css?v=20260338">
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="./js/data.js?v=20260337" defer></script>
-    <script src="./js/utils.js?v=20260337" defer></script>
-    <script src="./js/icons.js?v=20260337" defer></script>
-    <script src="./js/db.js?v=20260337" defer></script>
-    <script src="./js/auth.js?v=20260337" defer></script>
-    <script src="./js/charts.js?v=20260337" defer></script>
-    <script src="./js/modal.js?v=20260337" defer></script>
-    <script src="./js/ui.js?v=20260337" defer></script>
-    <script src="./js/onboarding.js?v=20260337" defer></script>
-    <script src="./js/main.js?v=20260337" defer></script>
+    <script src="./js/data.js?v=20260338" defer></script>
+    <script src="./js/utils.js?v=20260338" defer></script>
+    <script src="./js/icons.js?v=20260338" defer></script>
+    <script src="./js/db.js?v=20260338" defer></script>
+    <script src="./js/auth.js?v=20260338" defer></script>
+    <script src="./js/charts.js?v=20260338" defer></script>
+    <script src="./js/modal.js?v=20260338" defer></script>
+    <script src="./js/ui.js?v=20260338" defer></script>
+    <script src="./js/onboarding.js?v=20260338" defer></script>
+    <script src="./js/main.js?v=20260338" defer></script>
 </head>
 <body>
 
@@ -205,13 +205,31 @@
             </div>
 
             <!-- Month selector -->
-            <div class="month-tabs" id="monthTabs">
-                <button class="month-tab" data-month="oct">Oct</button>
-                <button class="month-tab" data-month="nov">Nov</button>
-                <button class="month-tab" data-month="dec">Déc</button>
-                <button class="month-tab" data-month="jan">Jan</button>
-                <button class="month-tab" data-month="fev">Fév</button>
-                <button class="month-tab active live-tab" data-month="mars">Mars</button>
+            <div class="month-year-selector" id="monthTabs">
+                <div class="month-year-group">
+                    <span class="month-year-label">
+                        2025
+                        <select class="month-year-pick" id="yearPick2025" title="Choisir l'année">
+                            <option value="2025" selected>2025</option>
+                            <option value="2024">2024</option>
+                            <option value="2023">2023</option>
+                        </select>
+                    </span>
+                    <div class="month-tabs-row">
+                        <button class="month-tab" data-month="oct">Oct</button>
+                        <button class="month-tab" data-month="nov">Nov</button>
+                        <button class="month-tab" data-month="dec">Déc</button>
+                    </div>
+                </div>
+                <div class="month-year-divider"></div>
+                <div class="month-year-group">
+                    <span class="month-year-label">2026</span>
+                    <div class="month-tabs-row">
+                        <button class="month-tab" data-month="jan">Jan</button>
+                        <button class="month-tab" data-month="fev">Fév</button>
+                        <button class="month-tab active live-tab" data-month="mars">Mars</button>
+                    </div>
+                </div>
             </div>
 
             <div class="expense-grid" id="expenseList"></div>
