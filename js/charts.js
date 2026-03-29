@@ -312,8 +312,6 @@ function initSavings() {
     canvas.addEventListener('mousemove', e => {
         const rect   = canvas.getBoundingClientRect();
         const mouseX = e.clientX - rect.left;
-        const { left: aLeft, right: aRight } = savingsChart.chartArea;
-        if (mouseX < aLeft || mouseX > aRight) { hideTip(); canvas.style.cursor = 'default'; return; }
         canvas.style.cursor = 'pointer';
         showTip(getNearestIdx(mouseX));
     });
@@ -323,8 +321,6 @@ function initSavings() {
     canvas.addEventListener('click', e => {
         const rect   = canvas.getBoundingClientRect();
         const mouseX = e.clientX - rect.left;
-        const { left: aLeft, right: aRight } = savingsChart.chartArea;
-        if (mouseX < aLeft || mouseX > aRight) return;
         const idx  = getNearestIdx(mouseX);
         if (idx < 0) return;
         const month   = data[idx];
