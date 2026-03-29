@@ -2239,3 +2239,145 @@
         }
         .sticky-add-btn:hover { transform: translateX(-50%) translateY(-2px); box-shadow: 0 10px 30px var(--accent-glow); }
         @media (max-width: 700px) { .sticky-add-btn { display: flex; align-items: center; gap: 8px; } }
+
+        /* ═══════════════════════════════════════════════
+           MOBILE — Responsive fixes ≤ 700px
+           ═══════════════════════════════════════════════ */
+
+        @media (max-width: 700px) {
+
+            /* ── Page ─────────────────────────────────── */
+            body { overflow-x: hidden; }
+
+            .page-wrapper { padding: 0 14px 80px; }
+
+            header { padding: 16px 0 18px; }
+
+            /* ── Expense cards: visible action buttons ── */
+            /* On touch devices hover never fires → always show actions */
+            .expense-card {
+                flex-wrap: wrap;
+                align-items: flex-start;
+                padding: 14px;
+                gap: 10px;
+            }
+
+            .expense-card .card-actions {
+                position: static;
+                width: 100%;
+                opacity: 1;
+                pointer-events: auto;
+                background: transparent;
+                backdrop-filter: none;
+                -webkit-backdrop-filter: none;
+                border-radius: 0;
+                display: flex;
+                justify-content: flex-end;
+                padding: 8px 0 0;
+                margin-top: 0;
+                border-top: 1px solid var(--border);
+                gap: 6px;
+            }
+
+            .expense-card .action-btn {
+                padding: 6px 12px;
+                font-size: 12px;
+                gap: 4px;
+            }
+
+            /* ── History table (past month modal) ─────── */
+            .history-table td,
+            .history-table th { padding: 9px 8px; font-size: 12.5px; }
+
+            .history-table .td-yearly { font-size: 9px; color: var(--text-3); }
+
+            /* ── Plan comparison rows ─────────────────── */
+            .plan-speed { display: none; }
+
+            .plan-row { gap: 8px; padding: 9px 10px; }
+
+            /* ── Savings / hike banners ───────────────── */
+            .savings-alert-banner { flex-wrap: wrap; gap: 8px; }
+
+            .savings-actions {
+                width: 100%;
+                justify-content: flex-end;
+                flex-shrink: 1;
+            }
+
+            .hike-alert-banner { flex-wrap: wrap; gap: 6px; }
+
+            .hike-counter { width: 100%; text-align: right; }
+
+            /* ── Simulation zone banner ───────────────── */
+            .sim-zone-banner {
+                flex-wrap: wrap;
+                padding: 16px 18px;
+                gap: 10px;
+            }
+
+            .sim-zone-actions {
+                margin-left: 0;
+                width: 100%;
+                justify-content: flex-end;
+            }
+
+            /* ── Month nav ────────────────────────────── */
+            .month-nav { padding: 2px 0; }
+
+            .month-tab { padding: 5px 10px; font-size: 12px; }
+
+            /* ── Section header (title + month label) ── */
+            .expense-main-header { flex-wrap: wrap; gap: 6px; }
+
+            /* ── Form 2-column grid → stack ──────────── */
+            .form-row-2 { grid-template-columns: 1fr; gap: 10px; }
+
+            /* ── Cat grid: 4 cols on mobile ───────────── */
+            .cat-grid { grid-template-columns: repeat(4, 1fr) !important; }
+            .cat-grid-left { grid-template-columns: repeat(4, 1fr) !important; }
+
+            /* ── Score stats: readable on small screens  */
+            .score-stats { gap: 6px; }
+            .score-stat-val { font-size: 15px; }
+
+            /* ── Modal: don't go wider than screen ─────  */
+            .modal { padding: 20px 16px 18px; }
+            .modal-title { font-size: 18px; margin-bottom: 20px; }
+
+            /* ── Sim donut diff row ───────────────────── */
+            .sim-diff-row { gap: 10px; }
+
+            /* ── History chart tooltip card ──────────── */
+            .ctip-card { min-width: 160px; padding: 10px 12px 9px; }
+
+            /* ── Add btn text: icon only on mobile ──── */
+            .add-btn .add-btn-label { display: none; }
+        }
+
+        /* ═══════════════════════════════════════════════
+           MOBILE — Extra tight ≤ 400px
+           ═══════════════════════════════════════════════ */
+
+        @media (max-width: 400px) {
+
+            .page-wrapper { padding: 0 10px 80px; }
+
+            .expense-card .action-btn-alerts { display: none; }
+
+            .cat-grid { grid-template-columns: repeat(3, 1fr) !important; }
+            .cat-grid-left { grid-template-columns: repeat(3, 1fr) !important; }
+
+            .month-tab { padding: 4px 7px; font-size: 11px; }
+
+            .year-badge { font-size: 12px; padding: 5px 8px; }
+
+            .score-stats { grid-template-columns: repeat(3,1fr); gap: 4px; }
+            .score-stat { padding: 8px 4px; }
+            .score-stat-val { font-size: 14px; }
+            .score-stat-lbl { font-size: 9px; }
+
+            .plan-savings { display: none; }
+
+            .history-table .td-icon { width: 26px; height: 26px; font-size: 13px; }
+        }
