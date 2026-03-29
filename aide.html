@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aide — Depensa</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800;900&family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="./css/aide.css">
+</head>
+<body>
+
+<!-- ══ NAVBAR ══ -->
+<nav>
+  <a href="./landing.html" class="nav-logo">💰 dep<em>ensa</em></a>
+  <div class="nav-right">
+    <a href="./landing.html" class="btn-outline">Accueil</a>
+    <a href="./index.html" class="btn-primary">Ouvrir l'app →</a>
+  </div>
+</nav>
+
+<!-- ══ HERO ══ -->
+<section class="help-hero">
+  <div class="hero-glow"></div>
+  <div class="hero-badge"><span class="hero-badge-dot"></span>Centre d'aide</div>
+  <h1>Tout ce que vous devez<br>savoir sur <span class="grad">Depensa</span></h1>
+  <p>Guide complet, section par section. Trouvez rapidement ce que vous cherchez.</p>
+</section>
+
+<!-- ══ QUICK NAV ══ -->
+<nav class="quick-nav" aria-label="Navigation rapide">
+  <a class="quick-chip" data-target="sec-add">➕ Ajouter</a>
+  <a class="quick-chip" data-target="sec-recurring">🔁 Récurrentes</a>
+  <a class="quick-chip" data-target="sec-months">📅 Mois</a>
+  <a class="quick-chip" data-target="sec-alerts">🔔 Alertes</a>
+  <a class="quick-chip" data-target="sec-score">🎯 Score</a>
+  <a class="quick-chip" data-target="sec-sim">🔬 Simulation</a>
+  <a class="quick-chip" data-target="sec-savings">💸 Économiser</a>
+  <a class="quick-chip" data-target="sec-export">📤 Export</a>
+  <a class="quick-chip" data-target="sec-faq">❓ FAQ</a>
+</nav>
+
+<!-- ══ SECTIONS ══ -->
+<div class="help-sections">
+
+  <!-- 1. Ajouter une dépense -->
+  <div class="help-block" id="sec-add">
+    <div class="help-block-header">
+      <div class="help-block-icon" style="background:rgba(124,90,246,.14);">➕</div>
+      <div class="help-block-meta">
+        <div class="help-block-title">Ajouter une dépense</div>
+        <div class="help-block-sub">Saisir, catégoriser et enregistrer en quelques secondes</div>
+      </div>
+      <span class="help-block-chevron">▼</span>
+    </div>
+    <div class="help-block-body">
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-text">Cliquez sur <strong>+ Ajouter</strong> en haut de la liste de dépenses — ou sur le bouton flottant violet en bas de l'écran sur mobile.</div>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-text">Tapez le <strong>nom de la dépense</strong>. Depensa reconnaît automatiquement les fournisseurs populaires (Netflix, Spotify, Bell, Vidéotron…) et affiche leur logo en aperçu.</div>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <div class="step-text">Choisissez une <strong>catégorie</strong> dans la grille (Habitation, Transport, Loisirs…). Vous pouvez créer une catégorie personnalisée en sélectionnant <em>+ Personnalisé</em>.</div>
+        </div>
+        <div class="step">
+          <div class="step-num">4</div>
+          <div class="step-text">Entrez le <strong>montant</strong> et choisissez la fréquence : <strong>Mensuel</strong> ou <strong>Annuel</strong>. Un montant annuel est automatiquement divisé par 12 pour le suivi mensuel.</div>
+        </div>
+        <div class="step">
+          <div class="step-num">5</div>
+          <div class="step-text">Cliquez <strong>Ajouter ✓</strong>. La dépense apparaît dans la liste et les totaux (mensuel, donut, score) se mettent à jour immédiatement.</div>
+        </div>
+      </div>
+      <div class="tip">
+        <span class="tip-icon">💡</span>
+        <span>Le champ <strong>Notes</strong> est optionnel — utile pour préciser le numéro de contrat, la date de renouvellement ou un rappel personnel.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. Dépenses récurrentes -->
+  <div class="help-block" id="sec-recurring">
+    <div class="help-block-header">
+      <div class="help-block-icon" style="background:rgba(16,185,129,.12);">🔁</div>
+      <div class="help-block-meta">
+        <div class="help-block-title">Dépenses récurrentes</div>
+        <div class="help-block-sub">Rollover automatique chaque 1er du mois</div>
+      </div>
+      <span class="help-block-chevron">▼</span>
+    </div>
+    <div class="help-block-body">
+      <p>Activez <strong>Dépense récurrente</strong> dans le formulaire d'ajout pour les charges qui se répètent chaque mois : loyer, abonnements, assurances, forfaits…</p>
+      <p>Au <strong>1er de chaque mois à minuit</strong>, Depensa archive le mois écoulé et reporte automatiquement toutes vos dépenses récurrentes dans le nouveau mois. Vous n'avez rien à faire.</p>
+      <p>Les dépenses <strong>non récurrentes</strong> (achat ponctuel, frais exceptionnels) restent dans le mois où elles ont été saisies et ne sont pas reportées.</p>
+      <div class="tip">
+        <span class="tip-icon">🔕</span>
+        <span>Les dépenses récurrentes affichent une clochette barrée — les alertes de variation de prix ne s'y appliquent pas, car leur montant est fixe.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. Navigation par mois -->
+  <div class="help-block" id="sec-months">
+    <div class="help-block-header">
+      <div class="help-block-icon" style="background:rgba(56,189,248,.12);">📅</div>
+      <div class="help-block-meta">
+        <div class="help-block-title">Navigation par mois</div>
+        <div class="help-block-sub">Historique complet, mois par mois</div>
+      </div>
+      <span class="help-block-chevron">▼</span>
+    </div>
+    <div class="help-block-body">
+      <p>Les onglets en haut de la liste affichent les <strong>6 derniers mois</strong> et le mois en cours, identifié par un point <strong>●</strong>.</p>
+      <p>Cliquez sur un <strong>mois passé</strong> pour consulter ses dépenses en lecture seule — aucune modification n'est possible sur l'historique. Cliquez à nouveau sur le mois actuel pour revenir en mode édition.</p>
+      <p>Le <strong>graphique Historique</strong> en bas de page trace l'évolution de vos dépenses totales sur les 6 derniers mois et le mois courant. Survolez (ou appuyez sur mobile) pour voir le détail de chaque mois.</p>
+      <div class="tip">
+        <span class="tip-icon">📊</span>
+        <span>L'<strong>année</strong> en haut des onglets est cliquable — elle vous permet de naviguer entre les années si vous avez plus de 6 mois d'historique.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4. Alertes de variation -->
+  <div class="help-block" id="sec-alerts">
+    <div class="help-block-header">
+      <div class="help-block-icon" style="background:rgba(245,158,11,.11);">🔔</div>
+      <div class="help-block-meta">
+        <div class="help-block-title">Alertes de variation</div>
+        <div class="help-block-sub">Soyez informé des hausses de prix en temps réel</div>
+      </div>
+      <span class="help-block-chevron">▼</span>
+    </div>
+    <div class="help-block-body">
+      <p>Depensa compare en arrière-plan les prix de vos fournisseurs actifs (FAI, cellulaire, streaming…) aux tarifs du marché récupérés en temps réel. Si une hausse est détectée, une <strong>bannière rouge</strong> apparaît en haut de la liste avec le pourcentage d'augmentation.</p>
+      <p>Depuis la bannière, vous pouvez :</p>
+      <div class="feature-pills">
+        <span class="feature-pill">✕ Ignorer la hausse</span>
+        <span class="feature-pill">→ Voir les alternatives</span>
+        <span class="feature-pill">🔔 Désactiver par dépense</span>
+      </div>
+      <div class="tip">
+        <span class="tip-icon">💡</span>
+        <span>Cliquez sur l'icône <strong>🔔</strong> d'une carte de dépense pour activer ou désactiver les alertes pour cette dépense spécifique.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 5. Score financier -->
+  <div class="help-block" id="sec-score">
+    <div class="help-block-header">
+      <div class="help-block-icon" style="background:rgba(124,90,246,.12);">🎯</div>
+      <div class="help-block-meta">
+        <div class="help-block-title">Score financier</div>
+        <div class="help-block-sub">Mesurer la santé de votre budget mensuel</div>
+      </div>
+      <span class="help-block-chevron">▼</span>
+    </div>
+    <div class="help-block-body">
+      <p>Le score (de <strong>0 à 100</strong>) mesure le rapport entre vos dépenses totales du mois et votre <strong>objectif budgétaire</strong> personnel.</p>
+      <p>Un score de <strong>100</strong> signifie que vous êtes exactement dans votre objectif ou en dessous. Le score baisse si vos dépenses dépassent l'objectif.</p>
+      <p>Modifiez votre objectif directement dans la carte <em>Score financier</em> sur la gauche du tableau de bord — la valeur est sauvegardée automatiquement dans votre compte.</p>
+      <div class="tip">
+        <span class="tip-icon">📈</span>
+        <span>Utilisez les <strong>statistiques</strong> (Récurrent / Variable / Annualisé) dans la carte score pour mieux comprendre la répartition de vos dépenses.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 6. Mode Simulation -->
+  <div class="help-block" id="sec-sim">
+    <div class="help-block-header">
+      <div class="help-block-icon" style="background:rgba(245,158,11,.1);">🔬</div>
+      <div class="help-block-meta">
+        <div class="help-block-title">Mode Simulation</div>
+        <div class="help-block-sub">Testez des scénarios sans toucher à vos vraies données</div>
+      </div>
+      <span class="help-block-chevron">▼</span>
+    </div>
+    <div class="help-block-body">
+      <p>La Simulation vous permet de modéliser des changements hypothétiques — changer de forfait, annuler un abonnement, ajouter une nouvelle dépense — et d'en voir l'<strong>impact instantané sur votre budget</strong>, sans modifier vos données réelles.</p>
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-text">Cliquez sur <strong>Simulation</strong> dans la barre d'actions pour ouvrir la zone de simulation.</div>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-text">Modifiez les montants des dépenses existantes via le bouton <strong>🔬 Sim</strong> sur chaque carte, ou masquez-les pour simuler leur suppression.</div>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <div class="step-text">Ajoutez de nouvelles dépenses hypothétiques avec <strong>+ Ajouter (sim)</strong> — elles n'existent que dans la simulation.</div>
+        </div>
+        <div class="step">
+          <div class="step-num">4</div>
+          <div class="step-text">Le donut de simulation compare <strong>avant / après</strong> en temps réel. Quittez avec <strong>Quitter la simulation</strong> — vos vraies données restent intactes.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 7. Façons d'économiser -->
+  <div class="help-block" id="sec-savings">
+    <div class="help-block-header">
+      <div class="help-block-icon" style="background:rgba(16,185,129,.1);">💸</div>
+      <div class="help-block-meta">
+        <div class="help-block-title">Façons d'économiser</div>
+        <div class="help-block-sub">Recommandations personnalisées basées sur vos dépenses</div>
+      </div>
+      <span class="help-block-chevron">▼</span>
+    </div>
+    <div class="help-block-body">
+      <p>Cette section analyse vos forfaits <strong>internet</strong> et <strong>cellulaire</strong> actifs et les compare aux meilleures offres du marché québécois récupérées en temps réel.</p>
+      <p>Pour chaque recommandation, Depensa affiche le <strong>montant économisé par mois</strong> et par an si vous passiez à l'offre suggérée. Cliquez sur le nom du fournisseur pour être redirigé directement vers son site.</p>
+      <div class="tip">
+        <span class="tip-icon">✓</span>
+        <span>Marquez une recommandation comme <strong>Appliquée</strong> pour indiquer que vous avez effectué le changement. Elle restera visible dans votre historique.</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 8. Exporter -->
+  <div class="help-block" id="sec-export">
+    <div class="help-block-header">
+      <div class="help-block-icon" style="background:rgba(56,189,248,.1);">📤</div>
+      <div class="help-block-meta">
+        <div class="help-block-title">Exporter vos données</div>
+        <div class="help-block-sub">PDF imprimable et CSV pour tableur</div>
+      </div>
+      <span class="help-block-chevron">▼</span>
+    </div>
+    <div class="help-block-body">
+      <p>Cliquez sur <strong>Exporter</strong> en haut à droite de la liste de dépenses pour accéder aux deux formats disponibles :</p>
+      <p><strong>PDF</strong> — rapport visuel complet du mois sélectionné, prêt à imprimer ou à partager. Inclut le total mensuel, la liste détaillée et les catégories.</p>
+      <p><strong>CSV</strong> — fichier tableur compatible Excel, Numbers et Google Sheets. Idéal pour créer vos propres graphiques ou analyser vos données sur le long terme.</p>
+      <div class="tip">
+        <span class="tip-icon">📅</span>
+        <span>L'export porte sur le <strong>mois affiché</strong> — naviguez vers le mois souhaité avant d'exporter pour obtenir les données du bon mois.</span>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /.help-sections -->
+
+<!-- ══ FAQ ══ -->
+<div class="faq-section" id="sec-faq">
+  <div class="section-label">FAQ</div>
+  <div class="section-title">Questions fréquentes</div>
+
+  <div class="faq-list">
+
+    <div class="faq-item">
+      <div class="faq-q">
+        Mes données sont-elles sauvegardées en ligne ?
+        <span class="faq-chevron">▼</span>
+      </div>
+      <div class="faq-a">Oui. Lorsque vous êtes connecté avec un compte Depensa, toutes vos dépenses sont synchronisées de façon sécurisée dans le nuage via <strong>Supabase</strong>. Vous retrouvez vos données sur n'importe quel appareil. En mode invité (sans compte), les données restent en mémoire locale et sont perdues à la fermeture de l'onglet.</div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q">
+        Peut-on utiliser Depensa sans créer de compte ?
+        <span class="faq-chevron">▼</span>
+      </div>
+      <div class="faq-a">Oui. Sur l'écran de connexion, cliquez sur <strong>Continuer sans compte →</strong>. Vous accédez immédiatement au tableau de bord avec toutes les fonctionnalités disponibles. Attention : vos données ne seront pas sauvegardées d'une session à l'autre sans compte.</div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q">
+        Comment fonctionne le changement de mois automatique ?
+        <span class="faq-chevron">▼</span>
+      </div>
+      <div class="faq-a">Chaque 1er du mois à minuit, Depensa détecte automatiquement le changement de mois. Il archive le mois écoulé (accessible en lecture seule dans les onglets), supprime les dépenses non récurrentes du mois précédent et reporte toutes les dépenses récurrentes dans le nouveau mois. Un nouvel onglet de mois apparaît dans la navigation.</div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q">
+        Les prix des fournisseurs sont-ils vraiment à jour ?
+        <span class="faq-chevron">▼</span>
+      </div>
+      <div class="faq-a">Depensa récupère les prix internet et cellulaire depuis son propre service de scraping à chaque ouverture de l'application. En cas d'indisponibilité du serveur, des valeurs de référence sont utilisées comme repli. Les prix affichés sont indicatifs et peuvent varier selon les promotions en cours chez les fournisseurs.</div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q">
+        Puis-je modifier une dépense après l'avoir ajoutée ?
+        <span class="faq-chevron">▼</span>
+      </div>
+      <div class="faq-a">Oui. Cliquez sur <strong>✏️ Modifier</strong> sur la carte d'une dépense pour rouvrir le formulaire pré-rempli. Vous pouvez changer le nom, le montant, la catégorie, la fréquence et les options. Les modifications sont sauvegardées immédiatement.</div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q">
+        Comment supprimer une dépense ou toutes mes données ?
+        <span class="faq-chevron">▼</span>
+      </div>
+      <div class="faq-a">Pour supprimer une dépense, cliquez sur <strong>✕ Supprimer</strong> sur sa carte. Pour effacer toutes les données en mode invité, la bannière en bas de page propose le bouton <strong>Effacer les données</strong>. Pour un compte connecté, la gestion des données se fait via les <strong>Paramètres</strong> (icône avatar en haut à droite).</div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q">
+        Est-ce que Depensa est gratuit ?
+        <span class="faq-chevron">▼</span>
+      </div>
+      <div class="faq-a">Oui, Depensa est <strong>entièrement gratuit</strong>. Aucun abonnement, aucune carte de crédit requise. Créez un compte et commencez à suivre vos finances immédiatement.</div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══ CTA ══ -->
+<div class="help-cta">
+  <div class="help-cta-card">
+    <h2>Prêt à reprendre le contrôle ?</h2>
+    <p>Ouvrez Depensa et commencez à suivre vos dépenses en moins de 2 minutes.</p>
+    <a href="./index.html" class="btn-cta">Ouvrir l'application →</a>
+  </div>
+</div>
+
+<script src="./js/aide.js"></script>
+</body>
+</html>
