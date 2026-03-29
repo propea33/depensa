@@ -1270,6 +1270,22 @@
             box-shadow: 0 0 0 3px var(--accent-glow);
         }
 
+        .cat-search-input {
+            flex: 1;
+            background: transparent;
+            border: none;
+            border-bottom: 1px solid var(--border-2);
+            color: var(--text);
+            font-family: 'Figtree', sans-serif;
+            font-size: 12px;
+            padding: 2px 4px;
+            outline: none;
+            transition: border-color .2s;
+            min-width: 0;
+        }
+        .cat-search-input::placeholder { color: var(--text-3); }
+        .cat-search-input:focus { border-color: var(--accent); }
+
         .cat-grid {
             display: grid;
             grid-template-columns: repeat(5, 1fr);

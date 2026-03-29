@@ -13,6 +13,7 @@ $('eName').addEventListener('input', () => {
 
 $('recurringToggle').addEventListener('click', () => setRecurring(!isRecurring));
 $('alertsToggle').addEventListener('click', () => setAlerts(!isAlerts));
+$('catSearch').addEventListener('input', () => buildCatGrid());
 
 $('eFrequency').addEventListener('change', updateAmountLabel);
 $('eAmount').addEventListener('input', updateAmountLabel);

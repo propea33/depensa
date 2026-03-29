@@ -103,8 +103,9 @@ function showProviderPicker(catId) {
 
 function buildCatGrid() {
     const grid = $('catGrid');
+    const q = ($('catSearch')?.value || '').toLowerCase().trim();
     grid.innerHTML = '';
-    allCats().forEach(cat => {
+    allCats().filter(cat => !q || cat.name.toLowerCase().includes(q)).forEach(cat => {
         const btn = document.createElement('button');
         btn.type      = 'button';
         btn.className = 'cat-btn' + (cat.id === selCat ? ' sel' : '');
@@ -175,6 +176,7 @@ function openAddModal() {
     editingId = null;
     selCat = 'habitation';
     $('expenseForm').reset();
+    $('catSearch').value = '';
     $('modal-title').textContent  = 'Ajouter une dépense';
     $('modal-submit').textContent = 'Ajouter ✓';
     setRecurring(false);
@@ -200,6 +202,7 @@ function openEditModal(id) {
     selCat = exp.cat;
     $('modal-title').textContent  = 'Modifier la dépense';
     $('modal-submit').textContent = 'Enregistrer ✓';
+    $('catSearch').value = '';
     setRecurring(exp.recurring ?? false);
     setAlerts(exp.alerts !== false);
     $('eFrequency').value = exp.frequency || 'mensuel';
