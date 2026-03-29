@@ -3,16 +3,24 @@
 // ═══════════════════════════════════════════════════════
 
 function getSelectedExpenses() {
-    if (selectedMonth === 'mars') return expenses;
-    const idx = MONTH_MAP[selectedMonth];
-    return idx !== undefined ? HISTORY[idx].expenses : expenses;
+    if (selectedMonth === liveMonthKey()) return expenses;
+    // Hardcoded HISTORY (pre-rollover months)
+    const histIdx = MONTH_MAP[selectedMonth];
+    if (histIdx !== undefined) return HISTORY[histIdx].expenses;
+    // Extra months archived in localStorage by rollover
+    try {
+        const extra = JSON.parse(localStorage.getItem('depensa_history_extra') || '[]');
+        const found = extra.find(e => e.key === selectedMonth);
+        if (found) return found.expenses;
+    } catch (_) {}
+    return expenses;
 }
 
 function renderExpenses() {
     const grid   = $('expenseList');
     grid.innerHTML = '';
 
-    const isPast = selectedMonth !== 'mars';
+    const isPast = selectedMonth !== liveMonthKey();
     const source = getSelectedExpenses();
     const filtered = showRecurringOnly ? source.filter(e => e.recurring) : source;
 

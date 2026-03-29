@@ -227,11 +227,18 @@ const HISTORY = [
     ]},
 ];
 
-// Currently selected month for expense view ('mars' = live)
-let selectedMonth = 'mars';
+// Returns "YYYY-MM" for today's month (e.g. "2026-03")
+function liveMonthKey() {
+    const d = new Date();
+    return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0');
+}
 
-const MONTH_MAP = { oct:0, nov:1, dec:2, jan:3, fev:4 };
-const MONTH_LABELS = { oct:'Octobre 2025', nov:'Novembre 2025', dec:'Décembre 2025', jan:'Janvier 2026', fev:'Février 2026', mars:'Mars 2026' };
+// Currently selected month for expense view (YYYY-MM key, live = current month)
+let selectedMonth = liveMonthKey();
+
+// Populated dynamically by initMonthSystem() in months.js
+const MONTH_MAP    = {};
+const MONTH_LABELS = {};
 
 // Optimization score state
 let savingsGoal = 150;

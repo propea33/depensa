@@ -124,17 +124,24 @@ function updateDonut() {
 }
 
 function historyData() {
-    return [...HISTORY, { month:'Mars ●', total: totalMonthly() }];
+    const liveKey = liveMonthKey();
+    // Last 5 past months from merged history
+    const past = getFullHistoryArray().slice(-5);
+    return [
+        ...past.map(h => ({ month: h.month, total: h.total, expenses: h.expenses, key: h.key })),
+        { month: keyToShort(liveKey) + ' ●', total: totalMonthly(), expenses, key: liveKey },
+    ];
 }
 
 function updateHistoryTrend() {
     const data = historyData();
-    const prev = data[data.length - 2].total;
-    const curr = data[data.length - 1].total;
-    const diff = curr - prev;
-    const pct  = Math.round(Math.abs(diff) / prev * 100);
+    if (data.length < 2) return;
+    const prev = data[data.length - 2];
+    const curr = data[data.length - 1];
+    const diff = curr.total - prev.total;
+    const pct  = Math.round(Math.abs(diff) / (prev.total || 1) * 100);
     const el   = $('historyTrend');
-    el.textContent = diff > 0 ? `▲ +${pct}% vs fév.` : `▼ -${pct}% vs fév.`;
+    el.textContent = diff > 0 ? `▲ +${pct}% vs ${prev.month.toLowerCase()}` : `▼ -${pct}% vs ${prev.month.toLowerCase()}`;
     el.className   = 'history-trend ' + (diff > 0 ? 'up' : 'down');
 }
 
@@ -156,10 +163,11 @@ function initSavings() {
     const pointBorder  = data.map((_, i) => i === data.length - 1 ? '#fff' : 'transparent');
     const pointBorderW = data.map((_, i) => i === data.length - 1 ? 2 : 0);
 
-    const FULL_LABELS = {
-        'Oct': 'Octobre 2025', 'Nov': 'Novembre 2025', 'Déc': 'Décembre 2025',
-        'Jan': 'Janvier 2026', 'Fév': 'Février 2026', 'Mars ●': 'Mars 2026',
-    };
+    // Build full labels dynamically from historyData keys
+    const FULL_LABELS = {};
+    data.forEach(d => {
+        FULL_LABELS[d.month] = d.key ? keyToLabel(d.key) : d.month.replace(' ●', '');
+    });
 
     let _hoverIdx = -1;
 
@@ -259,7 +267,7 @@ function initSavings() {
     }
 
     function getExpList(idx) {
-        return idx === data.length - 1 ? expenses : (HISTORY[idx]?.expenses || []);
+        return data[idx]?.expenses || [];
     }
 
     function showTip(idx) {

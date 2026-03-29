@@ -122,7 +122,6 @@ $('monthTabs').addEventListener('click', e => {
     selectedMonth = tab.dataset.month;
     document.querySelectorAll('.month-tab').forEach(t => t.classList.remove('active'));
     tab.classList.add('active');
-    // Close popover when a past month is picked
     $('yearPopover').classList.remove('open');
     $('yearBadge').setAttribute('aria-expanded', 'false');
     renderExpenses();
@@ -356,12 +355,17 @@ $('settingsPasswordForm').addEventListener('submit', async e => {
     loadISPPrices();
     loadCellPrices();
 
+    // ── Initialise le système de mois (dynamique) ───────
+    initMonthSystem();
+    buildMonthTabs();
+
     // ── Mode offline (file://) → dashboard directement ──
     if (DB_OFFLINE) {
         renderExpenses();
         renderRecs();
         renderTicker();
         requestAnimationFrame(() => { initDonut(); initSavings(); });
+        scheduleMidnightCheck();
         return;
     }
 
@@ -369,7 +373,6 @@ $('settingsPasswordForm').addEventListener('submit', async e => {
     const session = await authGetSession();
 
     if (!session) {
-        // Pas de session → afficher l'écran de connexion / inscription
         openAuthScreen();
         return;
     }
@@ -387,9 +390,17 @@ $('settingsPasswordForm').addEventListener('submit', async e => {
         nextId   = Math.max(...dbData.map(e => e.id)) + 1;
     }
 
+    // Enregistrer le mois courant si c'est la première connexion
+    if (!localStorage.getItem('depensa_live_month')) {
+        localStorage.setItem('depensa_live_month', liveMonthKey());
+    }
+    // Vérifier si le mois a changé depuis la dernière visite
+    await checkMonthRollover();
+
     updateHeaderName();
     renderExpenses();
     renderRecs();
     renderTicker();
     requestAnimationFrame(() => { initDonut(); initSavings(); });
+    scheduleMidnightCheck();
 })();
