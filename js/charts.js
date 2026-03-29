@@ -139,25 +139,66 @@ function updateHistoryTrend() {
 }
 
 function initSavings() {
-    const ctx  = $('savingsChart').getContext('2d');
-    const data = historyData();
+    const canvas = $('savingsChart');
+    const ctx    = canvas.getContext('2d');
+    const data   = historyData();
     const isDark = document.documentElement.getAttribute('data-theme') !== 'light';
 
-    const grad = ctx.createLinearGradient(0, 0, 0, 148);
+    const grad = ctx.createLinearGradient(0, 0, 0, 200);
     grad.addColorStop(0, 'rgba(124,58,237,0.28)');
     grad.addColorStop(1, 'rgba(124,58,237,0)');
 
     const tickColor = isDark ? '#3d4a60' : '#b0b9cc';
     const gridColor = isDark ? 'rgba(255,255,255,0.04)' : 'rgba(0,0,0,0.04)';
 
-    // Point styles: last point is "live" (bigger, glowing)
     const pointRadius  = data.map((_, i) => i === data.length - 1 ? 5 : 3);
     const pointBg      = data.map((_, i) => i === data.length - 1 ? '#a855f7' : '#7c3aed');
     const pointBorder  = data.map((_, i) => i === data.length - 1 ? '#fff' : 'transparent');
     const pointBorderW = data.map((_, i) => i === data.length - 1 ? 2 : 0);
 
+    const FULL_LABELS = {
+        'Oct': 'Octobre 2025', 'Nov': 'Novembre 2025', 'Déc': 'Décembre 2025',
+        'Jan': 'Janvier 2026', 'Fév': 'Février 2026', 'Mars ●': 'Mars 2026',
+    };
+
+    let _hoverIdx = -1;
+
+    // ── Hairline plugin ──────────────────────────────────
+    const hairlinePlugin = {
+        id: 'hairline',
+        afterDraw(chart) {
+            if (_hoverIdx < 0) return;
+            const meta = chart.getDatasetMeta(0);
+            if (!meta.data[_hoverIdx]) return;
+            const x = meta.data[_hoverIdx].x;
+            const { top, bottom } = chart.chartArea;
+            const c = chart.ctx;
+            c.save();
+            const g = c.createLinearGradient(0, top, 0, bottom);
+            g.addColorStop(0, 'rgba(168,85,247,0.85)');
+            g.addColorStop(1, 'rgba(168,85,247,0)');
+            c.beginPath();
+            c.moveTo(x, top);
+            c.lineTo(x, bottom);
+            c.strokeStyle = g;
+            c.lineWidth = 1.5;
+            c.stroke();
+            // Dot on the data point
+            const ptY = meta.data[_hoverIdx].y;
+            c.beginPath();
+            c.arc(x, ptY, 5, 0, Math.PI * 2);
+            c.fillStyle = '#a855f7';
+            c.fill();
+            c.strokeStyle = '#fff';
+            c.lineWidth = 2;
+            c.stroke();
+            c.restore();
+        }
+    };
+
     savingsChart = new Chart(ctx, {
         type: 'line',
+        plugins: [hairlinePlugin],
         data: {
             labels: data.map(d => d.month),
             datasets: [{
@@ -171,10 +212,9 @@ function initSavings() {
                 pointBackgroundColor: pointBg,
                 pointBorderColor: pointBorder,
                 pointBorderWidth: pointBorderW,
-                pointHoverRadius: 6,
-                pointHoverBackgroundColor: '#a855f7',
-                pointHoverBorderColor: '#fff',
-                pointHoverBorderWidth: 2,
+                pointHoverRadius: 0, // hairline plugin handles hover dot
+                pointHoverBackgroundColor: 'transparent',
+                pointHoverBorderColor: 'transparent',
             }],
         },
         options: {
@@ -199,28 +239,97 @@ function initSavings() {
             },
             plugins: {
                 legend: { display: false },
-                tooltip: {
-                    ...tooltipDefaults('#a855f7'),
-                    callbacks: {
-                        title: items => items[0].label.replace(' ●', ' (en cours)'),
-                        label: ctx => ` Total : ${fmt(ctx.parsed.y)}/mois`,
-                    },
-                },
-            },
-            onClick: (e, elements) => {
-                if (!elements.length) return;
-                const idx = elements[0].index;
-                const data = historyData();
-                const month = data[idx];
-                const expList = idx === data.length - 1
-                    ? expenses
-                    : HISTORY[idx].expenses;
-                openHistoryModal(month.month.replace(' ●', ''), expList);
-            },
-            onHover: (e, elements) => {
-                e.native.target.style.cursor = elements.length ? 'pointer' : 'default';
+                tooltip: { enabled: false },
             },
         },
+    });
+
+    // ── Custom HTML tooltip ──────────────────────────────
+    const wrap = canvas.parentElement;
+    const tip  = $('chartTooltipCard');
+
+    function getNearestIdx(mouseX) {
+        const meta = savingsChart.getDatasetMeta(0);
+        let minDist = Infinity, nearest = -1;
+        meta.data.forEach((pt, i) => {
+            const d = Math.abs(pt.x - mouseX);
+            if (d < minDist) { minDist = d; nearest = i; }
+        });
+        return nearest;
+    }
+
+    function getExpList(idx) {
+        return idx === data.length - 1 ? expenses : (HISTORY[idx]?.expenses || []);
+    }
+
+    function showTip(idx) {
+        if (idx === _hoverIdx) return;
+        _hoverIdx = idx;
+        savingsChart.update('none');
+
+        const month  = data[idx];
+        const label  = FULL_LABELS[month.month] || month.month.replace(' ●', '');
+        const expList = getExpList(idx);
+        const top3   = [...expList].sort((a, b) => b.amount - a.amount).slice(0, 3);
+
+        const pills = top3.map(e => {
+            const cat = getCAT(e.cat);
+            return `<div class="ctip-pill">
+                <span class="ctip-pill-icon">${cat.icon}</span>
+                <span class="ctip-pill-name">${e.name}</span>
+                <span class="ctip-pill-amount">${fmt(e.amount)}</span>
+            </div>`;
+        }).join('');
+
+        tip.innerHTML = `
+            <div class="ctip-month">${label}</div>
+            <div class="ctip-total">${fmt(month.total)}</div>
+            <div class="ctip-pills">${pills}</div>
+            <div class="ctip-hint">Cliquez pour voir le détail →</div>
+        `;
+
+        tip.style.display = 'block';
+        const meta  = savingsChart.getDatasetMeta(0);
+        const ptX   = meta.data[idx].x;
+        const canvasRect = canvas.getBoundingClientRect();
+        const wrapRect   = wrap.getBoundingClientRect();
+        const relX  = ptX + (canvasRect.left - wrapRect.left);
+        const tipW  = tip.offsetWidth || 200;
+        const wrapW = wrap.offsetWidth;
+        let left    = relX - tipW / 2;
+        left = Math.max(6, Math.min(left, wrapW - tipW - 6));
+        tip.style.left = left + 'px';
+        requestAnimationFrame(() => tip.classList.add('visible'));
+    }
+
+    function hideTip() {
+        _hoverIdx = -1;
+        tip.classList.remove('visible');
+        savingsChart.update('none');
+        setTimeout(() => { if (_hoverIdx < 0) tip.style.display = 'none'; }, 180);
+    }
+
+    canvas.addEventListener('mousemove', e => {
+        const rect   = canvas.getBoundingClientRect();
+        const mouseX = e.clientX - rect.left;
+        const { left: aLeft, right: aRight } = savingsChart.chartArea;
+        if (mouseX < aLeft || mouseX > aRight) { hideTip(); canvas.style.cursor = 'default'; return; }
+        canvas.style.cursor = 'pointer';
+        showTip(getNearestIdx(mouseX));
+    });
+
+    canvas.addEventListener('mouseleave', hideTip);
+
+    canvas.addEventListener('click', e => {
+        const rect   = canvas.getBoundingClientRect();
+        const mouseX = e.clientX - rect.left;
+        const { left: aLeft, right: aRight } = savingsChart.chartArea;
+        if (mouseX < aLeft || mouseX > aRight) return;
+        const idx  = getNearestIdx(mouseX);
+        if (idx < 0) return;
+        const month   = data[idx];
+        const expList = getExpList(idx);
+        openHistoryModal(month.month.replace(' ●', ''), expList);
     });
 
     updateHistoryTrend();
