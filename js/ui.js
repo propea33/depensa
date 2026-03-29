@@ -171,7 +171,7 @@ function renderExpenses() {
         const simTag  = isSimOverridden ? `<span class="sim-active-tag">🔬 Sim</span>` : '';
         const hikeTag = hasHike ? `<span class="hike-badge">⚠ +${Math.round(hikeMap.get(exp.id).pct * 100)}%</span>` : '';
 
-        const alertsOn = exp.alerts !== false;
+        const alertsOn = exp.alerts !== false && !exp.recurring;
         const actions = !isPast ? `
             <div class="card-actions">
                 <button class="action-btn action-btn-alerts ${alertsOn ? '' : 'alerts-off'}" data-id="${exp.id}" title="${alertsOn ? 'Alertes actives — cliquer pour désactiver' : 'Alertes désactivées — cliquer pour activer'}">${alertsOn ? '🔔' : '🔕'}</button>
