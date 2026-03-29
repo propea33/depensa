@@ -122,8 +122,26 @@ $('monthTabs').addEventListener('click', e => {
     selectedMonth = tab.dataset.month;
     document.querySelectorAll('.month-tab').forEach(t => t.classList.remove('active'));
     tab.classList.add('active');
+    // Close popover when a past month is picked
+    $('yearPopover').classList.remove('open');
+    $('yearBadge').setAttribute('aria-expanded', 'false');
     renderExpenses();
     updateDonut();
+});
+
+// ─── Year badge popover ───────────────────────────────
+
+$('yearBadge').addEventListener('click', e => {
+    e.stopPropagation();
+    const isOpen = $('yearPopover').classList.toggle('open');
+    $('yearBadge').setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+});
+
+document.addEventListener('click', e => {
+    if (!$('yearBadge').contains(e.target) && !$('yearPopover').contains(e.target)) {
+        $('yearPopover').classList.remove('open');
+        $('yearBadge').setAttribute('aria-expanded', 'false');
+    }
 });
 
 // ─── Ticker toggle ────────────────────────────────────
