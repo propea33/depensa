@@ -508,10 +508,9 @@ function renderTicker() {
     const track = $('tickerTrack');
     // Build one set of items, then duplicate for seamless loop
     const items = expenses.map(exp => {
-        const cat = getCAT(exp.cat);
         return `
             <span class="ticker-item">
-                <span class="ticker-item-icon">${cat.icon}</span>
+                <span class="ticker-item-icon">${getExpenseIconHTML(exp.name, exp.cat)}</span>
                 <span class="ticker-item-name">${exp.name}</span>
                 <span class="ticker-item-amount">${fmt(monthlyAmount(exp))}</span>
             </span>

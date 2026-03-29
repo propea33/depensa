@@ -134,7 +134,8 @@
             color: var(--text-2);
         }
 
-        .ticker-item-icon { font-size: 13px; }
+        .ticker-item-icon { font-size: 13px; display: inline-flex; align-items: center; vertical-align: middle; }
+        .ticker-item-icon img { width: 16px !important; height: 16px !important; max-width: 16px; max-height: 16px; border-radius: 4px; display: block; }
 
         .ticker-item-name { font-weight: 500; color: var(--text); }
 
