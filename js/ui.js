@@ -223,6 +223,9 @@ function renderExpenses() {
     const lbl = $('donutMonthLabel');
     if (lbl) lbl.textContent = MONTH_LABELS[selectedMonth] || 'Mars 2026';
 
+    const mlbl = $('selectedMonthLabel');
+    if (mlbl) mlbl.textContent = MONTH_LABELS[selectedMonth] || 'Mars 2026';
+
     renderLegend();
     renderScoreBlock();
 }
