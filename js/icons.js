@@ -428,6 +428,26 @@ function _normalizeName(name) {
         .trim();
 }
 
+function _escapeRegExp(s) {
+    return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
+function _containsMappedToken(haystack, needle) {
+    if (!haystack || !needle) return false;
+    const h = haystack.toLowerCase();
+    const n = needle.toLowerCase().trim();
+    if (!n) return false;
+
+    // For brand keys with punctuation/signs (start.ca, disney+, tou.tv), keep substring match.
+    if (/[.+&]/.test(n)) return h.includes(n);
+
+    // For plain words (bell, telus, etc.), require token boundaries to avoid false positives
+    // like "labelle" => "bell".
+    const esc = _escapeRegExp(n);
+    const re = new RegExp(`(^|[^a-z0-9\\u00C0-\\u024F])${esc}([^a-z0-9\\u00C0-\\u024F]|$)`, 'i');
+    return re.test(h);
+}
+
 function _lookupDomain(name) {
     const norm = _normalizeName(name);
     if (!norm) return null;
@@ -442,7 +462,7 @@ function _lookupDomain(name) {
         const parenNorm = parenMatch[1].toLowerCase().trim();
         if (ICON_MAP[parenNorm]) return ICON_MAP[parenNorm];
         for (const [key, domain] of Object.entries(ICON_MAP)) {
-            if (parenNorm.includes(key) || (key.length > 3 && key.includes(parenNorm))) {
+            if (_containsMappedToken(parenNorm, key) || (key.length > 4 && _containsMappedToken(key, parenNorm))) {
                 return domain;
             }
         }
@@ -450,7 +470,7 @@ function _lookupDomain(name) {
 
     // Correspondance partielle : la clé est dans le nom ou vice-versa
     for (const [key, domain] of Object.entries(ICON_MAP)) {
-        if (norm.includes(key) || (key.length > 3 && key.includes(norm))) {
+        if (_containsMappedToken(norm, key) || (key.length > 4 && _containsMappedToken(key, norm))) {
             return domain;
         }
     }
