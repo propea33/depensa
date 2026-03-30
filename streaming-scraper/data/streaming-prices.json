@@ -8,7 +8,7 @@
     {
       "provider": "Netflix",
       "plan_name": "Standard avec pub",
-      "price": 8.0,
+      "price": 8.99,
       "currency": "CAD",
       "url": "https://www.netflix.com/ca/",
       "note": "",
@@ -47,7 +47,7 @@
     {
       "provider": "Disney+",
       "plan_name": "Standard avec pub",
-      "price": 7.99,
+      "price": 8.99,
       "currency": "CAD",
       "url": "https://www.disneyplus.com/en-ca",
       "note": "",
@@ -60,7 +60,7 @@
     {
       "provider": "Illico+",
       "plan_name": "Mensuel",
-      "price": 6.99,
+      "price": 15.0,
       "currency": "CAD",
       "url": "https://www.videotron.com/television/illico-plus",
       "note": "",
@@ -73,7 +73,7 @@
     {
       "provider": "Tou.tv",
       "plan_name": "Extra",
-      "price": 6.99,
+      "price": 7.99,
       "currency": "CAD",
       "url": "https://ici.tou.tv/abonnement",
       "note": "",
@@ -86,7 +86,7 @@
     {
       "provider": "Apple TV+",
       "plan_name": "Mensuel",
-      "price": 12.99,
+      "price": 14.99,
       "currency": "CAD",
       "url": "https://tv.apple.com/ca",
       "note": "",
@@ -99,7 +99,7 @@
     {
       "provider": "Paramount+",
       "plan_name": "Mensuel",
-      "price": 9.99,
+      "price": 8.99,
       "currency": "CAD",
       "url": "https://www.paramountplus.com/ca/",
       "note": "",

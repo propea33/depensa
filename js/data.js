@@ -160,16 +160,28 @@ async function loadCellPrices() {
 
 // ── Streaming Plans — chargé dynamiquement depuis le scraper GitHub ────────
 let STREAMING_PLANS = [
-    { provider:'Netflix',      plan_name:'Standard avec pub', price:8,  url:'https://www.netflix.com/ca/',                   scraped_ok:false, previous_price:null, delta:0, price_drop:false },
-    { provider:'Amazon Prime', plan_name:'Prime Video',       price:10, url:'https://www.primevideo.com/',                   scraped_ok:false, previous_price:null, delta:0, price_drop:false },
-    { provider:'Crave',        plan_name:'De base avec pubs', price:12, url:'https://www.crave.ca/en/subscribe',             scraped_ok:false, previous_price:null, delta:0, price_drop:false },
-    { provider:'Disney+',      plan_name:'Standard avec pub', price:8,  url:'https://www.disneyplus.com/en-ca',              scraped_ok:false, previous_price:null, delta:0, price_drop:false },
-    { provider:'Illico+',      plan_name:'Mensuel',           price:7,  url:'https://www.videotron.com/television/illico-plus', scraped_ok:false, previous_price:null, delta:0, price_drop:false },
-    { provider:'Tou.tv',       plan_name:'Extra',             price:7,  url:'https://ici.tou.tv/abonnement',                 scraped_ok:false, previous_price:null, delta:0, price_drop:false },
-    { provider:'Apple TV+',    plan_name:'Mensuel',           price:13, url:'https://tv.apple.com/ca',                       scraped_ok:false, previous_price:null, delta:0, price_drop:false },
-    { provider:'Paramount+',   plan_name:'Mensuel',           price:10, url:'https://www.paramountplus.com/ca/',             scraped_ok:false, previous_price:null, delta:0, price_drop:false },
+    { provider:'Netflix',      plan_name:'Standard avec pub', price:8.99,  url:'https://www.netflix.com/ca/',                   scraped_ok:false, previous_price:null, delta:0, price_drop:false },
+    { provider:'Amazon Prime', plan_name:'Prime Video',       price:9.99, url:'https://www.primevideo.com/',                   scraped_ok:false, previous_price:null, delta:0, price_drop:false },
+    { provider:'Crave',        plan_name:'De base avec pubs', price:11.99, url:'https://www.crave.ca/en/subscribe',             scraped_ok:false, previous_price:null, delta:0, price_drop:false },
+    { provider:'Disney+',      plan_name:'Standard avec pub', price:8.99,  url:'https://www.disneyplus.com/en-ca',              scraped_ok:false, previous_price:null, delta:0, price_drop:false },
+    { provider:'Illico+',      plan_name:'Mensuel',           price:15.0,  url:'https://www.videotron.com/television/illico-plus', scraped_ok:false, previous_price:null, delta:0, price_drop:false },
+    { provider:'Tou.tv',       plan_name:'Extra',             price:7.99,  url:'https://ici.tou.tv/abonnement',                 scraped_ok:false, previous_price:null, delta:0, price_drop:false },
+    { provider:'Apple TV+',    plan_name:'Mensuel',           price:14.99, url:'https://tv.apple.com/ca',                       scraped_ok:false, previous_price:null, delta:0, price_drop:false },
+    { provider:'Paramount+',   plan_name:'Mensuel',           price:8.99,  url:'https://www.paramountplus.com/ca/',             scraped_ok:false, previous_price:null, delta:0, price_drop:false },
     { provider:'Tubi',         plan_name:'Gratuit (pub)',     price:0,  url:'https://tubitv.com/',                           scraped_ok:false, previous_price:null, delta:0, price_drop:false },
 ];
+
+const STREAMING_PRICE_GUARD = {
+    'netflix':      { min: 6,   max: 30 },
+    'amazon prime': { min: 6,   max: 30 },
+    'crave':        { min: 6,   max: 35 },
+    'disney+':      { min: 6,   max: 30 },
+    'illico+':      { min: 6,   max: 35 },
+    'tou.tv':       { min: 4,   max: 25 },
+    'apple tv+':    { min: 8,   max: 35 },
+    'paramount+':   { min: 5,   max: 30 },
+    'tubi':         { min: 0,   max: 0.5 },
+};
 
 async function loadStreamingPrices() {
     try {
@@ -177,17 +189,38 @@ async function loadStreamingPrices() {
         if (!res.ok) throw new Error('HTTP ' + res.status);
         const data = await res.json();
 
-        const fallbackUrls = Object.fromEntries(STREAMING_PLANS.map(p => [p.provider.toLowerCase(), p.url]));
-        STREAMING_PLANS = (data.plans || []).map(p => ({
-            provider:       p.provider,
-            plan_name:      p.plan_name || 'Mensuel',
-            price:          p.price,
-            url:            fallbackUrls[(p.provider || '').toLowerCase()] || p.url,
-            scraped_ok:     p.scraped_ok,
-            previous_price: (typeof p.previous_price === 'number') ? p.previous_price : null,
-            delta:          (typeof p.delta === 'number') ? p.delta : 0,
-            price_drop:     !!p.price_drop,
-        }));
+        const fallbackByProvider = Object.fromEntries(STREAMING_PLANS.map(p => [p.provider.toLowerCase(), p]));
+        const incomingPlans = Array.isArray(data.plans) ? data.plans : [];
+        const sanitized = incomingPlans.map(p => {
+            const key = (p.provider || '').toLowerCase();
+            const fb  = fallbackByProvider[key];
+            if (!fb) return null;
+
+            const rawPrice = Number(p.price);
+            const guard = STREAMING_PRICE_GUARD[key] || { min: 0, max: 40 };
+            const isCurrencyCad = !p.currency || String(p.currency).toUpperCase() === 'CAD';
+            const isPriceValid = Number.isFinite(rawPrice) && rawPrice >= guard.min && rawPrice <= guard.max;
+            const finalPrice = (isCurrencyCad && isPriceValid) ? Math.round(rawPrice * 100) / 100 : fb.price;
+
+            return {
+                provider:       p.provider || fb.provider,
+                plan_name:      p.plan_name || fb.plan_name || 'Mensuel',
+                price:          finalPrice,
+                url:            fb.url || p.url,
+                scraped_ok:     !!p.scraped_ok && isCurrencyCad && isPriceValid,
+                previous_price: (typeof p.previous_price === 'number') ? p.previous_price : null,
+                delta:          (typeof p.delta === 'number' && isCurrencyCad && isPriceValid) ? p.delta : 0,
+                price_drop:     !!p.price_drop && isCurrencyCad && isPriceValid,
+            };
+        }).filter(Boolean);
+
+        if (sanitized.length > 0) {
+            // Keep canonical provider order, fill missing providers with local fallback.
+            STREAMING_PLANS = STREAMING_PLANS.map(base => {
+                const found = sanitized.find(s => s.provider.toLowerCase() === base.provider.toLowerCase());
+                return found || base;
+            });
+        }
 
         streamingPricesUpdatedAt = data.updated_at;
         console.log('[Depensa] Prix streaming chargés (' + data.updated_at + ') — ' +

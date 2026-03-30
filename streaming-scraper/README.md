@@ -24,6 +24,7 @@ Résultat publié dans `data/streaming-prices.json`.
   - `previous_price`
   - `delta`
   - `price_drop`
+- Garde-fous qualité: si la page semble en devise US (USD/US$) ou si le prix sort d'une plage réaliste CAD par service, le scraper rejette la valeur et conserve le dernier prix valide.
 
 ## Structure
 

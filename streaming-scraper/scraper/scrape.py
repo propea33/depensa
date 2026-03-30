@@ -42,20 +42,22 @@ class ServiceConfig:
     url: str
     fallback_price: float
     plan_name: str
+    min_price: float
+    max_price: float
     note: str = ""
     is_free: bool = False
 
 
 SERVICES: list[ServiceConfig] = [
-    ServiceConfig("Netflix", "https://www.netflix.com/ca/", 8.0, "Standard avec pub"),
-    ServiceConfig("Amazon Prime", "https://www.primevideo.com/", 9.99, "Prime Video"),
-    ServiceConfig("Crave", "https://www.crave.ca/en/subscribe", 11.99, "De base avec pubs"),
-    ServiceConfig("Disney+", "https://www.disneyplus.com/en-ca", 7.99, "Standard avec pub"),
-    ServiceConfig("Illico+", "https://www.videotron.com/television/illico-plus", 6.99, "Mensuel"),
-    ServiceConfig("Tou.tv", "https://ici.tou.tv/abonnement", 6.99, "Extra"),
-    ServiceConfig("Apple TV+", "https://tv.apple.com/ca", 12.99, "Mensuel"),
-    ServiceConfig("Paramount+", "https://www.paramountplus.com/ca/", 9.99, "Mensuel"),
-    ServiceConfig("Tubi", "https://tubitv.com/", 0.0, "Gratuit (pub)", is_free=True),
+    ServiceConfig("Netflix", "https://www.netflix.com/ca/", 8.99, "Standard avec pub", 6.0, 30.0),
+    ServiceConfig("Amazon Prime", "https://www.primevideo.com/", 9.99, "Prime Video", 6.0, 30.0),
+    ServiceConfig("Crave", "https://www.crave.ca/en/subscribe", 11.99, "De base avec pubs", 6.0, 35.0),
+    ServiceConfig("Disney+", "https://www.disneyplus.com/en-ca", 8.99, "Standard avec pub", 6.0, 30.0),
+    ServiceConfig("Illico+", "https://www.videotron.com/television/illico-plus", 15.0, "Mensuel", 6.0, 35.0),
+    ServiceConfig("Tou.tv", "https://ici.tou.tv/abonnement", 7.99, "Extra", 4.0, 25.0),
+    ServiceConfig("Apple TV+", "https://tv.apple.com/ca", 14.99, "Mensuel", 8.0, 35.0),
+    ServiceConfig("Paramount+", "https://www.paramountplus.com/ca/", 8.99, "Mensuel", 5.0, 30.0),
+    ServiceConfig("Tubi", "https://tubitv.com/", 0.0, "Gratuit (pub)", 0.0, 0.5, is_free=True),
 ]
 
 MONTHLY_HINTS = [
@@ -141,6 +143,14 @@ def pick_monthly_price(page_text: str) -> Optional[float]:
     return best["price"]
 
 
+def looks_like_non_cad(text: str) -> bool:
+    t = text.lower()
+    # If a page mostly exposes US pricing and no CAD hint, we avoid trusting it.
+    has_us = ("us$" in t) or (" usd" in t) or ("u.s." in t)
+    has_cad = ("cad" in t) or ("ca$" in t) or ("$ cad" in t) or ("canada" in t)
+    return has_us and not has_cad
+
+
 def fetch_page_text(url: str, timeout: int = 25) -> str:
     r = requests.get(
         url,
@@ -162,9 +172,13 @@ def scrape_service(cfg: ServiceConfig) -> tuple[Optional[float], bool, str]:
 
     try:
         text = fetch_page_text(cfg.url)
+        if looks_like_non_cad(text):
+            return None, False, "non_cad_detected"
         price = pick_monthly_price(text)
         if price is None:
             return None, False, "no_price_found"
+        if not (cfg.min_price <= price <= cfg.max_price):
+            return None, False, "out_of_range"
         return price, True, "http_regex"
     except Exception:
         return None, False, "fetch_error"
