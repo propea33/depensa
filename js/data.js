@@ -74,6 +74,7 @@ const RECS = [
 const ISP_PRICES_URL  = 'https://raw.githubusercontent.com/propea33/isp-scraper/main/data/isp-prices.json';
 const CELL_PRICES_URL = 'https://raw.githubusercontent.com/propea33/isp-scraper/main/data/cell-prices.json';
 const STREAMING_PRICES_URL = 'https://raw.githubusercontent.com/propea33/depensa/main/streaming-scraper/data/streaming-prices.json';
+const STREAMING_PRICES_API_URL = 'https://api.github.com/repos/propea33/depensa/contents/streaming-scraper/data/streaming-prices.json?ref=main';
 
 // Valeurs par défaut (utilisées si le fetch échoue ou avant chargement)
 let INTERNET_PLANS = [
@@ -185,9 +186,32 @@ const STREAMING_PRICE_GUARD = {
 
 async function loadStreamingPrices() {
     try {
-        const res  = await fetch(STREAMING_PRICES_URL + '?t=' + Date.now());
-        if (!res.ok) throw new Error('HTTP ' + res.status);
-        const data = await res.json();
+        const cacheBust = Date.now();
+        const rawReq = fetch(STREAMING_PRICES_URL + '?t=' + cacheBust)
+            .then(r => r.ok ? r.json() : null)
+            .catch(() => null);
+        const apiReq = fetch(STREAMING_PRICES_API_URL + '&t=' + cacheBust)
+            .then(r => r.ok ? r.json() : null)
+            .then(payload => {
+                if (!payload || !payload.content) return null;
+                try {
+                    const b64 = String(payload.content).replace(/\n/g, '');
+                    return JSON.parse(atob(b64));
+                } catch (_) {
+                    return null;
+                }
+            })
+            .catch(() => null);
+
+        const [rawData, apiData] = await Promise.all([rawReq, apiReq]);
+        const candidates = [rawData, apiData].filter(d => d && Array.isArray(d.plans));
+        if (candidates.length === 0) throw new Error('Aucune source streaming disponible');
+
+        const data = candidates.sort((a, b) => {
+            const da = Date.parse(a.updated_at || '') || 0;
+            const db = Date.parse(b.updated_at || '') || 0;
+            return db - da;
+        })[0];
 
         const fallbackByProvider = Object.fromEntries(STREAMING_PLANS.map(p => [p.provider.toLowerCase(), p]));
         const incomingPlans = Array.isArray(data.plans) ? data.plans : [];
