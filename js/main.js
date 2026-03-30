@@ -130,6 +130,15 @@ $('recurringFilter').addEventListener('click', () => {
     renderExpenses();
 });
 
+const expenseViewIcons = $('expenseViewIcons');
+const expenseViewList  = $('expenseViewList');
+if (expenseViewIcons) {
+    expenseViewIcons.addEventListener('click', () => setExpenseViewMode('icons'));
+}
+if (expenseViewList) {
+    expenseViewList.addEventListener('click', () => setExpenseViewMode('list'));
+}
+
 // ─── Month selector ───────────────────────────────────
 
 $('monthTabs').addEventListener('click', e => {

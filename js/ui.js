@@ -18,6 +18,22 @@ function getSelectedExpenses() {
 
 // Set by main.js after a successful add so we can auto-focus the new card.
 let pendingScrollExpenseId = null;
+const EXPENSE_VIEW_STORAGE_KEY = 'depensa_expense_view';
+let expenseViewMode = localStorage.getItem(EXPENSE_VIEW_STORAGE_KEY) === 'list' ? 'list' : 'icons';
+
+function setExpenseViewMode(mode) {
+    expenseViewMode = mode === 'list' ? 'list' : 'icons';
+    localStorage.setItem(EXPENSE_VIEW_STORAGE_KEY, expenseViewMode);
+    renderExpenses();
+}
+
+function syncExpenseViewControls() {
+    const iconsBtn = $('expenseViewIcons');
+    const listBtn  = $('expenseViewList');
+    if (!iconsBtn || !listBtn) return;
+    iconsBtn.classList.toggle('active', expenseViewMode === 'icons');
+    listBtn.classList.toggle('active', expenseViewMode === 'list');
+}
 
 const EXPENSE_GROUP_ORDER = [
     { key: 'maison',    label: 'Maison' },
@@ -109,6 +125,8 @@ function groupExpensesForDisplay(list) {
 function renderExpenses() {
     const grid   = $('expenseList');
     grid.innerHTML = '';
+    grid.classList.toggle('expense-grid-list', expenseViewMode === 'list');
+    syncExpenseViewControls();
 
     const isPast = selectedMonth !== liveMonthKey();
     const source = getSelectedExpenses();

@@ -208,26 +208,38 @@
             <!-- Month selector -->
             <div class="month-nav" id="monthTabs">
                 <div class="month-nav-inner">
-                    <div class="year-badge-wrap">
-                        <button class="year-badge" id="yearBadge" aria-expanded="false">
-                            2026
-                            <svg class="year-chevron" width="10" height="10" viewBox="0 0 10 10" fill="none">
-                                <path d="M2 3.5L5 6.5L8 3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                            </svg>
-                        </button>
-                        <div class="year-popover" id="yearPopover">
-                            <div class="year-popover-label">2025</div>
-                            <div class="year-popover-months">
-                                <button class="month-tab" data-month="oct">Oct</button>
-                                <button class="month-tab" data-month="nov">Nov</button>
-                                <button class="month-tab" data-month="dec">Déc</button>
+                    <div class="month-nav-main">
+                        <div class="year-badge-wrap">
+                            <button class="year-badge" id="yearBadge" aria-expanded="false">
+                                2026
+                                <svg class="year-chevron" width="10" height="10" viewBox="0 0 10 10" fill="none">
+                                    <path d="M2 3.5L5 6.5L8 3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </button>
+                            <div class="year-popover" id="yearPopover">
+                                <div class="year-popover-label">2025</div>
+                                <div class="year-popover-months">
+                                    <button class="month-tab" data-month="oct">Oct</button>
+                                    <button class="month-tab" data-month="nov">Nov</button>
+                                    <button class="month-tab" data-month="dec">Déc</button>
+                                </div>
                             </div>
                         </div>
+                        <div class="month-pills" id="monthPills">
+                            <button class="month-tab" data-month="jan">Jan</button>
+                            <button class="month-tab" data-month="fev">Fév</button>
+                            <button class="month-tab active live-tab" data-month="mars">Mars</button>
+                        </div>
                     </div>
-                    <div class="month-pills" id="monthPills">
-                        <button class="month-tab" data-month="jan">Jan</button>
-                        <button class="month-tab" data-month="fev">Fév</button>
-                        <button class="month-tab active live-tab" data-month="mars">Mars</button>
+                    <div class="month-nav-view">
+                        <div class="view-toggle" role="group" aria-label="Mode d'affichage des dépenses">
+                            <button class="view-toggle-btn active" id="expenseViewIcons" type="button" title="Affichage Icônes">
+                                ▦ <span class="view-toggle-label">Icônes</span>
+                            </button>
+                            <button class="view-toggle-btn" id="expenseViewList" type="button" title="Affichage Liste">
+                                ☰ <span class="view-toggle-label">Liste</span>
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>

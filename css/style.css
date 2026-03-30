@@ -379,6 +379,42 @@
             font-size: 18px;
         }
 
+        .view-toggle {
+            display: inline-flex;
+            align-items: center;
+            background: var(--bg-card);
+            border: 2px solid var(--border-2);
+            border-radius: 9px;
+            padding: 2px;
+            gap: 2px;
+        }
+
+        .view-toggle-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 9px;
+            border: none;
+            border-radius: 6px;
+            background: transparent;
+            color: var(--text-2);
+            font-family: 'DM Sans', sans-serif;
+            font-size: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background 0.15s, color 0.15s, transform 0.12s;
+        }
+
+        .view-toggle-btn:hover {
+            color: var(--text);
+            background: var(--bg-card-hover);
+        }
+
+        .view-toggle-btn.active {
+            color: #fff;
+            background: var(--accent);
+        }
+
         .add-btn {
             display: flex;
             align-items: center;
@@ -445,6 +481,44 @@
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 10px;
+        }
+
+        .expense-grid.expense-grid-list {
+            grid-template-columns: 1fr;
+            gap: 8px;
+        }
+
+        .expense-grid.expense-grid-list .expense-group-header {
+            margin-top: 4px;
+        }
+
+        .expense-grid.expense-grid-list .expense-card {
+            padding: 9px 12px;
+            gap: 8px;
+            min-height: 56px;
+        }
+
+        .expense-grid.expense-grid-list .expense-icon {
+            width: 30px;
+            height: 30px;
+            font-size: 14px;
+            border-radius: 7px;
+        }
+
+        .expense-grid.expense-grid-list .expense-name {
+            font-size: 12.5px;
+            margin-bottom: 1px;
+        }
+
+        .expense-grid.expense-grid-list .expense-monthly {
+            font-size: 15px;
+            margin-top: 0;
+        }
+
+        .expense-grid.expense-grid-list .expense-yearly,
+        .expense-grid.expense-grid-list .expense-freq-badge,
+        .expense-grid.expense-grid-list .recurring-badge {
+            display: none;
         }
 
         .expense-group-header {
@@ -1077,6 +1151,7 @@
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
             gap: 18px;
+            align-items: start;
         }
 
         .rec-card {
@@ -1086,6 +1161,7 @@
             overflow: hidden;
             cursor: pointer;
             transition: border-color 0.15s, box-shadow 0.15s, transform 0.15s;
+            align-self: start;
         }
 
         .rec-card:hover {
@@ -1570,7 +1646,21 @@
         .month-nav-inner {
             display: flex;
             align-items: center;
+            justify-content: space-between;
             gap: 6px;
+        }
+
+        .month-nav-main {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            min-width: 0;
+            flex-wrap: wrap;
+        }
+
+        .month-nav-view {
+            margin-left: auto;
+            flex-shrink: 0;
         }
 
         /* Year badge — the clickable trigger */
@@ -2480,6 +2570,10 @@
 
             /* ── Section header (title + month label) ── */
             .expense-main-header { flex-wrap: wrap; gap: 6px; }
+            .month-nav-inner { align-items: flex-start; }
+            .month-nav-view { width: 100%; margin-left: 0; }
+            .view-toggle-btn { padding: 6px 8px; }
+            .view-toggle-label { display: none; }
 
             /* ── Form 2-column grid → stack ──────────── */
             .form-row-2 { grid-template-columns: 1fr; gap: 10px; }
