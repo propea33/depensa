@@ -1,0 +1,47 @@
+name: 📺 Daily Streaming Scrape (Depensa)
+
+on:
+  schedule:
+    # 12:00 UTC daily (07:00 EST / 08:00 EDT Montreal)
+    - cron: '0 12 * * *'
+  workflow_dispatch:
+
+jobs:
+  scrape_streaming:
+    name: Scrape streaming prices & commit
+    runs-on: ubuntu-22.04
+    timeout-minutes: 20
+
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+          cache-dependency-path: streaming-scraper/requirements.txt
+
+      - name: Install dependencies
+        run: pip install -r streaming-scraper/requirements.txt
+
+      - name: Run streaming scraper
+        run: python streaming-scraper/scraper/scrape.py
+        continue-on-error: true
+
+      - name: Commit updated streaming prices
+        run: |
+          git config user.name  "depensa-streaming-scraper[bot]"
+          git config user.email "actions@github.com"
+          git add streaming-scraper/data/streaming-prices.json
+          if git diff --staged --quiet; then
+            echo "No changes in streaming prices JSON — nothing to commit."
+          else
+            git commit -m "chore: update streaming prices $(date -u '+%Y-%m-%d %H:%M UTC')"
+            git push
+            echo "✅ Streaming prices committed and pushed."
+          fi
