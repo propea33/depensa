@@ -563,7 +563,7 @@ function loadDynamicRec(rec, card) {
                 const d = new Date(streamingPricesUpdatedAt);
                 timestampLabel = 'Scraped le ' + d.toLocaleDateString('fr-CA', { day:'numeric', month:'long', year:'numeric' }) + ' à ' + d.toLocaleTimeString('fr-CA', { hour:'2-digit', minute:'2-digit' });
             } else {
-                timestampLabel = 'Prix estimés — <a href="https://github.com/propea33/streaming-scraper" target="_blank" style="color:var(--accent)">configurer le scraper</a>';
+                timestampLabel = 'Prix estimés — <a href="https://github.com/propea33/depensa/tree/main/streaming-scraper" target="_blank" style="color:var(--accent)">configurer le scraper</a>';
             }
 
             let totalPotentialSave = 0;

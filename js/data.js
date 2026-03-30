@@ -73,7 +73,7 @@ const RECS = [
 // ── ISP + Cell Plans — chargés dynamiquement depuis le scraper GitHub ───────
 const ISP_PRICES_URL  = 'https://raw.githubusercontent.com/propea33/isp-scraper/main/data/isp-prices.json';
 const CELL_PRICES_URL = 'https://raw.githubusercontent.com/propea33/isp-scraper/main/data/cell-prices.json';
-const STREAMING_PRICES_URL = 'https://raw.githubusercontent.com/propea33/streaming-scraper/main/data/streaming-prices.json';
+const STREAMING_PRICES_URL = 'https://raw.githubusercontent.com/propea33/depensa/main/streaming-scraper/data/streaming-prices.json';
 
 // Valeurs par défaut (utilisées si le fetch échoue ou avant chargement)
 let INTERNET_PLANS = [
