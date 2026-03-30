@@ -20,10 +20,24 @@ function getSelectedExpenses() {
 let pendingScrollExpenseId = null;
 const EXPENSE_VIEW_STORAGE_KEY = 'depensa_expense_view';
 let expenseViewMode = localStorage.getItem(EXPENSE_VIEW_STORAGE_KEY) === 'list' ? 'list' : 'icons';
+const EXPENSE_SORT_STORAGE_KEY = 'depensa_expense_sort';
+const EXPENSE_SORT_LABELS = {
+    categories: 'Par Catégories',
+    amount_desc: 'Plus grandes',
+    amount_asc: 'Plus petites',
+};
+let expenseSortMode = localStorage.getItem(EXPENSE_SORT_STORAGE_KEY) || 'categories';
+if (!['categories', 'amount_desc', 'amount_asc'].includes(expenseSortMode)) expenseSortMode = 'categories';
 
 function setExpenseViewMode(mode) {
     expenseViewMode = mode === 'list' ? 'list' : 'icons';
     localStorage.setItem(EXPENSE_VIEW_STORAGE_KEY, expenseViewMode);
+    renderExpenses();
+}
+
+function setExpenseSortMode(mode) {
+    expenseSortMode = ['categories', 'amount_desc', 'amount_asc'].includes(mode) ? mode : 'categories';
+    localStorage.setItem(EXPENSE_SORT_STORAGE_KEY, expenseSortMode);
     renderExpenses();
 }
 
@@ -33,6 +47,14 @@ function syncExpenseViewControls() {
     if (!iconsBtn || !listBtn) return;
     iconsBtn.classList.toggle('active', expenseViewMode === 'icons');
     listBtn.classList.toggle('active', expenseViewMode === 'list');
+}
+
+function syncExpenseSortControls() {
+    const sortBtnLabel = $('sortBtnLabel');
+    if (sortBtnLabel) sortBtnLabel.textContent = EXPENSE_SORT_LABELS[expenseSortMode] || 'Par Catégories';
+    document.querySelectorAll('#sortMenu .sort-item').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.sort === expenseSortMode);
+    });
 }
 
 const EXPENSE_GROUP_ORDER = [
@@ -127,6 +149,7 @@ function renderExpenses() {
     grid.innerHTML = '';
     grid.classList.toggle('expense-grid-list', expenseViewMode === 'list');
     syncExpenseViewControls();
+    syncExpenseSortControls();
 
     const isPast = selectedMonth !== liveMonthKey();
     const source = getSelectedExpenses();
@@ -251,13 +274,39 @@ function renderExpenses() {
         savingsBanner.innerHTML = '';
     }
 
+    // Place the view toggle strictly below all alert banners, right above the expense list.
+    const viewRow = $('expenseViewRow');
+    if (viewRow) {
+        const hasSavings = savingsBanner && savingsBanner.innerHTML.trim().length > 0;
+        const hasHikes   = hikeBanner && hikeBanner.innerHTML.trim().length > 0;
+        if (hasHikes) {
+            hikeBanner.insertAdjacentElement('afterend', viewRow);
+        } else if (hasSavings) {
+            savingsBanner.insertAdjacentElement('afterend', viewRow);
+        } else {
+            grid.parentElement.insertBefore(viewRow, grid);
+        }
+    }
+
     let cardIndex = 0;
-    const grouped = groupExpensesForDisplay(filtered);
+    const grouped = expenseSortMode === 'categories'
+        ? groupExpensesForDisplay(filtered)
+        : [{
+            label: null,
+            items: [...filtered].sort((a, b) => {
+                const diff = effectiveMonthly(a) - effectiveMonthly(b);
+                if (expenseSortMode === 'amount_desc') return -diff;
+                if (expenseSortMode === 'amount_asc') return diff;
+                return 0;
+            }),
+        }];
     grouped.forEach(group => {
-        const header = document.createElement('div');
-        header.className = 'expense-group-header';
-        header.textContent = group.label;
-        grid.appendChild(header);
+        if (group.label) {
+            const header = document.createElement('div');
+            header.className = 'expense-group-header';
+            header.textContent = group.label;
+            grid.appendChild(header);
+        }
 
         group.items.forEach(exp => {
             const cat = getCAT(exp.cat);

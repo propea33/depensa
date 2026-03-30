@@ -130,6 +130,21 @@ $('recurringFilter').addEventListener('click', () => {
     renderExpenses();
 });
 
+// ─── Sort dropdown (expenses) ────────────────────────
+
+$('sortBtn').addEventListener('click', e => {
+    e.stopPropagation();
+    $('sortWrap').classList.toggle('open');
+});
+document.addEventListener('click', () => $('sortWrap').classList.remove('open'));
+$('sortMenu').addEventListener('click', e => e.stopPropagation());
+document.querySelectorAll('#sortMenu .sort-item').forEach(btn => {
+    btn.addEventListener('click', () => {
+        setExpenseSortMode(btn.dataset.sort);
+        $('sortWrap').classList.remove('open');
+    });
+});
+
 const expenseViewIcons = $('expenseViewIcons');
 const expenseViewList  = $('expenseViewList');
 if (expenseViewIcons) {

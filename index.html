@@ -231,16 +231,27 @@
                             <button class="month-tab active live-tab" data-month="mars">Mars</button>
                         </div>
                     </div>
-                    <div class="month-nav-view">
-                        <div class="view-toggle" role="group" aria-label="Mode d'affichage des dépenses">
-                            <button class="view-toggle-btn active" id="expenseViewIcons" type="button" title="Affichage Icônes">
-                                ▦ <span class="view-toggle-label">Icônes</span>
-                            </button>
-                            <button class="view-toggle-btn" id="expenseViewList" type="button" title="Affichage Liste">
-                                ☰ <span class="view-toggle-label">Liste</span>
-                            </button>
-                        </div>
+                </div>
+            </div>
+
+            <div class="expense-view-row" id="expenseViewRow">
+                <div class="sort-wrap" id="sortWrap">
+                    <button class="sort-btn" id="sortBtn" type="button">
+                        ⇅ <span id="sortBtnLabel">Par Catégories</span> <span class="sort-chevron">▼</span>
+                    </button>
+                    <div class="sort-menu" id="sortMenu">
+                        <button class="sort-item active" type="button" data-sort="categories">Par Catégories</button>
+                        <button class="sort-item" type="button" data-sort="amount_desc">Plus grande dépense à la plus petite</button>
+                        <button class="sort-item" type="button" data-sort="amount_asc">Plus petite à la plus grande</button>
                     </div>
+                </div>
+                <div class="view-toggle" role="group" aria-label="Mode d'affichage des dépenses">
+                    <button class="view-toggle-btn active" id="expenseViewIcons" type="button" title="Affichage Icônes">
+                        ▦ <span class="view-toggle-label">Icônes</span>
+                    </button>
+                    <button class="view-toggle-btn" id="expenseViewList" type="button" title="Affichage Liste">
+                        ☰ <span class="view-toggle-label">Liste</span>
+                    </button>
                 </div>
             </div>
 

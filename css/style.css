@@ -415,6 +415,86 @@
             background: var(--accent);
         }
 
+        .sort-wrap {
+            position: relative;
+        }
+
+        .sort-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            padding: 8px 12px;
+            border-radius: 8px;
+            background: var(--bg-card);
+            border: 2px solid var(--border-2);
+            color: var(--text-2);
+            font-family: 'DM Sans', sans-serif;
+            font-size: 12.5px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: border-color 0.15s, color 0.15s;
+        }
+
+        .sort-btn:hover {
+            border-color: var(--border);
+            color: var(--text);
+        }
+
+        .sort-chevron {
+            font-size: 9px;
+            opacity: .6;
+            transition: transform .2s ease;
+        }
+
+        .sort-wrap.open .sort-chevron {
+            transform: rotate(180deg);
+        }
+
+        .sort-menu {
+            position: absolute;
+            right: 0;
+            top: calc(100% + 6px);
+            z-index: 40;
+            min-width: 290px;
+            padding: 5px;
+            background: var(--bg-card);
+            border: 2px solid var(--border);
+            border-radius: 10px;
+            box-shadow: 4px 4px 0 var(--border);
+            display: none;
+            flex-direction: column;
+            gap: 3px;
+        }
+
+        .sort-wrap.open .sort-menu {
+            display: flex;
+        }
+
+        .sort-item {
+            width: 100%;
+            text-align: left;
+            padding: 8px 10px;
+            border: none;
+            border-radius: 7px;
+            background: transparent;
+            color: var(--text);
+            font-family: 'DM Sans', sans-serif;
+            font-size: 12.5px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.12s, color 0.12s;
+        }
+
+        .sort-item:hover {
+            background: var(--bg-card-hover);
+        }
+
+        .sort-item.active {
+            background: rgba(124,58,237,0.1);
+            color: var(--accent);
+            font-weight: 700;
+        }
+
         .add-btn {
             display: flex;
             align-items: center;
@@ -1658,9 +1738,12 @@
             flex-wrap: wrap;
         }
 
-        .month-nav-view {
-            margin-left: auto;
-            flex-shrink: 0;
+        .expense-view-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            justify-content: flex-end;
+            margin-top: 6px;
         }
 
         /* Year badge — the clickable trigger */
@@ -2571,7 +2654,8 @@
             /* ── Section header (title + month label) ── */
             .expense-main-header { flex-wrap: wrap; gap: 6px; }
             .month-nav-inner { align-items: flex-start; }
-            .month-nav-view { width: 100%; margin-left: 0; }
+            .expense-view-row { margin-top: 4px; justify-content: flex-end; }
+            .sort-menu { min-width: 250px; }
             .view-toggle-btn { padding: 6px 8px; }
             .view-toggle-label { display: none; }
 
