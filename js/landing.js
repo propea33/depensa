@@ -128,16 +128,16 @@ function openHistModal(idx) {
   const total = entry.expenses.reduce((s, e) => s + e.amount, 0);
   const rows = entry.expenses.map(e => `
     <tr>
-      <td><div class="hist-exp-icon" style="background:${e.color}22;overflow:hidden;">${expIconHTML(e)}</div></td>
+      <td><div class="td-icon" style="background:${e.color}22;overflow:hidden;">${expIconHTML(e)}</div></td>
       <td>${e.name}</td>
       <td>
-        <span class="hist-td-amount">${fmtAmt(e.amount)}</span><br>
-        <span class="hist-td-yearly">${fmtAmt(e.amount * 12)}/an</span>
+        <span class="td-amount">${fmtAmt(e.amount)}</span><br>
+        <span class="td-yearly">${fmtAmt(e.amount * 12)}/an</span>
       </td>
     </tr>`).join('');
   document.getElementById('histModalBody').innerHTML = `
     <div style="max-height:400px;overflow-y:auto;scrollbar-width:thin;">
-      <table class="hist-table">
+      <table class="history-table">
         <thead><tr><th style="width:44px;"></th><th>Dépense</th><th>Montant</th></tr></thead>
         <tbody>${rows}</tbody>
         <tfoot><tr><td colspan="2">Total mensuel</td><td>${fmtAmt(total)}</td></tr></tfoot>
