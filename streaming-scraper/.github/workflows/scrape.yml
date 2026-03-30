@@ -1,0 +1,45 @@
+name: 📺 Scrape Streaming Prices
+
+on:
+  schedule:
+    - cron: '0 12 * * *'
+  workflow_dispatch:
+
+jobs:
+  scrape:
+    name: Scrape & Commit
+    runs-on: ubuntu-22.04
+    timeout-minutes: 15
+
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run scraper
+        run: python scraper/scrape.py
+        continue-on-error: true
+
+      - name: Commit updated prices
+        run: |
+          git config user.name  "streaming-scraper[bot]"
+          git config user.email "actions@github.com"
+          git add data/streaming-prices.json
+          if git diff --staged --quiet; then
+            echo "Aucun changement dans streaming-prices.json — pas de commit."
+          else
+            git commit -m "chore: update streaming prices $(date -u '+%Y-%m-%d %H:%M UTC')"
+            git push
+            echo "✅ Commit et push effectués."
+          fi

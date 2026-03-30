@@ -57,14 +57,9 @@ const RECS = [
     {
         id: 'streaming', icon: '📺', color: '#ef4444',
         name: 'Abonnements Streaming',
-        desc: 'Optimisez vos services de contenu',
+        desc: 'Comparez vos abonnements aux prix du marché',
         saveMonthly: 34, saveYearly: 408,
-        rows: [
-            { name:'Netflix + Disney+ + Crave', plan:'Séparés',      price:57, badge:'current' },
-            { name:'Netflix + Crave',           plan:'Sans Disney+', price:43, badge:null      },
-            { name:'Netflix seulement',         plan:'Essentiel',    price:23, badge:'best'    },
-        ],
-        tip: '💡 Disney+ et Crave ont un contenu qui se chevauche. Garder Netflix seulement vous économise $34/mois!',
+        dynamic: true,
     },
     {
         id: 'internet', icon: '🌐', color: '#06b6d4',
@@ -78,6 +73,7 @@ const RECS = [
 // ── ISP + Cell Plans — chargés dynamiquement depuis le scraper GitHub ───────
 const ISP_PRICES_URL  = 'https://raw.githubusercontent.com/propea33/isp-scraper/main/data/isp-prices.json';
 const CELL_PRICES_URL = 'https://raw.githubusercontent.com/propea33/isp-scraper/main/data/cell-prices.json';
+const STREAMING_PRICES_URL = 'https://raw.githubusercontent.com/propea33/streaming-scraper/main/data/streaming-prices.json';
 
 // Valeurs par défaut (utilisées si le fetch échoue ou avant chargement)
 let INTERNET_PLANS = [
@@ -92,6 +88,7 @@ let INTERNET_PLANS = [
 
 let ispPricesUpdatedAt  = null;   // timestamp de la dernière mise à jour ISP
 let cellPricesUpdatedAt = null;   // timestamp de la dernière mise à jour Cell
+let streamingPricesUpdatedAt = null; // timestamp de la dernière mise à jour Streaming
 
 async function loadISPPrices() {
     // Ne pas fetcher si l'URL est encore le placeholder
@@ -158,6 +155,45 @@ async function loadCellPrices() {
             data.scraped_count + ' scrapés, ' + data.fallback_count + ' fallback');
     } catch (e) {
         console.warn('[Depensa] Impossible de charger les prix cell — données par défaut utilisées.', e);
+    }
+}
+
+// ── Streaming Plans — chargé dynamiquement depuis le scraper GitHub ────────
+let STREAMING_PLANS = [
+    { provider:'Netflix',      plan_name:'Standard avec pub', price:8,  url:'https://www.netflix.com/ca/',                   scraped_ok:false, previous_price:null, delta:0, price_drop:false },
+    { provider:'Amazon Prime', plan_name:'Prime Video',       price:10, url:'https://www.primevideo.com/',                   scraped_ok:false, previous_price:null, delta:0, price_drop:false },
+    { provider:'Crave',        plan_name:'De base avec pubs', price:12, url:'https://www.crave.ca/en/subscribe',             scraped_ok:false, previous_price:null, delta:0, price_drop:false },
+    { provider:'Disney+',      plan_name:'Standard avec pub', price:8,  url:'https://www.disneyplus.com/en-ca',              scraped_ok:false, previous_price:null, delta:0, price_drop:false },
+    { provider:'Illico+',      plan_name:'Mensuel',           price:7,  url:'https://www.videotron.com/television/illico-plus', scraped_ok:false, previous_price:null, delta:0, price_drop:false },
+    { provider:'Tou.tv',       plan_name:'Extra',             price:7,  url:'https://ici.tou.tv/abonnement',                 scraped_ok:false, previous_price:null, delta:0, price_drop:false },
+    { provider:'Apple TV+',    plan_name:'Mensuel',           price:13, url:'https://tv.apple.com/ca',                       scraped_ok:false, previous_price:null, delta:0, price_drop:false },
+    { provider:'Paramount+',   plan_name:'Mensuel',           price:10, url:'https://www.paramountplus.com/ca/',             scraped_ok:false, previous_price:null, delta:0, price_drop:false },
+    { provider:'Tubi',         plan_name:'Gratuit (pub)',     price:0,  url:'https://tubitv.com/',                           scraped_ok:false, previous_price:null, delta:0, price_drop:false },
+];
+
+async function loadStreamingPrices() {
+    try {
+        const res  = await fetch(STREAMING_PRICES_URL + '?t=' + Date.now());
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        const data = await res.json();
+
+        const fallbackUrls = Object.fromEntries(STREAMING_PLANS.map(p => [p.provider.toLowerCase(), p.url]));
+        STREAMING_PLANS = (data.plans || []).map(p => ({
+            provider:       p.provider,
+            plan_name:      p.plan_name || 'Mensuel',
+            price:          p.price,
+            url:            fallbackUrls[(p.provider || '').toLowerCase()] || p.url,
+            scraped_ok:     p.scraped_ok,
+            previous_price: (typeof p.previous_price === 'number') ? p.previous_price : null,
+            delta:          (typeof p.delta === 'number') ? p.delta : 0,
+            price_drop:     !!p.price_drop,
+        }));
+
+        streamingPricesUpdatedAt = data.updated_at;
+        console.log('[Depensa] Prix streaming chargés (' + data.updated_at + ') — ' +
+            data.scraped_count + ' scrapés, ' + data.fallback_count + ' fallback');
+    } catch (e) {
+        console.warn('[Depensa] Impossible de charger les prix streaming — données par défaut utilisées.', e);
     }
 }
 

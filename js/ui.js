@@ -463,6 +463,90 @@ function renderRecs() {
 function loadDynamicRec(rec, card) {
     const bodyInner = card.querySelector('.rec-body-inner');
 
+    if (rec.id === 'streaming') {
+        const streamExpenses = expenses.filter(e => e.cat === 'streaming');
+        const currentCost = streamExpenses.reduce((s, e) => s + monthlyAmount(e), 0);
+
+        bodyInner.innerHTML = `
+            <div class="search-loading">
+                <div class="search-spinner"></div>
+                <span>Recherche des meilleurs prix streaming…</span>
+            </div>`;
+
+        setTimeout(() => {
+            const normalize = s => (s || '')
+                .toLowerCase()
+                .normalize('NFD')
+                .replace(/[\u0300-\u036f]/g, '')
+                .replace(/[^a-z0-9+]/g, '');
+
+            const subscribedByProvider = new Map();
+            streamExpenses.forEach(exp => {
+                const key = normalize(exp.name);
+                const monthly = monthlyAmount(exp);
+                if (!subscribedByProvider.has(key) || monthly < subscribedByProvider.get(key)) {
+                    subscribedByProvider.set(key, monthly);
+                }
+            });
+
+            const sorted = [...STREAMING_PLANS].sort((a, b) => b.price - a.price);
+
+            let timestampLabel = '';
+            if (streamingPricesUpdatedAt) {
+                const d = new Date(streamingPricesUpdatedAt);
+                timestampLabel = 'Scraped le ' + d.toLocaleDateString('fr-CA', { day:'numeric', month:'long', year:'numeric' }) + ' à ' + d.toLocaleTimeString('fr-CA', { hour:'2-digit', minute:'2-digit' });
+            } else {
+                timestampLabel = 'Prix estimés — <a href="https://github.com/propea33/streaming-scraper" target="_blank" style="color:var(--accent)">configurer le scraper</a>';
+            }
+
+            let totalPotentialSave = 0;
+            const rows = sorted.map((p, i) => {
+                const key = normalize(p.provider);
+                const currentProviderPrice = subscribedByProvider.get(key);
+                const isSubscribed = typeof currentProviderPrice === 'number';
+                const saving = isSubscribed ? Math.max(0, currentProviderPrice - p.price) : 0;
+                totalPotentialSave += saving;
+
+                const estimBadge = !p.scraped_ok
+                    ? '<span style="font-size:10px;color:var(--text-3);background:rgba(255,255,255,0.06);padding:1px 5px;border-radius:4px;margin-left:4px;">estimé</span>'
+                    : '';
+                const dropBadge = p.price_drop && p.delta < 0
+                    ? `<span style="font-size:10px;color:#065f46;background:#d1fae5;padding:1px 5px;border-radius:4px;margin-left:4px;">↘ baisse ${fmt(Math.abs(p.delta))}</span>`
+                    : '';
+
+                return `
+                    <a class="plan-row ${isSubscribed ? 'plan-current' : ''}"
+                       href="${p.url}" target="_blank" rel="noopener"
+                       style="animation-delay:${i * 55}ms">
+                        <div class="plan-provider">
+                            ${p.provider}${estimBadge}${dropBadge}
+                            <small>${p.plan_name || 'Mensuel'}</small>
+                        </div>
+                        <span class="plan-speed">${isSubscribed ? 'Abonné' : 'Non abonné'}</span>
+                        <div style="text-align:right;min-width:80px;">
+                            <div class="plan-price">${fmt(p.price)}<span style="font-size:11px;font-weight:400;color:var(--text-2)">/mois</span></div>
+                            ${saving > 0 ? `<div class="plan-savings">-${fmt(saving)}/mois<div class="plan-savings-year">-${fmt(saving * 12)}/an</div></div>` : ''}
+                        </div>
+                        ${isSubscribed ? '<span class="plan-tag plan-tag-current">Actuel</span>' : ''}
+                        <span class="plan-link-icon">↗</span>
+                    </a>
+                `;
+            }).join('');
+
+            bodyInner.innerHTML = `
+                <div class="search-result-header">
+                    <span class="search-current-cost">Vos abonnements actuels : <strong>${fmt(currentCost)}/mois</strong></span>
+                    <span class="search-timestamp">${timestampLabel}</span>
+                </div>
+                ${rows}
+                ${totalPotentialSave > 0
+                    ? `<div class="rec-tip">💡 En optimisant vos services actifs, vous pouvez économiser <strong>${fmt(totalPotentialSave)}/mois</strong> soit <strong>${fmt(totalPotentialSave * 12)}/an</strong>.</div>`
+                    : `<div class="rec-tip">✅ Aucun gain évident détecté sur vos abonnements actifs pour le moment.</div>`
+                }
+            `;
+        }, 900);
+    }
+
     if (rec.id === 'internet') {
         const currentCost = expenses
             .filter(e => e.cat === 'internet')
@@ -675,7 +759,8 @@ function openSimSection() {
     simNextId   = Math.max(0, ...simExpenses.map(e => e.id)) + 1;
     $('dashContent').style.display  = 'none';
     $('simContent').style.display   = 'block';
-    $('simNavBtn').classList.add('active');
+    const simNavBtn = $('simNavBtn');
+    if (simNavBtn) simNavBtn.classList.add('active');
     simRender();
     requestAnimationFrame(() => { if (!simDonutInst) initSimSectionDonut(); else updateSimSectionDonut(); });
 }
@@ -683,7 +768,8 @@ function openSimSection() {
 function closeSimSection() {
     $('dashContent').style.display = '';
     $('simContent').style.display  = 'none';
-    $('simNavBtn').classList.remove('active');
+    const simNavBtn = $('simNavBtn');
+    if (simNavBtn) simNavBtn.classList.remove('active');
     if (simDonutInst) { simDonutInst.destroy(); simDonutInst = null; }
 }
 

@@ -206,10 +206,13 @@ $('simQuitBtn').addEventListener('click', deactivateSimulation);
 
 // ─── Simulation section navigation ───────────────────
 
-$('simNavBtn').addEventListener('click', () => {
-    if ($('simContent').style.display === 'none' || !$('simContent').style.display) openSimSection();
-    else closeSimSection();
-});
+const simNavBtn = $('simNavBtn');
+if (simNavBtn) {
+    simNavBtn.addEventListener('click', () => {
+        if ($('simContent').style.display === 'none' || !$('simContent').style.display) openSimSection();
+        else closeSimSection();
+    });
+}
 
 $('simBackBtn').addEventListener('click', closeSimSection);
 $('simResetBtn').addEventListener('click', resetSimSection);
@@ -370,9 +373,10 @@ $('settingsPasswordForm').addEventListener('submit', async e => {
     // Initialise le client Supabase (no-op en mode offline)
     dbInit();
 
-    // Charge les prix ISP + Cell en arrière-plan
+    // Charge les prix ISP + Cell + Streaming en arrière-plan
     loadISPPrices();
     loadCellPrices();
+    loadStreamingPrices();
 
     // ── Initialise le système de mois (dynamique) ───────
     initMonthSystem();
