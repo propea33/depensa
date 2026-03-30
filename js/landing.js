@@ -22,12 +22,10 @@ const observer = new IntersectionObserver(entries => {
 }, { threshold: 0.12 });
 document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
-// ─── Navbar scroll effect ─────────────────────────────
+// ─── Navbar color (always white) ─────────────────────
 
-window.addEventListener('scroll', () => {
-  document.getElementById('navbar').style.background =
-    window.scrollY > 20 ? 'rgba(8,11,18,.92)' : 'rgba(8,11,18,.7)';
-});
+const navbar = document.getElementById('navbar');
+if (navbar) navbar.style.background = '#ffffff';
 
 // ─── History chart data ───────────────────────────────
 
@@ -130,18 +128,21 @@ function openHistModal(idx) {
   const total = entry.expenses.reduce((s, e) => s + e.amount, 0);
   const rows = entry.expenses.map(e => `
     <tr>
-      <td><div class="hist-exp-cell">
-        <div class="hist-exp-icon" style="background:${e.color}22;overflow:hidden;">${expIconHTML(e)}</div>
-        ${e.name}
-      </div></td>
-      <td>${fmtAmt(e.amount)}</td>
+      <td><div class="hist-exp-icon" style="background:${e.color}22;overflow:hidden;">${expIconHTML(e)}</div></td>
+      <td>${e.name}</td>
+      <td>
+        <span class="hist-td-amount">${fmtAmt(e.amount)}</span><br>
+        <span class="hist-td-yearly">${fmtAmt(e.amount * 12)}/an</span>
+      </td>
     </tr>`).join('');
   document.getElementById('histModalBody').innerHTML = `
-    <table class="hist-table">
-      <thead><tr><th>Dépense</th><th style="text-align:right;">Montant</th></tr></thead>
-      <tbody>${rows}</tbody>
-      <tfoot><tr><td>Total mensuel</td><td>${fmtAmt(total)}</td></tr></tfoot>
-    </table>`;
+    <div style="max-height:400px;overflow-y:auto;scrollbar-width:thin;">
+      <table class="hist-table">
+        <thead><tr><th style="width:44px;"></th><th>Dépense</th><th>Montant</th></tr></thead>
+        <tbody>${rows}</tbody>
+        <tfoot><tr><td colspan="2">Total mensuel</td><td>${fmtAmt(total)}</td></tr></tfoot>
+      </table>
+    </div>`;
   document.getElementById('histOverlay').classList.add('open');
 }
 
@@ -173,6 +174,11 @@ window.addEventListener('load', () => {
   const pointBorderW = values.map((_, i) => i === values.length - 1 ? 2 : 0);
 
   let _hoverIdx = -1;
+  let tipAnimFrame = null;
+  let tipCurrentX = null;
+  let tipCurrentY = null;
+  let tipTargetX = null;
+  let tipTargetY = null;
 
   // ── Hairline plugin ────────────────────────────────
   const hairlinePlugin = {
@@ -267,50 +273,102 @@ window.addEventListener('load', () => {
     return nearest;
   }
 
-  // ── Show tooltip ───────────────────────────────────
-  function showTip(idx) {
-    if (idx === _hoverIdx) return;
-    _hoverIdx = idx;
-    chart.update('none');
+  function startTipMotion() {
+    if (tipAnimFrame) return;
+    const tick = () => {
+      if (tipTargetX === null) {
+        tipAnimFrame = null;
+        return;
+      }
+      if (tipCurrentX === null) tipCurrentX = tipTargetX;
+      if (tipCurrentY === null) tipCurrentY = tipTargetY;
 
-    const entry = HIST_DATA[idx];
-    const label = entry.month.replace(' ●', '');
-    const top3  = [...entry.expenses].sort((a, b) => b.amount - a.amount).slice(0, 3);
+      // Magnetic easing: same floaty feel as index chart tooltip
+      tipCurrentX += (tipTargetX - tipCurrentX) * 0.11;
+      tipCurrentY += (tipTargetY - tipCurrentY) * 0.11;
 
-    const pills = top3.map(e => {
-      const iconHTML = e.domain
-        ? `<img src="https://www.google.com/s2/favicons?domain=${e.domain}&sz=64" width="16" height="16" style="width:16px;height:16px;object-fit:contain;display:block;border-radius:3px;" alt="${e.name}">`
-        : `<span style="font-size:13px;">${e.icon || '💰'}</span>`;
-      return `<div class="landing-ctip-pill">
-        <div class="landing-ctip-pill-icon">${iconHTML}</div>
-        <span class="landing-ctip-pill-name">${e.name}</span>
-        <span class="landing-ctip-pill-amount">${fmtAmt(e.amount)}</span>
-      </div>`;
-    }).join('');
+      if (Math.abs(tipTargetX - tipCurrentX) < 0.35) tipCurrentX = tipTargetX;
+      if (Math.abs(tipTargetY - tipCurrentY) < 0.35) tipCurrentY = tipTargetY;
 
-    tip.innerHTML = `
-      <div class="landing-ctip-month">${label}</div>
-      <div class="landing-ctip-total">${fmtAmt(entry.total)}</div>
-      <div class="landing-ctip-pills">${pills}</div>
-      <div class="landing-ctip-hint">Cliquez pour voir le détail →</div>
-    `;
+      tip.style.left = tipCurrentX + 'px';
+      tip.style.top  = tipCurrentY + 'px';
+      tipAnimFrame = requestAnimationFrame(tick);
+    };
+    tipAnimFrame = requestAnimationFrame(tick);
+  }
 
-    tip.style.display = 'block';
-    const meta       = chart.getDatasetMeta(0);
-    const ptX        = meta.data[idx].x;
+  function updateTipTarget(mouseX, mouseY) {
     const canvasRect = canvas.getBoundingClientRect();
     const wrapRect   = wrap.getBoundingClientRect();
-    const relX       = ptX + (canvasRect.left - wrapRect.left);
+    const relX       = mouseX + (canvasRect.left - wrapRect.left);
+    const relY       = mouseY + (canvasRect.top - wrapRect.top);
     const tipW       = tip.offsetWidth || 190;
+    const tipH       = tip.offsetHeight || 110;
     const wrapW      = wrap.offsetWidth;
-    let left         = relX - tipW / 2;
+    const wrapH      = wrap.offsetHeight;
+
+    let left = relX - tipW / 2;
+    let top  = relY - tipH - 16;
+    if (top < 6) top = relY + 12;
+
     left = Math.max(6, Math.min(left, wrapW - tipW - 6));
-    tip.style.left = left + 'px';
-    requestAnimationFrame(() => tip.classList.add('visible'));
+    top  = Math.max(6, Math.min(top,  wrapH - tipH - 6));
+
+    tipTargetX = left;
+    tipTargetY = top;
+    if (tipCurrentX === null) {
+      tipCurrentX = left;
+      tipCurrentY = top;
+      tip.style.left = left + 'px';
+      tip.style.top  = top + 'px';
+    }
+    startTipMotion();
+  }
+
+  // ── Show tooltip ───────────────────────────────────
+  function showTip(idx, mouseX, mouseY) {
+    if (idx !== _hoverIdx) {
+      _hoverIdx = idx;
+      chart.update('none');
+
+      const entry = HIST_DATA[idx];
+      const label = entry.month.replace(' ●', '');
+      const top3  = [...entry.expenses].sort((a, b) => b.amount - a.amount).slice(0, 3);
+
+      const pills = top3.map(e => {
+        const iconHTML = e.domain
+          ? `<img src="https://www.google.com/s2/favicons?domain=${e.domain}&sz=64" width="16" height="16" style="width:16px;height:16px;object-fit:contain;display:block;border-radius:3px;" alt="${e.name}">`
+          : `<span style="font-size:13px;">${e.icon || '💰'}</span>`;
+        return `<div class="landing-ctip-pill">
+          <div class="landing-ctip-pill-icon">${iconHTML}</div>
+          <span class="landing-ctip-pill-name">${e.name}</span>
+          <span class="landing-ctip-pill-amount">${fmtAmt(e.amount)}</span>
+        </div>`;
+      }).join('');
+
+      tip.innerHTML = `
+        <div class="landing-ctip-month">${label}</div>
+        <div class="landing-ctip-total">${fmtAmt(entry.total)}</div>
+        <div class="landing-ctip-pills">${pills}</div>
+        <div class="landing-ctip-hint">Cliquez pour voir le détail →</div>
+      `;
+
+      tip.style.display = 'block';
+      requestAnimationFrame(() => tip.classList.add('visible'));
+    }
+    updateTipTarget(mouseX, mouseY);
   }
 
   function hideTip() {
     _hoverIdx = -1;
+    tipTargetX = null;
+    tipTargetY = null;
+    tipCurrentX = null;
+    tipCurrentY = null;
+    if (tipAnimFrame) {
+      cancelAnimationFrame(tipAnimFrame);
+      tipAnimFrame = null;
+    }
     tip.classList.remove('visible');
     chart.update('none');
     setTimeout(() => { if (_hoverIdx < 0) tip.style.display = 'none'; }, 180);
@@ -320,8 +378,9 @@ window.addEventListener('load', () => {
   canvas.addEventListener('mousemove', e => {
     const rect   = canvas.getBoundingClientRect();
     const mouseX = e.clientX - rect.left;
+    const mouseY = e.clientY - rect.top;
     canvas.style.cursor = 'pointer';
-    showTip(getNearestIdx(mouseX));
+    showTip(getNearestIdx(mouseX), mouseX, mouseY);
   });
 
   canvas.addEventListener('mouseleave', hideTip);

@@ -60,9 +60,9 @@ function initDonut() {
             const { ctx: c, chartArea } = chart;
             const cx = (chartArea.left + chartArea.right) / 2;
             const cy = (chartArea.top  + chartArea.bottom) / 2;
-            const isDark = document.documentElement.getAttribute('data-theme') !== 'light';
-            const textColor  = isDark ? '#e8eaf6' : '#1a1f36';
-            const labelColor = isDark ? '#8090aa' : '#5a6478';
+            const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+            const textColor  = isDark ? '#f5f7fb' : '#000000';
+            const labelColor = isDark ? '#d7deea' : '#000000';
 
             c.save();
             c.textAlign    = 'center';
@@ -70,11 +70,11 @@ function initDonut() {
 
             // Always show total in center (reflects selected month)
             const centreTotal = getSelectedExpenses().reduce((s,e) => s + e.amount, 0);
-            c.font      = '500 12px Figtree, sans-serif';
+            c.font      = '600 12px Figtree, sans-serif';
             c.fillStyle = labelColor;
             c.fillText('Total / mois', cx, cy - 14);
 
-            c.font      = '800 22px Outfit, sans-serif';
+            c.font      = '900 22px Outfit, sans-serif';
             c.fillStyle = textColor;
             c.fillText(fmt(centreTotal), cx, cy + 10);
 
@@ -149,13 +149,13 @@ function initSavings() {
     const canvas = $('savingsChart');
     const ctx    = canvas.getContext('2d');
     const data   = historyData();
-    const isDark = document.documentElement.getAttribute('data-theme') !== 'light';
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
 
     const grad = ctx.createLinearGradient(0, 0, 0, 200);
     grad.addColorStop(0, 'rgba(124,58,237,0.28)');
     grad.addColorStop(1, 'rgba(124,58,237,0)');
 
-    const tickColor = isDark ? '#3d4a60' : '#b0b9cc';
+    const tickColor = isDark ? '#9fb0c8' : '#b0b9cc';
     const gridColor = isDark ? 'rgba(255,255,255,0.04)' : 'rgba(0,0,0,0.04)';
 
     const pointRadius  = data.map((_, i) => i === data.length - 1 ? 5 : 3);
@@ -255,6 +255,11 @@ function initSavings() {
     // ── Custom HTML tooltip ──────────────────────────────
     const wrap = canvas.parentElement;
     const tip  = $('chartTooltipCard');
+    let tipAnimFrame = null;
+    let tipCurrentX  = null;
+    let tipCurrentY  = null;
+    let tipTargetX   = null;
+    let tipTargetY   = null;
 
     function getNearestIdx(mouseX) {
         const meta = savingsChart.getDatasetMeta(0);
@@ -270,48 +275,99 @@ function initSavings() {
         return data[idx]?.expenses || [];
     }
 
-    function showTip(idx) {
-        if (idx === _hoverIdx) return;
-        _hoverIdx = idx;
-        savingsChart.update('none');
+    function startTipMotion() {
+        if (tipAnimFrame) return;
+        const tick = () => {
+            if (tipTargetX === null) {
+                tipAnimFrame = null;
+                return;
+            }
+            if (tipCurrentX === null) tipCurrentX = tipTargetX;
+            if (tipCurrentY === null) tipCurrentY = tipTargetY;
 
-        const month  = data[idx];
-        const label  = FULL_LABELS[month.month] || month.month.replace(' ●', '');
-        const expList = getExpList(idx);
-        const top3   = [...expList].sort((a, b) => b.amount - a.amount).slice(0, 3);
+            // Magnetic easing: extra floaty lag for a premium hover feel
+            tipCurrentX += (tipTargetX - tipCurrentX) * 0.11;
+            tipCurrentY += (tipTargetY - tipCurrentY) * 0.11;
 
-        const pills = top3.map(e => {
-            const cat = getCAT(e.cat);
-            return `<div class="ctip-pill">
-                <span class="ctip-pill-icon">${cat.icon}</span>
-                <span class="ctip-pill-name">${e.name}</span>
-                <span class="ctip-pill-amount">${fmt(e.amount)}</span>
-            </div>`;
-        }).join('');
+            if (Math.abs(tipTargetX - tipCurrentX) < 0.35) tipCurrentX = tipTargetX;
+            if (Math.abs(tipTargetY - tipCurrentY) < 0.35) tipCurrentY = tipTargetY;
+            tip.style.left = tipCurrentX + 'px';
+            tip.style.top  = tipCurrentY + 'px';
+            tipAnimFrame = requestAnimationFrame(tick);
+        };
+        tipAnimFrame = requestAnimationFrame(tick);
+    }
 
-        tip.innerHTML = `
-            <div class="ctip-month">${label}</div>
-            <div class="ctip-total">${fmt(month.total)}</div>
-            <div class="ctip-pills">${pills}</div>
-            <div class="ctip-hint">Cliquez pour voir le détail →</div>
-        `;
-
-        tip.style.display = 'block';
-        const meta  = savingsChart.getDatasetMeta(0);
-        const ptX   = meta.data[idx].x;
+    function updateTipTarget(mouseX, mouseY) {
         const canvasRect = canvas.getBoundingClientRect();
         const wrapRect   = wrap.getBoundingClientRect();
-        const relX  = ptX + (canvasRect.left - wrapRect.left);
-        const tipW  = tip.offsetWidth || 200;
-        const wrapW = wrap.offsetWidth;
-        let left    = relX - tipW / 2;
+        const relX       = mouseX + (canvasRect.left - wrapRect.left);
+        const relY       = mouseY + (canvasRect.top - wrapRect.top);
+        const tipW       = tip.offsetWidth || 200;
+        const tipH       = tip.offsetHeight || 120;
+        const wrapW      = wrap.offsetWidth;
+        const wrapH      = wrap.offsetHeight;
+        let left         = relX - tipW / 2;
+        let top          = relY - tipH - 18;
+
+        // If not enough space above cursor, place tooltip below it
+        if (top < 6) top = relY + 14;
+
         left = Math.max(6, Math.min(left, wrapW - tipW - 6));
-        tip.style.left = left + 'px';
-        requestAnimationFrame(() => tip.classList.add('visible'));
+        top  = Math.max(6, Math.min(top,  wrapH - tipH - 6));
+        tipTargetX = left;
+        tipTargetY = top;
+        if (tipCurrentX === null) {
+            tipCurrentX = left;
+            tipCurrentY = top;
+            tip.style.left = left + 'px';
+            tip.style.top  = top + 'px';
+        }
+        startTipMotion();
+    }
+
+    function showTip(idx, mouseX, mouseY) {
+        if (idx !== _hoverIdx) {
+            _hoverIdx = idx;
+            savingsChart.update('none');
+
+            const month  = data[idx];
+            const label  = FULL_LABELS[month.month] || month.month.replace(' ●', '');
+            const expList = getExpList(idx);
+            const top3   = [...expList].sort((a, b) => b.amount - a.amount).slice(0, 3);
+
+            const pills = top3.map(e => {
+                const cat = getCAT(e.cat);
+                return `<div class="ctip-pill">
+                    <span class="ctip-pill-icon">${cat.icon}</span>
+                    <span class="ctip-pill-name">${e.name}</span>
+                    <span class="ctip-pill-amount">${fmt(e.amount)}</span>
+                </div>`;
+            }).join('');
+
+            tip.innerHTML = `
+                <div class="ctip-month">${label}</div>
+                <div class="ctip-total">${fmt(month.total)}</div>
+                <div class="ctip-pills">${pills}</div>
+                <div class="ctip-hint">Cliquez pour voir le détail →</div>
+            `;
+
+            tip.style.display = 'block';
+            requestAnimationFrame(() => tip.classList.add('visible'));
+        }
+        updateTipTarget(mouseX, mouseY);
     }
 
     function hideTip() {
         _hoverIdx = -1;
+        tipTargetX = null;
+        tipTargetY = null;
+        tipCurrentX = null;
+        tipCurrentY = null;
+        if (tipAnimFrame) {
+            cancelAnimationFrame(tipAnimFrame);
+            tipAnimFrame = null;
+        }
         tip.classList.remove('visible');
         savingsChart.update('none');
         setTimeout(() => { if (_hoverIdx < 0) tip.style.display = 'none'; }, 180);
@@ -320,8 +376,9 @@ function initSavings() {
     canvas.addEventListener('mousemove', e => {
         const rect   = canvas.getBoundingClientRect();
         const mouseX = e.clientX - rect.left;
+        const mouseY = e.clientY - rect.top;
         canvas.style.cursor = 'pointer';
-        showTip(getNearestIdx(mouseX));
+        showTip(getNearestIdx(mouseX), mouseX, mouseY);
     });
 
     canvas.addEventListener('mouseleave', hideTip);
@@ -341,8 +398,8 @@ function initSavings() {
 
 function updateSavingsChartColors() {
     if (!savingsChart) return;
-    const isDark = document.documentElement.getAttribute('data-theme') !== 'light';
-    const tickColor = isDark ? '#3d4a60' : '#b0b9cc';
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+    const tickColor = isDark ? '#9fb0c8' : '#b0b9cc';
     const gridColor = isDark ? 'rgba(255,255,255,0.04)' : 'rgba(0,0,0,0.04)';
     savingsChart.options.scales.x.ticks.color = tickColor;
     savingsChart.options.scales.y.ticks.color = tickColor;

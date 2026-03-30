@@ -2,6 +2,21 @@
 //  MAIN — Event listeners & bootstrap
 // ═══════════════════════════════════════════════════════
 
+const THEME_STORAGE_KEY = 'depensa_theme';
+
+function applyTheme(theme) {
+    const finalTheme = theme === 'dark' ? 'dark' : 'light';
+    document.documentElement.setAttribute('data-theme', finalTheme);
+    $('toggleKnob').textContent = finalTheme === 'dark' ? '🌙' : '☀️';
+    updateSavingsChartColors();
+    if (typeof donutChart !== 'undefined' && donutChart) donutChart.update('none');
+}
+
+function initTheme() {
+    const saved = localStorage.getItem(THEME_STORAGE_KEY);
+    applyTheme(saved === 'dark' ? 'dark' : 'light');
+}
+
 // ─── Modal form event listeners ───────────────────────
 
 // ─── Icon preview — debounce sur le champ nom ──────────
@@ -56,6 +71,7 @@ $('expenseForm').addEventListener('submit', e => {
         const exp = { id: nextId++, name, cat: finalCat, amount, recurring: isRecurring, frequency, notes, alerts: isAlerts };
         expenses.push(exp);
         dbInsertExpense(exp);
+        pendingScrollExpenseId = exp.id;
         showToast(`✓ ${name} ajouté — ${fmt(monthly)}/mois`);
     }
 
@@ -155,11 +171,10 @@ $('tickerToggle').addEventListener('click', () => {
 // ─── Theme toggle ─────────────────────────────────────
 
 $('themeBtn').addEventListener('click', () => {
-    const html  = document.documentElement;
-    const isDark = html.getAttribute('data-theme') === 'dark';
-    html.setAttribute('data-theme', isDark ? 'light' : 'dark');
-    $('toggleKnob').textContent = isDark ? '☀️' : '🌙';
-    updateSavingsChartColors();
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+    const next = isDark ? 'light' : 'dark';
+    localStorage.setItem(THEME_STORAGE_KEY, next);
+    applyTheme(next);
 });
 
 // ─── Export dropdown ──────────────────────────────────
@@ -349,6 +364,9 @@ $('settingsPasswordForm').addEventListener('submit', async e => {
 // ═══════════════════════════════════════════════════════
 
 (async () => {
+    // Applique le thème sauvegardé (light par défaut)
+    initTheme();
+
     // Initialise le client Supabase (no-op en mode offline)
     dbInit();
 

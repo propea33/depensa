@@ -16,6 +16,96 @@ function getSelectedExpenses() {
     return expenses;
 }
 
+// Set by main.js after a successful add so we can auto-focus the new card.
+let pendingScrollExpenseId = null;
+
+const EXPENSE_GROUP_ORDER = [
+    { key: 'maison',    label: 'Maison' },
+    { key: 'streaming', label: 'Services Streaming' },
+    { key: 'cell',      label: 'Cellulaire' },
+    { key: 'bouffe',    label: 'Bouffe' },
+    { key: 'transport', label: 'Transport & Auto' },
+    { key: 'sante',     label: 'Santé & Bien-être' },
+    { key: 'famille',   label: 'Famille & Éducation' },
+    { key: 'loisirs',   label: 'Loisirs' },
+    { key: 'autres',    label: 'Autres' },
+];
+
+const GROUP_BY_CAT = {
+    habitation:  'maison',
+    electricite: 'maison',
+    internet:    'maison',
+
+    streaming:   'streaming',
+    cell:        'cell',
+
+    epicerie:    'bouffe',
+    restaurant:  'bouffe',
+    cafe:        'bouffe',
+
+    auto:        'transport',
+    transport:   'transport',
+    gaz:         'transport',
+
+    pharmacie:   'sante',
+    gym:         'sante',
+
+    ecole:       'famille',
+    garderie:    'famille',
+
+    loisir:      'loisirs',
+    spectacles:  'loisirs',
+    voyage:      'loisirs',
+    linge:       'loisirs',
+};
+
+const CAT_SORT_WEIGHT = {
+    habitation: 1,
+    electricite: 2,
+    internet: 3,
+    gaz: 4,
+    streaming: 5,
+    cell: 6,
+    epicerie: 7,
+    restaurant: 8,
+    cafe: 9,
+    auto: 10,
+    transport: 11,
+    pharmacie: 12,
+    gym: 13,
+    ecole: 14,
+    garderie: 15,
+    loisir: 16,
+    spectacles: 17,
+    voyage: 18,
+    linge: 19,
+};
+
+function expenseGroupKey(catId) {
+    return GROUP_BY_CAT[catId] || 'autres';
+}
+
+function groupExpensesForDisplay(list) {
+    const grouped = new Map();
+    EXPENSE_GROUP_ORDER.forEach(g => grouped.set(g.key, []));
+
+    list.forEach(exp => grouped.get(expenseGroupKey(exp.cat)).push(exp));
+
+    const out = [];
+    EXPENSE_GROUP_ORDER.forEach(g => {
+        const items = grouped.get(g.key);
+        if (!items || items.length === 0) return;
+        items.sort((a, b) => {
+            const wa = CAT_SORT_WEIGHT[a.cat] || 999;
+            const wb = CAT_SORT_WEIGHT[b.cat] || 999;
+            if (wa !== wb) return wa - wb;
+            return a.name.localeCompare(b.name, 'fr');
+        });
+        out.push({ label: g.label, items });
+    });
+    return out;
+}
+
 function renderExpenses() {
     const grid   = $('expenseList');
     grid.innerHTML = '';
@@ -143,52 +233,63 @@ function renderExpenses() {
         savingsBanner.innerHTML = '';
     }
 
-    filtered.forEach((exp, idx) => {
-        const cat = getCAT(exp.cat);
-        const el  = document.createElement('div');
-        const isSimOverridden = simulationMode && simOverrides.hasOwnProperty(exp.id);
-        const hasHike = hikeMap.has(exp.id);
-        el.className = 'expense-card' + (isSimOverridden ? ' sim-overridden' : '') + (hasHike ? ' hike-detected' : '');
-        el.style.animationDelay = (idx * 35) + 'ms';
+    let cardIndex = 0;
+    const grouped = groupExpensesForDisplay(filtered);
+    grouped.forEach(group => {
+        const header = document.createElement('div');
+        header.className = 'expense-group-header';
+        header.textContent = group.label;
+        grid.appendChild(header);
 
-        // Amount display: use effective monthly, show hint if annual
-        const effAmt = effectiveMonthly(exp);
-        const isAnnual = exp.frequency === 'annuel';
-        const isOneTime = !exp.recurring;
-        const amountDisplay = isSimOverridden && simOverrides[exp.id] === null
-            ? `<div class="expense-monthly" style="color:var(--text-3);text-decoration:line-through">${fmt(monthlyAmount(exp))}</div><div style="font-size:10px;color:var(--amber)">Masqué en simulation</div>`
-            : isOneTime
-                ? `<div class="expense-monthly">${fmt(effAmt)}</div>`
-                : `<div class="expense-monthly">${fmt(effAmt)}<span style="font-size:10px;font-weight:400;color:var(--text-2)">/mois</span></div>
-                   ${isAnnual ? `<div style="font-size:10px;color:var(--text-2)">${fmt(exp.amount)}/an</div>` : `<div class="expense-yearly">${fmt(effAmt * 12)}/an</div>`}`;
+        group.items.forEach(exp => {
+            const cat = getCAT(exp.cat);
+            const el  = document.createElement('div');
+            el.dataset.expenseId = String(exp.id);
+            const isSimOverridden = simulationMode && simOverrides.hasOwnProperty(exp.id);
+            const hasHike = hikeMap.has(exp.id);
+            el.className = 'expense-card' + (isSimOverridden ? ' sim-overridden' : '') + (hasHike ? ' hike-detected' : '');
+            el.style.animationDelay = (cardIndex * 35) + 'ms';
+            cardIndex += 1;
 
-        const recurBadge = exp.recurring
-            ? `<div class="recurring-badge"><span class="badge-icon">↻</span> Récurrent</div>`
-            : '';
-        const freqBadge = isAnnual
-            ? `<span class="expense-freq-badge annual">Annuel</span>`
-            : '';
-        const simTag  = isSimOverridden ? `<span class="sim-active-tag">🔬 Sim</span>` : '';
-        const hikeTag = hasHike ? `<span class="hike-badge">⚠ +${Math.round(hikeMap.get(exp.id).pct * 100)}%</span>` : '';
+            // Amount display: use effective monthly, show hint if annual
+            const effAmt = effectiveMonthly(exp);
+            const isAnnual = exp.frequency === 'annuel';
+            const isOneTime = !exp.recurring;
+            const amountDisplay = isSimOverridden && simOverrides[exp.id] === null
+                ? `<div class="expense-monthly" style="color:var(--text-3);text-decoration:line-through">${fmt(monthlyAmount(exp))}</div><div style="font-size:10px;color:var(--amber)">Masqué en simulation</div>`
+                : isOneTime
+                    ? `<div class="expense-monthly">${fmt(effAmt)}</div>`
+                    : `<div class="expense-monthly">${fmt(effAmt)}<span style="font-size:10px;font-weight:400;color:var(--text-2)">/mois</span></div>
+                       ${isAnnual ? `<div style="font-size:10px;color:var(--text-2)">${fmt(exp.amount)}/an</div>` : `<div class="expense-yearly">${fmt(effAmt * 12)}/an</div>`}`;
 
-        const alertsOn = exp.alerts !== false && !exp.recurring;
-        const actions = !isPast ? `
-            <div class="card-actions">
-                <button class="action-btn action-btn-alerts ${alertsOn ? '' : 'alerts-off'}" data-id="${exp.id}" title="${alertsOn ? 'Alertes actives — cliquer pour désactiver' : 'Alertes désactivées — cliquer pour activer'}">${alertsOn ? '🔔' : '🔕'}</button>
-                <button class="action-btn action-btn-edit" data-id="${exp.id}">✏️ Modifier</button>
-                <button class="action-btn action-btn-del"  data-id="${exp.id}">✕ Supprimer</button>
-            </div>` : '';
+            const recurBadge = exp.recurring
+                ? `<div class="recurring-badge"><span class="badge-icon">↻</span> Récurrent</div>`
+                : '';
+            const freqBadge = isAnnual
+                ? `<span class="expense-freq-badge annual">Annuel</span>`
+                : '';
+            const simTag  = isSimOverridden ? `<span class="sim-active-tag">🔬 Sim</span>` : '';
+            const hikeTag = hasHike ? `<span class="hike-badge">⚠ +${Math.round(hikeMap.get(exp.id).pct * 100)}%</span>` : '';
 
-        el.innerHTML = `
-            <div class="expense-icon" style="background:${cat.color}1a">${getExpenseIconHTML(exp.name, exp.cat)}</div>
-            <div class="expense-info">
-                <div class="expense-name">${exp.name}${simTag}${hikeTag}</div>
-                ${amountDisplay}
-                <div style="display:flex;flex-wrap:wrap;gap:2px;margin-top:2px;">${recurBadge}${freqBadge}</div>
-            </div>
-            ${actions}
-        `;
-        grid.appendChild(el);
+            const alertsOn = exp.alerts !== false && !exp.recurring;
+            const actions = !isPast ? `
+                <div class="card-actions">
+                    <button class="action-btn action-btn-alerts ${alertsOn ? '' : 'alerts-off'}" data-id="${exp.id}" title="${alertsOn ? 'Alertes actives — cliquer pour désactiver' : 'Alertes désactivées — cliquer pour activer'}">${alertsOn ? '🔔' : '🔕'}</button>
+                    <button class="action-btn action-btn-edit" data-id="${exp.id}">✏️ Modifier</button>
+                    <button class="action-btn action-btn-del"  data-id="${exp.id}">✕ Supprimer</button>
+                </div>` : '';
+
+            el.innerHTML = `
+                <div class="expense-icon" style="background:${cat.color}1a">${getExpenseIconHTML(exp.name, exp.cat)}</div>
+                <div class="expense-info">
+                    <div class="expense-name">${exp.name}${simTag}${hikeTag}</div>
+                    ${amountDisplay}
+                    <div style="display:flex;flex-wrap:wrap;gap:2px;margin-top:2px;">${recurBadge}${freqBadge}</div>
+                </div>
+                ${actions}
+            `;
+            grid.appendChild(el);
+        });
     });
 
     // Empty state
@@ -222,6 +323,29 @@ function renderExpenses() {
                 setTimeout(() => { expenses = expenses.filter(x => x.id !== id); refresh(); }, 210);
             });
         });
+    }
+
+    // Auto-scroll + premium focus animation on freshly added expense card.
+    if (!isPast && pendingScrollExpenseId !== null) {
+        const selector = `.expense-card[data-expense-id="${pendingScrollExpenseId}"]`;
+        const targetCard = grid.querySelector(selector);
+
+        // If recurring filter hides the new expense, disable it once to reveal item.
+        if (!targetCard && showRecurringOnly) {
+            showRecurringOnly = false;
+            $('recurringFilter').classList.toggle('active', false);
+            renderExpenses();
+            return;
+        }
+
+        if (targetCard) {
+            requestAnimationFrame(() => {
+                targetCard.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'nearest' });
+                targetCard.classList.add('expense-card-added');
+                setTimeout(() => targetCard.classList.remove('expense-card-added'), 1400);
+            });
+        }
+        pendingScrollExpenseId = null;
     }
 
     const monthTotal = totalMonthly(source);
