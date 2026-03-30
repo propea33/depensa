@@ -2653,8 +2653,26 @@
 
             /* ── Section header (title + month label) ── */
             .expense-main-header { flex-wrap: wrap; gap: 6px; }
+            .expense-main-header > span { width: 100%; }
+            .expense-main-header > div {
+                width: 100%;
+                justify-content: flex-start;
+                flex-wrap: wrap;
+                gap: 8px;
+            }
             .month-nav-inner { align-items: flex-start; }
+            .month-nav-main { width: 100%; gap: 8px; }
+            .month-pills {
+                width: 100%;
+                overflow-x: auto;
+                padding-bottom: 2px;
+                scrollbar-width: none;
+            }
+            .month-pills::-webkit-scrollbar { display: none; }
             .expense-view-row { margin-top: 4px; justify-content: flex-end; }
+            .expense-view-row { flex-wrap: wrap; gap: 6px; }
+            .sort-wrap, .view-toggle { max-width: 100%; }
+            .sort-btn { width: 100%; justify-content: space-between; }
             .sort-menu { min-width: 250px; }
             .view-toggle-btn { padding: 6px 8px; }
             .view-toggle-label { display: none; }
@@ -2670,9 +2688,91 @@
             .score-stats { gap: 6px; }
             .score-stat-val { font-size: 15px; }
 
-            /* ── Modal: don't go wider than screen ─────  */
-            .modal { padding: 20px 16px 18px; }
-            .modal-title { font-size: 18px; margin-bottom: 20px; }
+            /* ── Mobile modal: compact bottom-sheet ───── */
+            #modalOverlay.modal-overlay {
+                padding: 0;
+                align-items: flex-end;
+            }
+            #modalOverlay .modal {
+                width: 100%;
+                max-width: 100%;
+                border-radius: 18px 18px 0 0;
+                border-left: none;
+                border-right: none;
+                border-bottom: none;
+                box-shadow: 0 -10px 28px rgba(0,0,0,0.18);
+                transform: translateY(24px);
+                padding: 16px 14px 14px;
+            }
+            #modalOverlay .modal.modal-wide {
+                width: 100%;
+                max-width: 100%;
+                max-height: min(90dvh, 760px);
+                padding: 14px 14px 10px;
+            }
+            #modalOverlay .modal-title {
+                font-size: 16px;
+                margin-bottom: 10px;
+                line-height: 1.2;
+            }
+            #modalOverlay .modal-cols {
+                overflow-y: auto;
+                padding-right: 0;
+                gap: 12px;
+            }
+            #modalOverlay .modal-col-right .form-group,
+            #modalOverlay .modal-col-left .form-group {
+                margin-bottom: 10px;
+            }
+            #modalOverlay .modal-actions {
+                margin-top: 10px;
+                padding-top: 10px;
+                padding-bottom: calc(8px + env(safe-area-inset-bottom, 0px));
+                background: var(--bg-card);
+                position: sticky;
+                bottom: 0;
+                z-index: 5;
+            }
+            #modalOverlay .modal-actions .btn-cancel,
+            #modalOverlay .modal-actions .btn-submit {
+                padding: 11px 10px;
+                min-height: 42px;
+                font-size: 13px;
+            }
+            .form-label {
+                font-size: 10px;
+                margin-bottom: 6px;
+            }
+            .form-input {
+                font-size: 16px;
+                padding: 10px 12px;
+            }
+            .cat-grid-left {
+                grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+                gap: 6px !important;
+            }
+            .cat-grid-left .cat-btn {
+                padding: 7px 2px;
+                min-height: 56px;
+            }
+            .cat-grid-left .cat-btn-icon { font-size: 16px; }
+            .cat-grid-left .cat-btn-name { font-size: 8.5px; }
+            .provider-grid {
+                grid-template-columns: repeat(4, minmax(0, 1fr));
+                max-height: 148px;
+                gap: 4px;
+            }
+            .provider-btn {
+                padding: 5px 1px 4px;
+            }
+            .provider-name {
+                font-size: 8px;
+                max-width: 100%;
+            }
+            .cat-search-input {
+                font-size: 13px;
+                padding: 8px 10px;
+            }
 
             /* ── Sim donut diff row ───────────────────── */
             .sim-diff-row { gap: 10px; }
@@ -2696,6 +2796,27 @@
 
             .cat-grid { grid-template-columns: repeat(3, 1fr) !important; }
             .cat-grid-left { grid-template-columns: repeat(3, 1fr) !important; }
+            #modalOverlay .modal.modal-wide {
+                max-height: min(92dvh, 720px);
+                padding: 12px 10px 8px;
+            }
+            #modalOverlay .modal-title {
+                font-size: 15px;
+            }
+            #modalOverlay .modal-actions {
+                gap: 8px;
+            }
+            #modalOverlay .modal-actions .btn-cancel,
+            #modalOverlay .modal-actions .btn-submit {
+                font-size: 12.5px;
+                padding: 10px 8px;
+            }
+            .provider-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+            .sort-menu {
+                right: auto;
+                left: 0;
+                min-width: min(92vw, 260px);
+            }
 
             .month-tab { padding: 4px 7px; font-size: 11px; }
 
