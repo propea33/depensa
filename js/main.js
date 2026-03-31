@@ -330,6 +330,7 @@ $('settingsOverlay').addEventListener('click', e => {
 });
 
 
+
 $('settingsNameForm').addEventListener('submit', async e => {
     e.preventDefault();
     const firstName = $('sFirstName').value.trim();

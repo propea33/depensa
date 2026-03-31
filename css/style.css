@@ -3162,7 +3162,7 @@
             .help-title { font-size: 19px; }
         }
 
-        /* ─── SHARED ANIMATIONS ───────────────────────── */
+/* ─── SHARED ANIMATIONS ───────────────────────── */
 
         @keyframes fadeSlideIn {
             from { opacity: 0; transform: translateY(-8px); }
