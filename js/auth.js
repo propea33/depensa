@@ -12,7 +12,9 @@ async function authGetSession() {
     try {
         const { data: { session } } = await _db.auth.getSession();
         if (session) {
-            _authUser = session.user;
+            // Fetch fresh user data (including latest user_metadata) from server
+            const { data: { user } } = await _db.auth.getUser();
+            _authUser = user || session.user;
             return session;
         }
         return null;
