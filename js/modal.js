@@ -190,11 +190,13 @@ function openAddModal() {
     updateFormForCat(selCat);
     showProviderPicker(selCat);
     $('modalOverlay').classList.add('open');
+    _initMobWiz(0);
     setTimeout(() => {
         refreshIconPreview();
-        // Focus sur le montant si un fournisseur est déjà pré-sélectionné
-        if ($('eName').value) $('eAmount').focus();
-        else $('eName').focus();
+        if (!_isMobWiz()) {
+            if ($('eName').value) $('eAmount').focus();
+            else $('eName').focus();
+        }
     }, 120);
 }
 
@@ -217,7 +219,8 @@ function openEditModal(id) {
     updateAmountLabel();
     showProviderPicker(exp.cat);
     $('modalOverlay').classList.add('open');
-    setTimeout(() => { $('eName').focus(); refreshIconPreview(); }, 120);
+    _initMobWiz(1);
+    setTimeout(() => { refreshIconPreview(); if (!_isMobWiz()) $('eName').focus(); }, 120);
 }
 
 function closeModal() {
@@ -381,5 +384,52 @@ function openSimEditModal(id) {
     $('eAmount').value = exp.amount;
     updateAmountLabel();
     $('modalOverlay').classList.add('open');
-    setTimeout(() => $('eName').focus(), 120);
+    _initMobWiz(1);
+    setTimeout(() => { if (!_isMobWiz()) $('eName').focus(); }, 120);
 }
+
+// ─── Mobile step wizard ────────────────────────────────────────
+
+let _mobStep = 0;
+
+function _isMobWiz() {
+    return window.matchMedia('(max-width: 700px)').matches;
+}
+
+function _showMobStep(step) {
+    _mobStep = step;
+    const overlay = $('modalOverlay');
+    if (!overlay) return;
+    overlay.setAttribute('data-mob-step', step);
+
+    const labels = ['Catégorie', 'Détails'];
+    const lbl = $('mobWizLabel');
+    if (lbl) lbl.textContent = labels[step] || '';
+
+    document.querySelectorAll('.mob-wiz-dot').forEach((dot, i) => {
+        dot.classList.toggle('active', i === step);
+        dot.classList.toggle('done', i < step);
+    });
+
+    if (step === 1) {
+        setTimeout(() => {
+            if ($('eName').value) $('eAmount').focus();
+            else $('eName').focus();
+        }, 60);
+    }
+}
+
+function _initMobWiz(startStep) {
+    const overlay = $('modalOverlay');
+    if (!overlay) return;
+    if (!_isMobWiz()) {
+        overlay.removeAttribute('data-mob-step');
+        return;
+    }
+    _showMobStep(startStep);
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    $('mobWizNext')?.addEventListener('click', () => { if (_mobStep === 0) _showMobStep(1); });
+    $('mobWizBack')?.addEventListener('click', () => { if (_mobStep === 1) _showMobStep(0); });
+});
