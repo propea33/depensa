@@ -68,6 +68,13 @@ const RECS = [
         saveMonthly: 25, saveYearly: 300,
         dynamic: true,
     },
+    {
+        id: 'gym', icon: '💪', color: '#f97316',
+        name: 'Abonnements Gym',
+        desc: 'Comparez les gyms et prix mensuels',
+        saveMonthly: 12, saveYearly: 144,
+        dynamic: true,
+    },
 ];
 
 // ── ISP + Cell Plans — chargés dynamiquement depuis le scraper GitHub ───────
@@ -75,6 +82,8 @@ const ISP_PRICES_URL  = 'https://raw.githubusercontent.com/propea33/isp-scraper/
 const CELL_PRICES_URL = 'https://raw.githubusercontent.com/propea33/isp-scraper/main/data/cell-prices.json';
 const STREAMING_PRICES_URL = 'https://raw.githubusercontent.com/propea33/depensa/main/streaming-scraper/data/streaming-prices.json';
 const STREAMING_PRICES_API_URL = 'https://api.github.com/repos/propea33/depensa/contents/streaming-scraper/data/streaming-prices.json?ref=main';
+const GYM_PRICES_URL = 'https://raw.githubusercontent.com/propea33/depensa/main/gym-scraper/data/gym-prices.json';
+const GYM_PRICES_API_URL = 'https://api.github.com/repos/propea33/depensa/contents/gym-scraper/data/gym-prices.json?ref=main';
 
 // Valeurs par défaut (utilisées si le fetch échoue ou avant chargement)
 let INTERNET_PLANS = [
@@ -90,6 +99,7 @@ let INTERNET_PLANS = [
 let ispPricesUpdatedAt  = null;   // timestamp de la dernière mise à jour ISP
 let cellPricesUpdatedAt = null;   // timestamp de la dernière mise à jour Cell
 let streamingPricesUpdatedAt = null; // timestamp de la dernière mise à jour Streaming
+let gymPricesUpdatedAt = null; // timestamp de la dernière mise à jour Gym
 
 async function loadISPPrices() {
     // Ne pas fetcher si l'URL est encore le placeholder
@@ -251,6 +261,92 @@ async function loadStreamingPrices() {
             data.scraped_count + ' scrapés, ' + data.fallback_count + ' fallback');
     } catch (e) {
         console.warn('[Depensa] Impossible de charger les prix streaming — données par défaut utilisées.', e);
+    }
+}
+
+// ── Gym Plans — chargé dynamiquement depuis le scraper GitHub ──────────────
+let GYM_PLANS = [
+    { provider:'Éconofitness',   plan_name:'Plan de base (mensualisé)', price:10.81, url:'https://econofitness.ca/fr/abonnements', scraped_ok:false, previous_price:null, delta:0, price_drop:false },
+    { provider:'Pro Gym',        plan_name:'Régulier (mensualisé)',      price:23.81, url:'https://www.progym.ca/abonnements/',    scraped_ok:false, previous_price:null, delta:0, price_drop:false },
+    { provider:'YMCA',           plan_name:'Mensuel estimé',             price:58.0,  url:'https://ymca.ca/en/',                    scraped_ok:false, previous_price:null, delta:0, price_drop:false },
+    { provider:'World Gym',      plan_name:'Mensuel estimé',             price:34.99, url:'https://www.worldgym.com/',             scraped_ok:false, previous_price:null, delta:0, price_drop:false },
+    { provider:'Energie Cardio', plan_name:'Mensuel estimé',             price:29.99, url:'https://energiecardio.com/',            scraped_ok:false, previous_price:null, delta:0, price_drop:false },
+];
+
+const GYM_PRICE_GUARD = {
+    'éconofitness':   { min: 8,  max: 40 },
+    'pro gym':        { min: 15, max: 60 },
+    'ymca':           { min: 25, max: 120 },
+    'world gym':      { min: 20, max: 120 },
+    'energie cardio': { min: 20, max: 120 },
+};
+
+async function loadGymPrices() {
+    try {
+        const cacheBust = Date.now();
+        const rawReq = fetch(GYM_PRICES_URL + '?t=' + cacheBust)
+            .then(r => r.ok ? r.json() : null)
+            .catch(() => null);
+        const apiReq = fetch(GYM_PRICES_API_URL + '&t=' + cacheBust)
+            .then(r => r.ok ? r.json() : null)
+            .then(payload => {
+                if (!payload || !payload.content) return null;
+                try {
+                    const b64 = String(payload.content).replace(/\n/g, '');
+                    return JSON.parse(atob(b64));
+                } catch (_) {
+                    return null;
+                }
+            })
+            .catch(() => null);
+
+        const [rawData, apiData] = await Promise.all([rawReq, apiReq]);
+        const candidates = [rawData, apiData].filter(d => d && Array.isArray(d.plans));
+        if (candidates.length === 0) throw new Error('Aucune source gym disponible');
+
+        const data = candidates.sort((a, b) => {
+            const da = Date.parse(a.updated_at || '') || 0;
+            const db = Date.parse(b.updated_at || '') || 0;
+            return db - da;
+        })[0];
+
+        const fallbackByProvider = Object.fromEntries(GYM_PLANS.map(p => [p.provider.toLowerCase(), p]));
+        const incomingPlans = Array.isArray(data.plans) ? data.plans : [];
+        const sanitized = incomingPlans.map(p => {
+            const key = (p.provider || '').toLowerCase();
+            const fb  = fallbackByProvider[key];
+            if (!fb) return null;
+
+            const rawPrice = Number(p.price);
+            const guard = GYM_PRICE_GUARD[key] || { min: 10, max: 150 };
+            const isCurrencyCad = !p.currency || String(p.currency).toUpperCase() === 'CAD';
+            const isPriceValid = Number.isFinite(rawPrice) && rawPrice >= guard.min && rawPrice <= guard.max;
+            const finalPrice = (isCurrencyCad && isPriceValid) ? Math.round(rawPrice * 100) / 100 : fb.price;
+
+            return {
+                provider:       p.provider || fb.provider,
+                plan_name:      p.plan_name || fb.plan_name || 'Mensuel',
+                price:          finalPrice,
+                url:            fb.url || p.url,
+                scraped_ok:     !!p.scraped_ok && isCurrencyCad && isPriceValid,
+                previous_price: (typeof p.previous_price === 'number') ? p.previous_price : null,
+                delta:          (typeof p.delta === 'number' && isCurrencyCad && isPriceValid) ? p.delta : 0,
+                price_drop:     !!p.price_drop && isCurrencyCad && isPriceValid,
+            };
+        }).filter(Boolean);
+
+        if (sanitized.length > 0) {
+            GYM_PLANS = GYM_PLANS.map(base => {
+                const found = sanitized.find(s => s.provider.toLowerCase() === base.provider.toLowerCase());
+                return found || base;
+            });
+        }
+
+        gymPricesUpdatedAt = data.updated_at;
+        console.log('[Depensa] Prix gym chargés (' + data.updated_at + ') — ' +
+            data.scraped_count + ' scrapés, ' + data.fallback_count + ' fallback');
+    } catch (e) {
+        console.warn('[Depensa] Impossible de charger les prix gym — données par défaut utilisées.', e);
     }
 }
 

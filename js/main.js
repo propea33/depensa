@@ -397,10 +397,11 @@ $('settingsPasswordForm').addEventListener('submit', async e => {
     // Initialise le client Supabase (no-op en mode offline)
     dbInit();
 
-    // Charge les prix ISP + Cell + Streaming en arrière-plan
+    // Charge les prix ISP + Cell + Streaming + Gym en arrière-plan
     loadISPPrices();
     loadCellPrices();
     loadStreamingPrices();
+    loadGymPrices();
 
     // ── Initialise le système de mois (dynamique) ───────
     initMonthSystem();

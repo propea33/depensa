@@ -1,0 +1,47 @@
+name: 💪 Daily Gym Scrape (Depensa)
+
+on:
+  schedule:
+    # 12:15 UTC daily (07:15 EST / 08:15 EDT Montreal)
+    - cron: '15 12 * * *'
+  workflow_dispatch:
+
+jobs:
+  scrape_gym:
+    name: Scrape gym prices & commit
+    runs-on: ubuntu-22.04
+    timeout-minutes: 20
+
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+          cache-dependency-path: gym-scraper/requirements.txt
+
+      - name: Install dependencies
+        run: pip install -r gym-scraper/requirements.txt
+
+      - name: Run gym scraper
+        run: python gym-scraper/scraper/scrape.py
+        continue-on-error: true
+
+      - name: Commit updated gym prices
+        run: |
+          git config user.name  "depensa-gym-scraper[bot]"
+          git config user.email "actions@github.com"
+          git add gym-scraper/data/gym-prices.json
+          if git diff --staged --quiet; then
+            echo "No changes in gym prices JSON — nothing to commit."
+          else
+            git commit -m "chore: update gym prices $(date -u '+%Y-%m-%d %H:%M UTC')"
+            git push
+            echo "✅ Gym prices committed and pushed."
+          fi

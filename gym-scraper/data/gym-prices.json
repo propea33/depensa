@@ -1,0 +1,75 @@
+{
+  "updated_at": "2026-03-31T01:31:42Z",
+  "scraped_count": 2,
+  "fallback_count": 3,
+  "region": "ca",
+  "currency": "CAD",
+  "plans": [
+    {
+      "provider": "Éconofitness",
+      "plan_name": "Plan de base (mensualisé)",
+      "price": 10.81,
+      "currency": "CAD",
+      "url": "https://econofitness.ca/fr/abonnements",
+      "note": "Prix de base annualisé en mensuel",
+      "scraped_ok": true,
+      "source": "econofitness_annual_to_monthly",
+      "previous_price": 10.81,
+      "delta": 0.0,
+      "price_drop": false
+    },
+    {
+      "provider": "Pro Gym",
+      "plan_name": "Régulier (mensualisé)",
+      "price": 23.81,
+      "currency": "CAD",
+      "url": "https://www.progym.ca/abonnements/",
+      "note": "Prix par 2 semaines converti en mensuel",
+      "scraped_ok": true,
+      "source": "progym_biweekly_to_monthly",
+      "previous_price": 23.81,
+      "delta": 0.0,
+      "price_drop": false
+    },
+    {
+      "provider": "YMCA",
+      "plan_name": "Mensuel estimé",
+      "price": 58.0,
+      "currency": "CAD",
+      "url": "https://ymca.ca/en/",
+      "note": "Prix variable selon centre; estimation locale (pas de tarif mensuel public national)",
+      "scraped_ok": false,
+      "source": "no_public_monthly_price",
+      "previous_price": 35.0,
+      "delta": 23.0,
+      "price_drop": false
+    },
+    {
+      "provider": "World Gym",
+      "plan_name": "Mensuel estimé",
+      "price": 34.99,
+      "currency": "CAD",
+      "url": "https://www.worldgym.com/",
+      "note": "Prix variable selon succursale; estimation locale (pas de tarif mensuel public national)",
+      "scraped_ok": false,
+      "source": "no_public_monthly_price",
+      "previous_price": 30.0,
+      "delta": 4.99,
+      "price_drop": false
+    },
+    {
+      "provider": "Energie Cardio",
+      "plan_name": "Mensuel estimé",
+      "price": 29.99,
+      "currency": "CAD",
+      "url": "https://energiecardio.com/",
+      "note": "Prix variable selon club; estimation locale (pas de tarif mensuel public national)",
+      "scraped_ok": false,
+      "source": "no_public_monthly_price",
+      "previous_price": 28.0,
+      "delta": 1.99,
+      "price_drop": false
+    }
+  ],
+  "drops": []
+}
