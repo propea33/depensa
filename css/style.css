@@ -2982,8 +2982,9 @@
         .settings-overlay {
             position: fixed; inset: 0; z-index: 250;
             background: rgba(0,0,0,0.5);
-            display: flex; align-items: center; justify-content: center;
-            padding: 20px;
+            display: flex; align-items: flex-start; justify-content: center;
+            padding: 24px 20px;
+            overflow-y: auto;
             animation: fadeIn 0.2s ease;
         }
 
@@ -2997,12 +2998,15 @@
             box-shadow: 6px 6px 0 var(--border);
             animation: popIn 0.3s cubic-bezier(0.34,1.56,0.64,1) both;
             overflow: hidden;
+            margin: auto 0;
         }
 
         .settings-header {
             display: flex; align-items: center; justify-content: space-between;
             padding: 20px 24px 16px;
             border-bottom: 2px solid var(--border-2);
+            position: sticky; top: 0; z-index: 1;
+            background: var(--bg-card);
         }
 
         .settings-title {
