@@ -7,7 +7,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="./css/style.css?v=20260384">
+    <link rel="stylesheet" href="./css/style.css?v=20260385">
     <link rel="stylesheet" href="./css/onboarding.css?v=20260345">
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -18,8 +18,8 @@
     <script src="./js/auth.js?v=20260345" defer></script>
     <script src="./js/months.js?v=20260345" defer></script>
     <script src="./js/charts.js?v=20260373" defer></script>
-    <script src="./js/modal.js?v=20260384" defer></script>
-    <script src="./js/ui.js?v=20260384" defer></script>
+    <script src="./js/modal.js?v=20260385" defer></script>
+    <script src="./js/ui.js?v=20260385" defer></script>
     <script src="./js/onboarding.js?v=20260373" defer></script>
     <script src="./js/main.js?v=20260377" defer></script>
 </head>
@@ -370,22 +370,12 @@
 <!-- ADD EXPENSE MODAL -->
 <div class="modal-overlay" id="modalOverlay">
     <div class="modal modal-wide">
-
-        <!-- Mobile wizard header (hidden on desktop) -->
-        <div class="mob-wiz-hdr" id="mobWizHdr">
-            <div class="mob-wiz-dots">
-                <span class="mob-wiz-dot" data-s="0"></span>
-                <span class="mob-wiz-dot" data-s="1"></span>
-            </div>
-            <div class="mob-wiz-label" id="mobWizLabel">Catégorie</div>
-        </div>
-
         <div class="modal-title" id="modal-title">Ajouter une dépense</div>
         <form id="expenseForm" novalidate>
             <div class="modal-cols">
-                <!-- LEFT / Step 0 on mobile: categories -->
+                <!-- LEFT: categories -->
                 <div class="modal-col-left">
-                    <div class="mob-cat-search-row" style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+                    <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
                         <label class="form-label" style="margin-bottom:0;">Catégorie</label>
                         <input type="text" id="catSearch" class="cat-search-input" placeholder="Rechercher…" autocomplete="off">
                     </div>
@@ -394,7 +384,7 @@
                         <input id="customCatName" class="form-input" type="text" placeholder="Nom de la catégorie…" autocomplete="off">
                     </div>
                 </div>
-                <!-- RIGHT / Step 1 on mobile: details -->
+                <!-- RIGHT: details -->
                 <div class="modal-col-right">
                     <div id="providerPicker" class="provider-picker" style="display:none;"></div>
 
@@ -431,14 +421,12 @@
                     </div>
                     <div class="form-group" style="margin-bottom:0;">
                         <label class="form-label" for="eNotes">Notes (optionnel)</label>
-                        <textarea id="eNotes" class="form-input" rows="2" placeholder="Détails, rappels…"></textarea>
+                        <textarea id="eNotes" class="form-input" rows="3" placeholder="Détails, rappels…"></textarea>
                     </div>
                 </div>
             </div>
             <div class="modal-actions modal-actions-centered">
                 <button type="button" class="btn-cancel" id="closeModal">Annuler</button>
-                <button type="button" class="btn-cancel mob-wiz-back" id="mobWizBack">← Retour</button>
-                <button type="button" class="btn-submit mob-wiz-next" id="mobWizNext">Suivant →</button>
                 <button type="submit" class="btn-submit" id="modal-submit">Ajouter ✓</button>
             </div>
         </form>

@@ -1383,11 +1383,6 @@
         .apply-btn:hover:not(:disabled) { transform: translate(-1px,-1px); box-shadow: 4px 4px 0 var(--border); }
         .apply-btn:disabled { background: var(--green); cursor: default; box-shadow: none; transform: none; }
 
-        /* Mobile wizard — hidden on desktop */
-        .mob-wiz-hdr   { display: none; }
-        .mob-wiz-back,
-        .mob-wiz-next  { display: none; }
-
         /* ─── MODAL ───────────────────────────────────── */
 
         .modal-overlay {
@@ -2780,7 +2775,7 @@
             .score-stats { gap: 6px; }
             .score-stat-val { font-size: 15px; }
 
-            /* ── Mobile modal: wizard bottom sheet ───── */
+            /* ── Mobile modal: compact bottom-sheet ───── */
             #modalOverlay.modal-overlay {
                 padding: 0;
                 align-items: flex-end;
@@ -2788,150 +2783,78 @@
             #modalOverlay .modal {
                 width: 100%;
                 max-width: 100%;
-                border-radius: 20px 20px 0 0;
+                border-radius: 16px 16px 0 0;
                 border-left: none;
                 border-right: none;
                 border-bottom: none;
-                box-shadow: 0 -8px 32px rgba(0,0,0,0.18);
+                box-shadow: 0 -8px 24px rgba(0,0,0,0.15);
                 transform: none;
-                padding: 0;
+                padding: 14px 12px 0;
             }
             #modalOverlay .modal.modal-wide {
                 width: 100%;
                 max-width: 100%;
-                max-height: 82dvh;
-                padding: 0;
+                max-height: 80dvh;
+                padding: 12px 12px 0;
                 display: flex;
                 flex-direction: column;
             }
-
-            /* ── Wizard header ── */
-            #modalOverlay .mob-wiz-hdr {
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                gap: 8px;
-                padding: 16px 16px 14px;
-                border-bottom: 1.5px solid var(--border-2);
+            #modalOverlay .modal-title {
+                font-size: 13px;
+                margin-bottom: 8px;
+                line-height: 1.2;
                 flex-shrink: 0;
             }
-            .mob-wiz-dots {
-                display: flex;
-                align-items: center;
-                gap: 5px;
-            }
-            .mob-wiz-dot {
-                width: 6px; height: 6px;
-                border-radius: 50%;
-                background: var(--border-2);
-                transition: all 0.22s ease;
-            }
-            .mob-wiz-dot.active {
-                width: 22px;
-                border-radius: 3px;
-                background: var(--accent);
-            }
-            .mob-wiz-dot.done { background: var(--accent); opacity: 0.35; }
-            .mob-wiz-label {
-                font-family: 'Plus Jakarta Sans', sans-serif;
-                font-size: 14px;
-                font-weight: 800;
-                color: var(--text);
-                letter-spacing: -0.2px;
-            }
-
-            /* Desktop title hidden in wizard mode */
-            #modalOverlay[data-mob-step] .modal-title { display: none; }
-
-            /* ── Scrollable content area ── */
             #modalOverlay .modal-cols {
                 flex: 1;
                 min-height: 0;
                 overflow-y: auto;
                 -webkit-overflow-scrolling: touch;
-                grid-template-columns: 1fr;
-                gap: 0;
-                padding: 14px 14px 0;
-            }
-
-            /* ── Step visibility ── */
-            #modalOverlay[data-mob-step="0"] .modal-col-right { display: none !important; }
-            #modalOverlay[data-mob-step="1"] .modal-col-left  { display: none !important; }
-
-            /* ── Action buttons per step ── */
-            #modalOverlay[data-mob-step="0"] #modal-submit  { display: none !important; }
-            #modalOverlay[data-mob-step="0"] .mob-wiz-next  { display: flex !important; }
-            #modalOverlay[data-mob-step="1"] #closeModal    { display: none !important; }
-            #modalOverlay[data-mob-step="1"] .mob-wiz-back  { display: flex !important; }
-
-            #modalOverlay .modal-actions {
-                flex-shrink: 0;
-                margin-top: 0;
-                padding: 10px 14px calc(12px + env(safe-area-inset-bottom, 0px));
-                background: var(--bg-card);
-                border-top: 1.5px solid var(--border-2);
+                padding-right: 0;
+                gap: 8px;
             }
             #modalOverlay .modal-col-right .form-group,
             #modalOverlay .modal-col-left .form-group {
-                margin-bottom: 10px;
+                margin-bottom: 8px;
+            }
+            #modalOverlay .modal-actions {
+                flex-shrink: 0;
+                margin-top: 0;
+                padding: 8px 0 calc(10px + env(safe-area-inset-bottom, 0px));
+                background: var(--bg-card);
+                position: sticky;
+                bottom: 0;
+                z-index: 5;
             }
             #modalOverlay .modal-actions .btn-cancel,
-            #modalOverlay .modal-actions .btn-submit,
-            #modalOverlay .modal-actions .mob-wiz-back,
-            #modalOverlay .modal-actions .mob-wiz-next {
-                padding: 11px 10px;
-                min-height: 44px;
-                font-size: 14px;
+            #modalOverlay .modal-actions .btn-submit {
+                padding: 10px 10px;
+                min-height: 40px;
+                font-size: 13px;
             }
             .form-label { font-size: 10px; margin-bottom: 3px; }
             .form-input  { font-size: 16px; padding: 9px 11px; }
-
-            /* ── Category grid: compact 5-col ── */
             .cat-grid-left {
-                grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
+                grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
                 gap: 5px !important;
             }
             .cat-grid-left .cat-btn {
                 padding: 6px 2px 5px;
                 min-height: 0;
-                gap: 3px;
+                gap: 2px;
                 border-width: 1.5px;
-                border-radius: 8px;
             }
-            .cat-grid-left .cat-btn-icon { font-size: 14px; }
+            .cat-grid-left .cat-btn-icon { font-size: 13px; }
             .cat-grid-left .cat-btn-name { font-size: 7.5px; line-height: 1.1; }
-            .mob-cat-search-row { margin-bottom: 8px; }
             .cat-search-input { font-size: 13px; padding: 6px 9px; }
-
-            /* ── Provider picker: horizontal scroll ── */
-            #modalOverlay[data-mob-step] .provider-grid {
-                display: flex;
-                flex-direction: row;
-                flex-wrap: nowrap;
-                overflow-x: auto;
-                -webkit-overflow-scrolling: touch;
-                scrollbar-width: none;
-                gap: 8px;
-                max-height: none;
-                padding-bottom: 6px;
-                grid-template-columns: none;
+            .provider-grid {
+                grid-template-columns: repeat(4, minmax(0, 1fr));
+                max-height: 120px;
+                gap: 4px;
             }
-            #modalOverlay[data-mob-step] .provider-grid::-webkit-scrollbar { display: none; }
-            #modalOverlay[data-mob-step] .provider-btn {
-                flex-shrink: 0;
-                flex-direction: column;
-                align-items: center;
-                width: 62px;
-                padding: 8px 4px 7px;
-                border-radius: 12px;
-                border-width: 1.5px;
-            }
-            #modalOverlay[data-mob-step] .provider-logo-wrap { width: 32px; height: 32px; }
-            #modalOverlay[data-mob-step] .provider-logo      { width: 28px; height: 28px; border-radius: 8px; }
-            #modalOverlay[data-mob-step] .provider-name      { font-size: 9px; max-width: 58px; }
-
-            /* Recurring / alerts toggles compact */
-            .recurring-toggle-row { padding: 9px 12px; }
+            .provider-btn { padding: 4px 1px 3px; }
+            .provider-name { font-size: 8px; max-width: 100%; }
+            .recurring-toggle-row { padding: 8px 10px; }
             .recurring-toggle-label { font-size: 12px; }
 
             /* ── Sim donut diff row ───────────────────── */
