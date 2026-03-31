@@ -614,14 +614,10 @@
             letter-spacing: .03em;
             color: var(--text-2);
             text-transform: uppercase;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
         }
 
         .group-header-total {
-            font-size: 11px;
-            font-weight: 700;
+            font-weight: 600;
             color: var(--text-3);
             letter-spacing: 0;
             text-transform: none;

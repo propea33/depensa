@@ -307,7 +307,7 @@ function renderExpenses() {
             const groupTotal = group.items.reduce((s, e) => s + effectiveMonthly(e), 0);
             const header = document.createElement('div');
             header.className = 'expense-group-header';
-            header.innerHTML = `<span>${group.label}</span><span class="group-header-total">${fmt(groupTotal)}</span>`;
+            header.innerHTML = `${group.label}<span class="group-header-total"> · ${fmt(groupTotal)}</span>`;
             grid.appendChild(header);
         }
 
