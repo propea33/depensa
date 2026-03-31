@@ -560,6 +560,7 @@ section { padding: 100px 24px; position: relative; z-index: 1; }
 .pricing-card {
   border-radius: 14px; padding: 36px;
   border: 2px solid var(--border); overflow: hidden;
+  display: flex; flex-direction: column;
 }
 .pc-free { background: #fff; box-shadow: 5px 5px 0 var(--border); }
 .pc-pro  { background: var(--bg); opacity: .6; }
@@ -589,6 +590,7 @@ section { padding: 100px 24px; position: relative; z-index: 1; }
   display: block; width: 100%; padding: 12px; border-radius: 8px;
   text-align: center; font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 700;
   cursor: pointer; text-decoration: none; transition: all .12s;
+  margin-top: auto;
 }
 .pc-cta-free {
   background: var(--accent); color: #fff; border: 2px solid var(--border);
