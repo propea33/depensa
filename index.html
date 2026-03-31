@@ -21,7 +21,7 @@
     <script src="./js/modal.js?v=20260386" defer></script>
     <script src="./js/ui.js?v=20260387" defer></script>
     <script src="./js/onboarding.js?v=20260373" defer></script>
-    <script src="./js/main.js?v=20260386" defer></script>
+    <script src="./js/main.js?v=20260387" defer></script>
 </head>
 <body>
 
@@ -110,6 +110,7 @@
                     <div class="avatar-menu-identity" id="avatarIdentity" style="display:none;"></div>
                     <div class="avatar-menu-divider" id="avatarDivider" style="display:none;"></div>
                     <button class="avatar-menu-item" id="settingsBtn">⚙&nbsp; Paramètres</button>
+                    <button class="avatar-menu-item" id="budgetAlertsBtn">🔔&nbsp; Alertes de dépenses</button>
                     <a class="avatar-menu-item" href="./aide.html" target="_blank">?&nbsp; Aide</a>
                     <div class="avatar-menu-divider"></div>
                     <button class="avatar-menu-item danger" id="logoutBtn">⎋&nbsp; Se déconnecter</button>
@@ -479,15 +480,6 @@
         <div class="settings-divider"></div>
 
         <div class="settings-section">
-            <div class="settings-section-label">Alertes de dépenses</div>
-            <p style="font-size:12px;color:var(--text-2);margin-bottom:14px;line-height:1.5;">Recevez une alerte lorsque le total mensuel d'une catégorie dépasse votre seuil.</p>
-            <div id="budgetAlertsList"></div>
-            <button type="button" class="settings-save-btn" id="addBudgetAlertBtn" style="margin-top:10px;">+ Ajouter une alerte</button>
-        </div>
-
-        <div class="settings-divider"></div>
-
-        <div class="settings-section">
             <div class="settings-section-label">Mot de passe</div>
             <form id="settingsPasswordForm" autocomplete="off">
                 <input type="password" id="sNewPassword" class="settings-input" placeholder="Nouveau mot de passe" autocomplete="new-password">
@@ -495,6 +487,21 @@
                 <button type="submit" class="settings-save-btn" id="settingsPasswordBtn">Changer le mot de passe</button>
                 <div class="settings-msg" id="settingsPasswordMsg"></div>
             </form>
+        </div>
+    </div>
+</div>
+
+<!-- BUDGET ALERTS PANEL -->
+<div class="settings-overlay" id="budgetAlertsOverlay" style="display:none;">
+    <div class="settings-card">
+        <div class="settings-header">
+            <span class="settings-title">🔔 Alertes de dépenses</span>
+            <button class="settings-close" id="budgetAlertsClose">✕</button>
+        </div>
+        <div class="settings-section">
+            <p style="font-size:12px;color:var(--text-2);margin-bottom:14px;line-height:1.5;">Recevez une alerte lorsque le total mensuel d'une catégorie dépasse votre seuil.</p>
+            <div id="budgetAlertsList"></div>
+            <button type="button" class="settings-save-btn" id="addBudgetAlertBtn" style="margin-top:10px;">+ Ajouter une alerte</button>
         </div>
     </div>
 </div>

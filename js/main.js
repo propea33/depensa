@@ -323,10 +323,25 @@ function _closeSettings() {
     $('settingsOverlay').style.display = 'none';
 }
 
-$('settingsBtn').addEventListener('click', () => { _openSettings(); _renderBudgetAlerts(); });
+$('settingsBtn').addEventListener('click', _openSettings);
 $('settingsClose').addEventListener('click', _closeSettings);
 $('settingsOverlay').addEventListener('click', e => {
     if (e.target === $('settingsOverlay')) _closeSettings();
+});
+
+// ─── Budget alerts panel ───────────────────────────────
+
+$('budgetAlertsBtn')?.addEventListener('click', () => {
+    _avatarMenuOpen = false;
+    $('avatarMenu').style.display = 'none';
+    _renderBudgetAlerts();
+    $('budgetAlertsOverlay').style.display = 'flex';
+});
+$('budgetAlertsClose')?.addEventListener('click', () => {
+    $('budgetAlertsOverlay').style.display = 'none';
+});
+$('budgetAlertsOverlay')?.addEventListener('click', e => {
+    if (e.target === $('budgetAlertsOverlay')) $('budgetAlertsOverlay').style.display = 'none';
 });
 
 // ─── Budget alerts ─────────────────────────────────────
