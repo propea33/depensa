@@ -313,9 +313,11 @@ function _syncAlertToggles() {
     if (savingsBtn) savingsBtn.setAttribute('aria-pressed', prefs.savingsAlertsEnabled ? 'true' : 'false');
 }
 
-function _openSettings() {
+async function _openSettings() {
     _avatarMenuOpen = false;
     $('avatarMenu').style.display = 'none';
+    // Refresh session to get latest user_metadata before pre-filling
+    await authGetSession();
     $('sFirstName').value = authUserFirstName() || '';
     $('sLastName').value  = authUserLastName()  || '';
     $('sNewPassword').value = '';

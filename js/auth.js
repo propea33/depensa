@@ -93,7 +93,11 @@ async function authMarkOnboardingDone(firstName, lastName) {
 }
 
 async function authUpdateProfile(firstName, lastName) {
-    if (!_db || !_authUser) return;
+    if (!_db) throw new Error('Non connecté.');
+    if (!_authUser) {
+        await authGetSession();
+        if (!_authUser) throw new Error('Session expirée. Reconnectez-vous.');
+    }
     const metadata = {};
     if (firstName !== undefined) metadata.first_name = firstName || '';
     if (lastName  !== undefined) metadata.last_name  = lastName  || '';
