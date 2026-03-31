@@ -988,8 +988,8 @@
         .year-figure {
             font-family: 'Plus Jakarta Sans', sans-serif;
             font-weight: 900;
-            font-size: 52px;
-            letter-spacing: -3px;
+            font-size: 36px;
+            letter-spacing: -1.5px;
             line-height: 1;
             color: var(--text);
         }
@@ -1883,12 +1883,12 @@
         @media (max-width: 1024px) {
             .dashboard { grid-template-columns: 1fr; }
             .expense-grid { grid-template-columns: repeat(3, 1fr); }
-            .year-figure { font-size: 40px; }
+            .year-figure { font-size: 30px; }
         }
 
         @media (max-width: 700px) {
             .expense-grid { grid-template-columns: 1fr 1fr; }
-            .year-figure { font-size: 34px; }
+            .year-figure { font-size: 28px; }
         }
 
         @media (max-width: 420px) {
@@ -1900,7 +1900,7 @@
             .card { padding: 18px; }
             .rec-grid { grid-template-columns: 1fr; }
             .cat-grid { grid-template-columns: repeat(5, 1fr); }
-            .year-figure { font-size: 34px; }
+            .year-figure { font-size: 28px; }
             /* Sim button: icon only on mobile */
             .sim-btn-label { display: none; }
             .sim-nav-btn { padding: 8px 10px; gap: 0; font-size: 16px; }

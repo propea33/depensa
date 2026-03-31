@@ -394,3 +394,29 @@ window.addEventListener('load', () => {
     if (idx >= 0) openHistModal(idx);
   });
 });
+
+// ─── Mockup donut chart ───────────────────────────────
+
+(function initMockDonut() {
+  const canvas = document.getElementById('mockDonutChart');
+  if (!canvas) return;
+  new Chart(canvas.getContext('2d'), {
+    type: 'doughnut',
+    data: {
+      labels: ['Habitation', 'Épicerie', 'Auto', 'Streaming', 'Internet', 'Gym'],
+      datasets: [{
+        data: [1450, 600, 480, 60, 85, 25],
+        backgroundColor: ['#7c3aed','#34d399','#f59e0b','#ef4444','#38bdf8','#f97316'],
+        borderColor: '#ffffff',
+        borderWidth: 3,
+        hoverOffset: 6,
+      }]
+    },
+    options: {
+      cutout: '68%',
+      plugins: { legend: { display: false }, tooltip: { enabled: false } },
+      animation: { duration: 900, easing: 'easeInOutQuart' },
+      responsive: true,
+    }
+  });
+})();
