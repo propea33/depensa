@@ -304,9 +304,10 @@ function renderExpenses() {
         }];
     grouped.forEach(group => {
         if (group.label) {
+            const groupTotal = group.items.reduce((s, e) => s + effectiveMonthly(e), 0);
             const header = document.createElement('div');
             header.className = 'expense-group-header';
-            header.textContent = group.label;
+            header.innerHTML = `<span>${group.label}</span><span class="group-header-total">${fmt(groupTotal)}</span>`;
             grid.appendChild(header);
         }
 
@@ -427,6 +428,8 @@ function renderExpenses() {
         }
         pendingScrollExpenseId = null;
     }
+
+    if (typeof checkBudgetAlerts === 'function') checkBudgetAlerts();
 
     const monthTotal = totalMonthly(source);
     $('totalMonthly').textContent = fmt(monthTotal);

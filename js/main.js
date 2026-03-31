@@ -323,11 +323,117 @@ function _closeSettings() {
     $('settingsOverlay').style.display = 'none';
 }
 
-$('settingsBtn').addEventListener('click', _openSettings);
+$('settingsBtn').addEventListener('click', () => { _openSettings(); _renderBudgetAlerts(); });
 $('settingsClose').addEventListener('click', _closeSettings);
 $('settingsOverlay').addEventListener('click', e => {
     if (e.target === $('settingsOverlay')) _closeSettings();
 });
+
+// ─── Budget alerts ─────────────────────────────────────
+
+const BUDGET_ALERTS_KEY = 'depensa_budget_alerts';
+
+function _loadBudgetAlerts() {
+    try { return JSON.parse(localStorage.getItem(BUDGET_ALERTS_KEY) || '[]'); }
+    catch (_) { return []; }
+}
+function _saveBudgetAlerts(arr) {
+    localStorage.setItem(BUDGET_ALERTS_KEY, JSON.stringify(arr));
+}
+
+function _renderBudgetAlerts() {
+    const list = $('budgetAlertsList');
+    if (!list) return;
+    const alerts = _loadBudgetAlerts();
+    const groups = [
+        { key: 'maison',    label: 'Maison' },
+        { key: 'streaming', label: 'Services Streaming' },
+        { key: 'cell',      label: 'Cellulaire' },
+        { key: 'bouffe',    label: 'Bouffe' },
+        { key: 'transport', label: 'Transport & Auto' },
+        { key: 'sante',     label: 'Santé & Bien-être' },
+        { key: 'famille',   label: 'Famille & Éducation' },
+        { key: 'loisirs',   label: 'Loisirs' },
+        { key: 'autres',    label: 'Autres' },
+    ];
+    list.innerHTML = alerts.map((a, i) => `
+        <div class="budget-alert-row" data-idx="${i}">
+            <select class="ba-cat">
+                ${groups.map(g => `<option value="${g.key}" ${g.key === a.cat ? 'selected' : ''}>${g.label}</option>`).join('')}
+            </select>
+            <input type="number" class="ba-amt" value="${a.amount}" min="1" placeholder="$">
+            <button type="button" class="budget-alert-del" title="Supprimer">✕</button>
+        </div>
+    `).join('');
+
+    list.querySelectorAll('.budget-alert-del').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const idx = parseInt(btn.closest('[data-idx]').dataset.idx);
+            const arr = _loadBudgetAlerts();
+            arr.splice(idx, 1);
+            _saveBudgetAlerts(arr);
+            _renderBudgetAlerts();
+        });
+    });
+    list.querySelectorAll('.ba-cat, .ba-amt').forEach(el => {
+        el.addEventListener('change', () => {
+            const arr = _loadBudgetAlerts();
+            list.querySelectorAll('.budget-alert-row').forEach((row, i) => {
+                arr[i].cat    = row.querySelector('.ba-cat').value;
+                arr[i].amount = parseFloat(row.querySelector('.ba-amt').value) || 0;
+            });
+            _saveBudgetAlerts(arr);
+        });
+    });
+}
+
+$('addBudgetAlertBtn')?.addEventListener('click', () => {
+    const arr = _loadBudgetAlerts();
+    arr.push({ cat: 'maison', amount: 0 });
+    _saveBudgetAlerts(arr);
+    _renderBudgetAlerts();
+});
+
+function checkBudgetAlerts() {
+    const alerts = _loadBudgetAlerts();
+    if (!alerts.length) return;
+
+    const GROUP_BY_CAT_LOCAL = {
+        habitation:'maison', electricite:'maison', internet:'maison',
+        streaming:'streaming', cell:'cell',
+        epicerie:'bouffe', restaurant:'bouffe', cafe:'bouffe',
+        auto:'transport', transport:'transport', gaz:'transport',
+        pharmacie:'sante', gym:'sante',
+        ecole:'famille', garderie:'famille',
+        loisir:'loisirs', spectacles:'loisirs', voyage:'loisirs', linge:'loisirs',
+    };
+
+    const totals = {};
+    expenses.forEach(exp => {
+        const g = GROUP_BY_CAT_LOCAL[exp.cat] || 'autres';
+        totals[g] = (totals[g] || 0) + effectiveMonthly(exp);
+    });
+
+    const container = document.getElementById('budgetAlertBanners');
+    if (!container) return;
+    container.innerHTML = '';
+
+    const GROUP_LABELS = {
+        maison:'Maison', streaming:'Services Streaming', cell:'Cellulaire',
+        bouffe:'Bouffe', transport:'Transport & Auto', sante:'Santé & Bien-être',
+        famille:'Famille & Éducation', loisirs:'Loisirs', autres:'Autres',
+    };
+
+    alerts.forEach(a => {
+        const total = totals[a.cat] || 0;
+        if (a.amount > 0 && total > a.amount) {
+            const div = document.createElement('div');
+            div.className = 'budget-alert-exceeded';
+            div.innerHTML = `⚠️ <span><strong>${GROUP_LABELS[a.cat] || a.cat}</strong> : ${fmt(total)} / limite ${fmt(a.amount)}</span>`;
+            container.appendChild(div);
+        }
+    });
+}
 
 
 

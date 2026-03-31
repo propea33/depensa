@@ -614,6 +614,17 @@
             letter-spacing: .03em;
             color: var(--text-2);
             text-transform: uppercase;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .group-header-total {
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--text-3);
+            letter-spacing: 0;
+            text-transform: none;
         }
 
         @keyframes popIn {
@@ -2566,7 +2577,7 @@
             transition: transform 0.2s, box-shadow 0.2s; white-space: nowrap;
         }
         .sticky-add-btn:hover { transform: translateX(-50%) translateY(-2px); box-shadow: 6px 6px 0 var(--border); }
-        @media (max-width: 700px) { .sticky-add-btn { display: flex; align-items: center; gap: 8px; } }
+        @media (max-width: 700px) { .sticky-add-btn { display: none !important; } }
 
         /* ═══════════════════════════════════════════════
            MOBILE — Responsive fixes ≤ 700px
@@ -2863,8 +2874,9 @@
             /* ── History chart tooltip card ──────────── */
             .ctip-card { min-width: 160px; padding: 10px 12px 9px; }
 
-            /* ── Add btn text: icon only on mobile ──── */
-            .add-btn .add-btn-label { display: none; }
+            /* ── Add btn: show full label on mobile (sticky removed) ──── */
+            .add-btn .add-btn-label { display: inline; }
+            .add-btn .add-btn-plus  { display: none; }
         }
 
         /* ═══════════════════════════════════════════════
@@ -3051,6 +3063,33 @@
         .settings-save-btn:disabled { opacity: 0.5; cursor: default; box-shadow: none; transform: none; }
 
         .settings-divider { height: 2px; background: var(--border-2); margin: 0 24px; }
+
+        /* ── Budget alert rows ── */
+        .budget-alert-row {
+            display: flex; align-items: center; gap: 8px; margin-bottom: 8px;
+        }
+        .budget-alert-row select,
+        .budget-alert-row input[type="number"] {
+            flex: 1; padding: 7px 10px; font-size: 13px;
+            background: var(--bg-input); border: 2px solid var(--border-2);
+            border-radius: var(--radius-sm); color: var(--text);
+            font-family: 'DM Sans', sans-serif;
+        }
+        .budget-alert-row input[type="number"] { max-width: 90px; flex: 0 0 90px; }
+        .budget-alert-row select:focus,
+        .budget-alert-row input:focus { border-color: var(--accent); outline: none; }
+        .budget-alert-del {
+            background: none; border: none; color: var(--red);
+            font-size: 16px; cursor: pointer; padding: 4px; line-height: 1;
+            flex-shrink: 0;
+        }
+        .budget-alert-exceeded {
+            display: flex; align-items: center; gap: 8px;
+            padding: 10px 14px; border-radius: var(--radius-sm);
+            background: rgba(220,38,38,0.06); border: 1.5px solid rgba(220,38,38,0.22);
+            font-size: 13px; color: var(--red); font-weight: 600; margin-bottom: 8px;
+            animation: popIn 0.25s ease both;
+        }
 
         .settings-msg { font-size: 12px; margin-top: 8px; }
         .settings-msg.ok  { color: var(--green); }
