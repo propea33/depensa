@@ -85,6 +85,7 @@ async function dbUpdateExpense(exp) {
                 type:      exp.type      || 'fixe',
                 frequency: exp.frequency || 'mensuel',
                 notes:     exp.notes     || '',
+                alerts:    exp.alerts !== false,
             })
             .eq('id', exp._dbId);
         if (error) throw error;
