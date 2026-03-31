@@ -498,8 +498,11 @@ $('settingsNameForm').addEventListener('submit', async e => {
     msg.className = 'settings-msg';
     try {
         await authUpdateProfile(firstName, lastName);
+        // Re-fill fields with confirmed saved values
+        $('sFirstName').value = authUserFirstName() || '';
+        $('sLastName').value  = authUserLastName()  || '';
         updateHeaderName();
-        msg.textContent = 'Nom mis à jour.';
+        msg.textContent = 'Nom mis à jour ✓';
         msg.className = 'settings-msg ok';
     } catch (err) {
         msg.textContent = err.message || 'Erreur.';
