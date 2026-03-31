@@ -392,6 +392,17 @@ function renderExpenses() {
         });
     }
 
+    // Mobile tap-to-reveal: toggle .tapped on card, dismiss others
+    if (window.matchMedia('(max-width: 700px)').matches) {
+        grid.querySelectorAll('.expense-card').forEach(card => {
+            card.addEventListener('click', () => {
+                const wasActive = card.classList.contains('tapped');
+                grid.querySelectorAll('.expense-card.tapped').forEach(c => c.classList.remove('tapped'));
+                if (!wasActive) card.classList.add('tapped');
+            });
+        });
+    }
+
     // Auto-scroll + premium focus animation on freshly added expense card.
     if (!isPast && pendingScrollExpenseId !== null) {
         const selector = `.expense-card[data-expense-id="${pendingScrollExpenseId}"]`;
@@ -1236,3 +1247,10 @@ function refresh() {
     renderTicker();
     if (simulationMode && simDonutChartInst) updateSimDonut();
 }
+
+// Mobile: dismiss tapped card when clicking outside the expense list
+document.addEventListener('click', e => {
+    if (window.matchMedia('(max-width: 700px)').matches && !e.target.closest('#expenseList')) {
+        document.querySelectorAll('#expenseList .expense-card.tapped').forEach(c => c.classList.remove('tapped'));
+    }
+});

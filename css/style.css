@@ -2581,30 +2581,7 @@
 
             header { padding: 16px 0 18px; }
 
-            /* ── Expense cards: always-visible action buttons on touch ── */
-
-            /* Icon-view: wrap + static actions below */
-            .expense-grid:not(.expense-grid-list) .expense-card {
-                flex-wrap: wrap;
-                align-items: flex-start;
-                padding: 12px;
-                gap: 8px;
-            }
-
-            .expense-grid:not(.expense-grid-list) .expense-card .card-actions {
-                position: static;
-                width: 100%;
-                opacity: 1;
-                pointer-events: auto;
-                background: transparent;
-                border-radius: 0;
-                display: flex;
-                justify-content: flex-end;
-                padding: 6px 0 0;
-                margin-top: 0;
-                border-top: 1px solid var(--border-2);
-                gap: 5px;
-            }
+            /* ── Expense cards: tap-to-reveal actions on mobile ── */
 
             /* List-view: compact single-line card */
             .expense-grid.expense-grid-list .expense-card {
@@ -2648,10 +2625,7 @@
                 margin-left: auto;
             }
 
-            .expense-grid.expense-grid-list .expense-card .expense-monthly span {
-                display: none;
-            }
-
+            .expense-grid.expense-grid-list .expense-card .expense-monthly span { display: none; }
             .expense-grid.expense-grid-list .expense-card .expense-yearly { display: none; }
 
             .expense-grid.expense-grid-list .expense-card .expense-info > div:last-child {
@@ -2666,7 +2640,30 @@
                 white-space: nowrap;
             }
 
-            .expense-grid.expense-grid-list .expense-card .card-actions {
+            /* Icon-view tapped: wrap with actions below */
+            .expense-grid:not(.expense-grid-list) .expense-card.tapped {
+                flex-wrap: wrap;
+                align-items: flex-start;
+                padding: 12px;
+                gap: 8px;
+            }
+
+            .expense-grid:not(.expense-grid-list) .expense-card.tapped .card-actions {
+                position: static;
+                width: 100%;
+                opacity: 1;
+                pointer-events: auto;
+                background: transparent;
+                border-radius: 0;
+                display: flex;
+                justify-content: flex-end;
+                padding: 6px 0 0;
+                border-top: 1px solid var(--border-2);
+                gap: 5px;
+            }
+
+            /* List-view tapped: actions appear inline at right */
+            .expense-grid.expense-grid-list .expense-card.tapped .card-actions {
                 position: static;
                 width: auto;
                 flex-shrink: 0;
@@ -2682,10 +2679,10 @@
                 justify-content: flex-end;
             }
 
-            /* Action buttons: icon-only on mobile (hide text label) */
-            .expense-card .btn-label { display: none; }
+            /* Action buttons: icon-only on mobile */
+            .expense-card.tapped .btn-label { display: none; }
 
-            .expense-card .action-btn {
+            .expense-card.tapped .action-btn {
                 padding: 5px 7px;
                 font-size: 13px;
                 gap: 0;
@@ -2695,7 +2692,7 @@
                 justify-content: center;
             }
 
-            .expense-card .action-btn:hover {
+            .expense-card.tapped .action-btn:hover {
                 box-shadow: 2px 2px 0 var(--border);
             }
 
