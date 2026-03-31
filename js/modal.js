@@ -101,36 +101,111 @@ function showProviderPicker(catId) {
     });
 }
 
+// ─── Groupes de catégories (2 niveaux) ────────────────────────────────────────
+
+const CAT_GROUPS = [
+    { id:'maison',    label:'Maison',              icon:'🏠', cats:['habitation','electricite','internet','assurance'] },
+    { id:'transport', label:'Transport & Auto',     icon:'🚗', cats:['auto','gaz','transport'] },
+    { id:'bouffe',    label:'Bouffe',               icon:'🛒', cats:['epicerie','restaurant','cafe'] },
+    { id:'streaming', label:'Streaming',            icon:'📺', cats:['streaming'] },
+    { id:'cell',      label:'Cellulaire',           icon:'📱', cats:['cell'] },
+    { id:'sante',     label:'Santé & Bien-être',    icon:'💊', cats:['pharmacie','gym'] },
+    { id:'famille',   label:'Famille & Éducation',  icon:'🎓', cats:['ecole','garderie'] },
+    { id:'loisirs',   label:'Loisirs',              icon:'🎭', cats:['loisir','spectacles','linge','voyage'] },
+    { id:'autres',    label:'Autres',               icon:'✏️', cats:['autre'] },
+];
+
+let _activeCatGroup = null; // which group is expanded
+
+function _selectCat(catId) {
+    selCat = catId;
+    const cat = allCats().find(c => c.id === catId);
+    updateFormForCat(catId);
+    showProviderPicker(catId);
+    refreshIconPreview();
+    const wrap = $('customCatWrap');
+    if (cat?.custom) { wrap.classList.add('visible'); $('customCatName').focus(); }
+    else wrap.classList.remove('visible');
+}
+
 function buildCatGrid() {
     const grid = $('catGrid');
     const q = ($('catSearch')?.value || '').toLowerCase().trim();
     grid.innerHTML = '';
-    allCats().filter(cat => !q || cat.name.toLowerCase().includes(q)).forEach(cat => {
-        const btn = document.createElement('button');
-        btn.type      = 'button';
-        btn.className = 'cat-btn' + (cat.id === selCat ? ' sel' : '');
-        btn.innerHTML = `<span class="cat-btn-icon">${cat.icon}</span><span class="cat-btn-name">${cat.name}</span>`;
-        btn.addEventListener('click', () => {
-            selCat = cat.id;
-            grid.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('sel'));
-            btn.classList.add('sel');
-            updateFormForCat(cat.id);
-            showProviderPicker(cat.id);
-            refreshIconPreview();
-            // Show/hide custom name input
-            const wrap = $('customCatWrap');
-            if (cat.custom) {
-                wrap.classList.add('visible');
-                $('customCatName').focus();
-            } else {
-                wrap.classList.remove('visible');
-            }
+
+    // ── Search mode: show flat filtered list ──────────────────
+    if (q) {
+        grid.classList.remove('cat-grid-grouped');
+        allCats().filter(cat => cat.name.toLowerCase().includes(q)).forEach(cat => {
+            const btn = document.createElement('button');
+            btn.type      = 'button';
+            btn.className = 'cat-btn' + (cat.id === selCat ? ' sel' : '');
+            btn.innerHTML = `<span class="cat-btn-icon">${cat.icon}</span><span class="cat-btn-name">${cat.name}</span>`;
+            btn.addEventListener('click', () => {
+                grid.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('sel'));
+                btn.classList.add('sel');
+                _selectCat(cat.id);
+            });
+            grid.appendChild(btn);
         });
-        grid.appendChild(btn);
+        $('customCatWrap').classList.toggle('visible', !!(allCats().find(c => c.id === selCat)?.custom));
+        return;
+    }
+
+    // ── Group mode ────────────────────────────────────────────
+    grid.classList.add('cat-grid-grouped');
+
+    // Find which group owns the currently selected cat
+    const selGroup = CAT_GROUPS.find(g => g.cats.includes(selCat));
+    if (_activeCatGroup === null && selGroup) _activeCatGroup = selGroup.id;
+
+    CAT_GROUPS.forEach(group => {
+        const isActive = _activeCatGroup === group.id;
+
+        // Group header button
+        const groupBtn = document.createElement('button');
+        groupBtn.type = 'button';
+        groupBtn.className = 'cat-group-btn' + (isActive ? ' active' : '');
+        const selInGroup = isActive && selCat ? allCats().find(c => c.id === selCat) : null;
+        groupBtn.innerHTML = `
+            <span class="cat-group-icon">${group.icon}</span>
+            <span class="cat-group-label">${group.label}</span>
+            ${selInGroup ? `<span class="cat-group-sel-badge">${selInGroup.icon} ${selInGroup.name}</span>` : ''}
+            <span class="cat-group-chevron">${isActive ? '▲' : '▼'}</span>
+        `;
+        groupBtn.addEventListener('click', () => {
+            _activeCatGroup = isActive ? null : group.id;
+            buildCatGrid();
+        });
+        grid.appendChild(groupBtn);
+
+        // Subcategory row (shown only when active)
+        if (isActive) {
+            const subRow = document.createElement('div');
+            subRow.className = 'cat-sub-row';
+            const groupCats = allCats().filter(c => group.cats.includes(c.id));
+            // Add custom cats that belong to this group (only "autres")
+            if (group.id === 'autres') {
+                allCats().filter(c => c.custom).forEach(c => { if (!groupCats.find(x => x.id === c.id)) groupCats.push(c); });
+            }
+            groupCats.forEach(cat => {
+                const btn = document.createElement('button');
+                btn.type = 'button';
+                btn.className = 'cat-btn cat-btn-sub' + (cat.id === selCat ? ' sel' : '');
+                btn.innerHTML = `<span class="cat-btn-icon">${cat.icon}</span><span class="cat-btn-name">${cat.name}</span>`;
+                btn.addEventListener('click', () => {
+                    subRow.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('sel'));
+                    btn.classList.add('sel');
+                    _selectCat(cat.id);
+                    buildCatGrid(); // refresh badge on group header
+                });
+                subRow.appendChild(btn);
+            });
+            grid.appendChild(subRow);
+        }
     });
-    // Sync custom field visibility on open
-    const selectedCat = allCats().find(c => c.id === selCat);
-    $('customCatWrap').classList.toggle('visible', !!(selectedCat && selectedCat.custom));
+
+    $('customCatWrap').classList.toggle('visible', !!(allCats().find(c => c.id === selCat)?.custom));
 }
 
 function updateFormForCat(catId) {
@@ -178,6 +253,7 @@ function updateAmountLabel() {
 function openAddModal() {
     editingId = null;
     selCat = 'habitation';
+    _activeCatGroup = 'maison';
     $('expenseForm').reset();
     $('catSearch').value = '';
     $('modal-title').textContent  = 'Ajouter une dépense';
@@ -202,6 +278,7 @@ function openEditModal(id) {
     if (!exp) return;
     editingId = id;
     selCat = exp.cat;
+    _activeCatGroup = CAT_GROUPS.find(g => g.cats.includes(exp.cat))?.id || null;
     $('modal-title').textContent  = 'Modifier la dépense';
     $('modal-submit').textContent = 'Enregistrer ✓';
     $('catSearch').value = '';
@@ -353,6 +430,7 @@ function openSimAddModal() {
     editingTarget = 'sim';
     simEditingId  = null;
     selCat = 'habitation';
+    _activeCatGroup = 'maison';
     $('expenseForm').reset();
     $('modal-title').textContent  = '🔬 Ajouter (simulation)';
     $('modal-submit').textContent = 'Ajouter ✓';
@@ -370,6 +448,7 @@ function openSimEditModal(id) {
     editingTarget = 'sim';
     simEditingId  = id;
     selCat = exp.cat;
+    _activeCatGroup = CAT_GROUPS.find(g => g.cats.includes(exp.cat))?.id || null;
     $('modal-title').textContent  = '🔬 Modifier (simulation)';
     $('modal-submit').textContent = 'Enregistrer ✓';
     setRecurring(exp.recurring ?? false);

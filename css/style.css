@@ -1586,6 +1586,60 @@
         .cat-btn-icon { font-size: 20px; line-height: 1; }
         .cat-btn-name { font-size: 9.5px; color: var(--text-2); text-align: center; line-height: 1.2; }
 
+        /* ── Grouped category selector ──────────────────── */
+        .cat-grid-grouped {
+            display: flex !important;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .cat-group-btn {
+            display: flex; align-items: center; gap: 9px;
+            width: 100%; padding: 10px 12px;
+            background: var(--bg-input);
+            border: 2px solid var(--border-2);
+            border-radius: 10px;
+            cursor: pointer; text-align: left;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 13px; font-weight: 600; color: var(--text);
+            transition: border-color .15s, background .15s;
+        }
+        .cat-group-btn:hover { border-color: var(--border); background: var(--bg-2); }
+        .cat-group-btn.active {
+            border-color: var(--accent);
+            background: rgba(124,58,237,0.07);
+            box-shadow: 2px 2px 0 var(--accent);
+        }
+        .cat-group-icon { font-size: 17px; flex-shrink: 0; }
+        .cat-group-label { flex: 1; }
+        .cat-group-sel-badge {
+            font-size: 11px; font-weight: 600;
+            color: var(--accent);
+            background: rgba(124,58,237,.12);
+            border: 1px solid rgba(124,58,237,.2);
+            border-radius: 100px; padding: 2px 8px;
+            white-space: nowrap;
+        }
+        .cat-group-chevron {
+            font-size: 9px; color: var(--text-3); flex-shrink: 0;
+        }
+
+        .cat-sub-row {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 6px;
+            padding: 10px 10px 6px;
+            background: rgba(124,58,237,0.04);
+            border: 2px solid var(--accent);
+            border-top: none;
+            border-radius: 0 0 10px 10px;
+            margin-top: -7px;
+        }
+
+        .cat-btn-sub { padding: 8px 4px !important; }
+        .cat-btn-sub .cat-btn-icon { font-size: 18px; }
+        .cat-btn-sub .cat-btn-name { font-size: 9px; }
+
         .custom-cat-wrap {
             display: none;
             margin-top: 10px;
