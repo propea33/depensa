@@ -177,310 +177,246 @@ nav {
   border-radius: 12px;
 }
 
-.mockup-real-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 10px;
-  margin-bottom: 10px;
-  padding: 11px 12px;
-  border: 2px solid var(--border);
-  border-radius: 11px;
-  background: var(--bg-2);
-}
-.mockup-real-logo {
-  display: inline-flex;
-  align-items: center;
-  gap: 7px;
-}
-.mockup-real-logo-mark {
-  width: 24px;
-  height: 24px;
-  border-radius: 7px;
-  border: 2px solid var(--border);
-  background: var(--accent);
-  color: #fff;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 12px;
-}
-.mockup-real-logo-text {
-  font-family: 'Plus Jakarta Sans', sans-serif;
-  font-weight: 800;
-  font-size: 14px;
-  letter-spacing: -.25px;
-  color: var(--text);
-}
-.mockup-real-logo-text em {
-  color: var(--accent);
-  font-style: normal;
-}
-.mockup-real-right {
-  display: inline-flex;
-  align-items: center;
-  gap: 7px;
-}
-.mockup-real-greet {
-  font-size: 10px;
-  color: var(--text-2);
-  font-weight: 600;
-}
-.mockup-real-sim {
-  font-size: 10px;
-  font-weight: 700;
-  color: #d97706;
-  background: #fff4e6;
-  border: 2px solid #f8cf9e;
-  border-radius: 999px;
-  padding: 3px 8px;
-  white-space: nowrap;
-}
-.mockup-real-theme {
-  width: 34px;
-  height: 19px;
-  border-radius: 999px;
-  border: 2px solid var(--border-2);
-  background: #ece8df;
-  display: inline-flex;
-  align-items: center;
-  padding: 1px;
-}
-.mockup-real-knob {
-  width: 13px;
-  height: 13px;
-  border-radius: 50%;
-  background: var(--accent);
-  margin-left: auto;
-}
-.mockup-real-avatar {
-  width: 25px;
-  height: 25px;
-  border-radius: 8px;
-  border: 2px solid var(--border);
-  background: var(--accent);
-  color: #fff;
-  font-family: 'Plus Jakarta Sans', sans-serif;
-  font-size: 9px;
-  font-weight: 800;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
+/* ── MOCKUP APP PREVIEW (scoped, identique au vrai dashboard) ── */
+
+.mockup-app-preview {
+  width: 1160px;
+  zoom: 0.65;
 }
 
-.mockup-grid {
+.mockup-app-preview .dashboard {
   display: grid;
-  grid-template-columns: .92fr 1.08fr;
-  gap: 12px;
-}
-.mockup-card-head {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 12px;
-  font-size: 11px;
-  font-weight: 800;
-  letter-spacing: .08em;
-  text-transform: uppercase;
-  color: var(--text);
-}
-.mockup-card-month {
-  color: var(--text-3);
-  font-size: 10px;
-  letter-spacing: .04em;
+  grid-template-columns: 310px 1fr;
+  gap: 20px;
+  align-items: start;
 }
 
-/* Repartition card */
-.mock-repartition-card {
-  background: #fff;
-  border: 3px solid #171717;
-  border-radius: 22px;
-  box-shadow: 7px 7px 0 #0f0f0f;
-  padding: 16px 16px 14px;
-}
-.mock-donut-wrap {
-  position: relative;
-  width: 100%;
-  max-width: 365px;
-  margin: 0 auto;
-}
-.mock-donut {
-  width: 100%;
-  aspect-ratio: 1;
-  border-radius: 50%;
-  border: 4px solid #6d66e4;
-  position: relative;
-  flex-shrink: 0;
-}
-.mock-donut::after {
-  content: '';
-  position: absolute;
-  inset: 56px;
-  border-radius: 50%;
-  background: #fff;
-  border: 3px solid #d8d8d8;
-}
-.mock-donut-center {
-  position: absolute;
-  inset: 0;
+.mockup-app-preview .sidebar {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  pointer-events: none;
-  text-align: center;
+  gap: 20px;
 }
-.mock-donut-center-label {
-  font-size: 13px;
-  font-weight: 700;
-  color: #111;
+
+.mockup-app-preview .card {
+  background: #ffffff;
+  border: 2px solid #0a0a0a;
+  border-radius: 12px;
+  padding: 26px;
+  box-shadow: 4px 4px 0 #0a0a0a;
 }
-.mock-donut-center-val {
-  font-family: 'Plus Jakarta Sans', sans-serif;
-  font-size: 28px;
-  font-weight: 900;
-  line-height: 1;
-  color: #0a0a0a;
-  margin-top: 4px;
-}
-.mock-legend {
-  width: 100%;
-  margin-top: 14px;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 8px 14px;
-}
-.mock-legend-item {
+
+.mockup-app-preview .card-header {
   display: flex;
   align-items: center;
-  gap: 9px;
-  font-size: 15px;
-  color: #57524a;
+  justify-content: space-between;
+  margin-bottom: 22px;
 }
-.mock-legend-item span { flex: 1; }
-.mock-legend-item strong { color: #222; font-weight: 700; }
-.mock-legend-dot {
-  width: 12px;
-  height: 12px;
+
+.mockup-app-preview .card-title {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-weight: 700;
+  font-size: 14.5px;
+  letter-spacing: 0.1px;
+  color: #0a0a0a;
+}
+
+.mockup-app-preview .card-meta {
+  font-size: 12px;
+  color: #5c5848;
+}
+
+.mockup-app-preview .donut-wrap {
+  position: relative;
+  width: 100%;
+  max-width: 260px;
+  margin: 0 auto;
+  aspect-ratio: 1;
+}
+
+.mockup-app-preview .chart-legend {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 7px 12px;
+  margin-top: 18px;
+}
+
+.mockup-app-preview .legend-item {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 12px;
+  color: #5c5848;
+}
+
+.mockup-app-preview .legend-dot {
+  width: 8px;
+  height: 8px;
   border-radius: 50%;
   flex-shrink: 0;
 }
 
-/* Right column */
-.mock-right-col { display: flex; flex-direction: column; }
-
-/* Expense cards */
-.mock-expense-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 8px;
-  flex: 1;
+.mockup-app-preview .legend-pct {
+  margin-left: auto;
+  font-size: 11px;
+  color: #0a0a0a;
+  font-weight: 500;
 }
-.mock-exp-card {
-  background: #fff;
-  border: 2px solid #c8c3b8;
-  border-radius: 10px;
-  padding: 10px 11px;
+
+.mockup-app-preview .expense-main {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.mockup-app-preview .expense-main-header {
   display: flex;
   align-items: center;
-  gap: 9px;
+  justify-content: space-between;
+}
+
+.mockup-app-preview .expense-main-title {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-weight: 700;
+  font-size: 18px;
+  color: #0a0a0a;
+}
+
+.mockup-app-preview .expense-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+.mockup-app-preview .expense-card {
+  background: #ffffff;
+  border: 2px solid #c8c3b8;
+  border-radius: 8px;
+  padding: 12px 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
   position: relative;
   overflow: hidden;
-  cursor: pointer;
-  transition: border-color 0.15s, box-shadow 0.15s, transform 0.15s;
+  transition: border-color .15s, box-shadow .15s, transform .15s;
 }
-.mock-exp-card:hover {
+
+.mockup-app-preview .expense-card:hover {
   border-color: #0a0a0a;
-  box-shadow: 2px 2px 0 #0a0a0a;
-  transform: translate(-1px, -1px);
+  box-shadow: 3px 3px 0 #0a0a0a;
+  transform: translate(-1px,-1px);
 }
-.mock-exp-card-icon {
-  width: 34px;
-  height: 34px;
+
+.mockup-app-preview .expense-icon {
+  width: 36px;
+  height: 36px;
   border-radius: 8px;
-  border: 2px solid #c8c3b8;
-  background: #f0ede6;
-  display: inline-flex;
+  display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 16px;
+  font-size: 17px;
   flex-shrink: 0;
   overflow: hidden;
+  border: 1.5px solid #c8c3b8;
+  background: #f0ede6;
 }
-.mock-exp-card-icon img {
-  width: 22px;
-  height: 22px;
+
+.mockup-app-preview .expense-img-icon {
+  width: 22px !important;
+  height: 22px !important;
+  max-width: 22px;
+  max-height: 22px;
+  border-radius: 5px;
   object-fit: contain;
-  border-radius: 4px;
   display: block;
 }
-.mock-exp-card-main { min-width: 0; flex: 1; }
-.mock-exp-card-name {
-  font-family: 'Plus Jakarta Sans', sans-serif;
-  font-size: 12px;
-  font-weight: 700;
-  line-height: 1.1;
+
+.mockup-app-preview .expense-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.mockup-app-preview .expense-name {
+  font-size: 13px;
+  font-weight: 600;
   color: #0a0a0a;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-}
-.mock-exp-card-amount {
-  font-family: 'Plus Jakarta Sans', sans-serif;
-  font-size: 14px;
-  font-weight: 800;
-  color: #0a0a0a;
-  line-height: 1.15;
-  margin-top: 2px;
-}
-.mock-exp-card-amount span {
-  font-family: 'DM Sans', sans-serif;
-  font-weight: 500;
-  font-size: .78em;
-  color: #5c5848;
-  margin-left: 1px;
-}
-.mock-exp-card-badge {
-  display: inline-flex;
-  align-items: center;
-  margin-top: 4px;
-  font-size: 9px;
-  font-weight: 700;
-  color: #7c3aed;
-  background: #ede9fe;
-  border: 1.5px solid #c4b5fd;
-  border-radius: 999px;
-  padding: 1px 7px;
+  line-height: 1.2;
 }
 
-/* Hover overlay on expense cards */
-.mock-exp-overlay {
+.mockup-app-preview .expense-monthly {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-weight: 800;
+  font-size: 17px;
+  color: #0a0a0a;
+  line-height: 1.2;
+  margin-top: 2px;
+}
+
+.mockup-app-preview .recurring-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  font-size: 9.5px;
+  font-weight: 600;
+  color: #7c3aed;
+  background: rgba(124,58,237,0.08);
+  border: 1.5px solid rgba(124,58,237,0.22);
+  border-radius: 100px;
+  padding: 1px 6px;
+  margin-top: 4px;
+  letter-spacing: .2px;
+}
+
+.mockup-app-preview .card-actions {
   position: absolute;
   inset: 0;
   background: rgba(255,255,255,0.93);
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 6px;
+  gap: 10px;
   opacity: 0;
-  transition: opacity 0.18s;
-  border-radius: inherit;
+  transition: opacity .2s ease;
+  border-radius: 8px;
 }
-.mock-exp-card:hover .mock-exp-overlay { opacity: 1; }
-.mock-act-btn {
-  padding: 5px 10px;
-  border-radius: 6px;
+
+.mockup-app-preview .expense-card:hover .card-actions {
+  opacity: 1;
+}
+
+.mockup-app-preview .action-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  border-radius: 7px;
   border: 2px solid #0a0a0a;
-  font-size: 10px;
-  font-weight: 700;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
   cursor: pointer;
   box-shadow: 2px 2px 0 #0a0a0a;
-  transition: transform 0.12s, box-shadow 0.12s;
-  font-family: 'DM Sans', sans-serif;
+  background: #fff;
+  color: #0a0a0a;
+  transition: transform .15s, box-shadow .15s;
 }
-.mock-act-btn:hover { transform: translate(-1px,-1px); box-shadow: 3px 3px 0 #0a0a0a; }
-.mock-act-edit { background: #7c3aed; color: #fff; }
-.mock-act-del  { background: #fff; color: #dc2626; }
+
+.mockup-app-preview .action-btn:hover {
+  transform: translate(-1px,-1px);
+  box-shadow: 3px 3px 0 #0a0a0a;
+}
+
+.mockup-app-preview .action-btn-edit {
+  background: #7c3aed;
+  color: #fff;
+}
+
+.mockup-app-preview .action-btn-del {
+  background: #fff;
+  color: #dc2626;
+}
 
 /* ── SOCIAL PROOF ───────────────────────────────────── */
 

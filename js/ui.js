@@ -19,7 +19,7 @@ function getSelectedExpenses() {
 // Set by main.js after a successful add so we can auto-focus the new card.
 let pendingScrollExpenseId = null;
 const EXPENSE_VIEW_STORAGE_KEY = 'depensa_expense_view';
-let expenseViewMode = localStorage.getItem(EXPENSE_VIEW_STORAGE_KEY) === 'list' ? 'list' : 'icons';
+let expenseViewMode = localStorage.getItem(EXPENSE_VIEW_STORAGE_KEY) === 'icons' ? 'icons' : 'list';
 const EXPENSE_SORT_STORAGE_KEY = 'depensa_expense_sort';
 const EXPENSE_SORT_LABELS = {
     categories: 'Par Catégories',
@@ -342,8 +342,8 @@ function renderExpenses() {
             const actions = !isPast ? `
                 <div class="card-actions">
                     <button class="action-btn action-btn-alerts ${alertsOn ? '' : 'alerts-off'}" data-id="${exp.id}" title="${alertsOn ? 'Alertes actives — cliquer pour désactiver' : 'Alertes désactivées — cliquer pour activer'}">${alertsOn ? '🔔' : '🔕'}</button>
-                    <button class="action-btn action-btn-edit" data-id="${exp.id}">✏️ Modifier</button>
-                    <button class="action-btn action-btn-del"  data-id="${exp.id}">✕ Supprimer</button>
+                    <button class="action-btn action-btn-edit" data-id="${exp.id}">✏️<span class="btn-label"> Modifier</span></button>
+                    <button class="action-btn action-btn-del"  data-id="${exp.id}">✕<span class="btn-label"> Supprimer</span></button>
                 </div>` : '';
 
             el.innerHTML = `

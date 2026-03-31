@@ -7,7 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="./css/landing.css?v=20260380">
+<link rel="stylesheet" href="./css/landing.css?v=20260381">
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 </head>
 <body>
@@ -52,128 +52,7 @@
     <div class="mockup-glow"></div>
     <div class="mockup">
 
-      <!-- Fake app header -->
-      <div class="mockup-real-header">
-        <div class="mockup-real-logo">
-          <div class="mockup-real-logo-mark">💰</div>
-          <div class="mockup-real-logo-text">dep<em>ensa</em></div>
-        </div>
-        <div class="mockup-real-right">
-          <span class="mockup-real-greet">Bonjour, Marco 👋</span>
-          <div class="mockup-real-theme"><div class="mockup-real-knob"></div></div>
-          <div class="mockup-real-avatar">MR</div>
-        </div>
-      </div>
-
-      <!-- Dashboard grid: donut left / expense cards right -->
-      <div class="mockup-grid">
-
-        <!-- Left: Donut + total -->
-        <div class="mock-repartition-card">
-          <div class="mockup-card-head">Répartition <span class="mockup-card-month">Mars 2026</span></div>
-          <div class="mock-donut-wrap">
-            <canvas id="mockDonutChart"></canvas>
-            <div class="mock-donut-center">
-              <div class="mock-donut-center-label">Total/mois</div>
-              <div class="mock-donut-center-val">$2 737</div>
-            </div>
-          </div>
-          <div class="mock-legend">
-            <div class="mock-legend-item"><div class="mock-legend-dot" style="background:#7c3aed"></div><span>Habitation</span><strong>53%</strong></div>
-            <div class="mock-legend-item"><div class="mock-legend-dot" style="background:#34d399"></div><span>Épicerie</span><strong>22%</strong></div>
-            <div class="mock-legend-item"><div class="mock-legend-dot" style="background:#f59e0b"></div><span>Auto</span><strong>18%</strong></div>
-            <div class="mock-legend-item"><div class="mock-legend-dot" style="background:#ef4444"></div><span>Streaming</span><strong>4%</strong></div>
-            <div class="mock-legend-item"><div class="mock-legend-dot" style="background:#38bdf8"></div><span>Internet</span><strong>2%</strong></div>
-            <div class="mock-legend-item"><div class="mock-legend-dot" style="background:#f97316"></div><span>Gym</span><strong>1%</strong></div>
-          </div>
-        </div>
-
-        <!-- Right: Expense cards -->
-        <div class="mock-right-col">
-          <div class="mockup-card-head">Dépenses <span class="mockup-card-month">Mars 2026</span></div>
-          <div class="mock-expense-grid">
-
-            <div class="mock-exp-card">
-              <div class="mock-exp-card-icon">🏠</div>
-              <div class="mock-exp-card-main">
-                <div class="mock-exp-card-name">Loyer</div>
-                <div class="mock-exp-card-amount">$1 450<span>/mois</span></div>
-                <div class="mock-exp-card-badge">↻ Récurrent</div>
-              </div>
-              <div class="mock-exp-overlay">
-                <button class="mock-act-btn mock-act-edit">✏️ Modifier</button>
-                <button class="mock-act-btn mock-act-del">✕ Supprimer</button>
-              </div>
-            </div>
-
-            <div class="mock-exp-card">
-              <div class="mock-exp-card-icon"><img src="https://www.google.com/s2/favicons?domain=videotron.com&sz=32" alt="Vidéotron"></div>
-              <div class="mock-exp-card-main">
-                <div class="mock-exp-card-name">Vidéotron</div>
-                <div class="mock-exp-card-amount">$85<span>/mois</span></div>
-                <div class="mock-exp-card-badge">↻ Récurrent</div>
-              </div>
-              <div class="mock-exp-overlay">
-                <button class="mock-act-btn mock-act-edit">✏️ Modifier</button>
-                <button class="mock-act-btn mock-act-del">✕ Supprimer</button>
-              </div>
-            </div>
-
-            <div class="mock-exp-card">
-              <div class="mock-exp-card-icon"><img src="https://www.google.com/s2/favicons?domain=tesla.com&sz=32" alt="Tesla"></div>
-              <div class="mock-exp-card-main">
-                <div class="mock-exp-card-name">Tesla</div>
-                <div class="mock-exp-card-amount">$480<span>/mois</span></div>
-                <div class="mock-exp-card-badge">↻ Récurrent</div>
-              </div>
-              <div class="mock-exp-overlay">
-                <button class="mock-act-btn mock-act-edit">✏️ Modifier</button>
-                <button class="mock-act-btn mock-act-del">✕ Supprimer</button>
-              </div>
-            </div>
-
-            <div class="mock-exp-card">
-              <div class="mock-exp-card-icon"><img src="https://www.google.com/s2/favicons?domain=netflix.com&sz=32" alt="Netflix"></div>
-              <div class="mock-exp-card-main">
-                <div class="mock-exp-card-name">Netflix</div>
-                <div class="mock-exp-card-amount">$23<span>/mois</span></div>
-                <div class="mock-exp-card-badge">↻ Récurrent</div>
-              </div>
-              <div class="mock-exp-overlay">
-                <button class="mock-act-btn mock-act-edit">✏️ Modifier</button>
-                <button class="mock-act-btn mock-act-del">✕ Supprimer</button>
-              </div>
-            </div>
-
-            <div class="mock-exp-card">
-              <div class="mock-exp-card-icon"><img src="https://www.google.com/s2/favicons?domain=econofitness.ca&sz=32" alt="Éconofitness"></div>
-              <div class="mock-exp-card-main">
-                <div class="mock-exp-card-name">Éconofitness</div>
-                <div class="mock-exp-card-amount">$25<span>/mois</span></div>
-                <div class="mock-exp-card-badge">↻ Récurrent</div>
-              </div>
-              <div class="mock-exp-overlay">
-                <button class="mock-act-btn mock-act-edit">✏️ Modifier</button>
-                <button class="mock-act-btn mock-act-del">✕ Supprimer</button>
-              </div>
-            </div>
-
-            <div class="mock-exp-card">
-              <div class="mock-exp-card-icon">🛒</div>
-              <div class="mock-exp-card-main">
-                <div class="mock-exp-card-name">Épicerie</div>
-                <div class="mock-exp-card-amount">$600<span>/mois</span></div>
-              </div>
-              <div class="mock-exp-overlay">
-                <button class="mock-act-btn mock-act-edit">✏️ Modifier</button>
-                <button class="mock-act-btn mock-act-del">✕ Supprimer</button>
-              </div>
-            </div>
-
-          </div>
-        </div>
-
-      </div><!-- /.mockup-grid -->
+      <img src="./assets/landing-dashboard-shot.jpg" alt="Aperçu du tableau de bord Depensa" class="mockup-shot">
     </div><!-- /.mockup -->
 
     <!-- History chart -->
@@ -429,6 +308,6 @@
   </div>
 </footer>
 
-<script src="./js/landing.js?v=20260380"></script>
+<script src="./js/landing.js?v=20260381"></script>
 </body>
 </html>
