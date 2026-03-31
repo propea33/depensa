@@ -453,8 +453,12 @@ function renderLegend() {
 
 function renderRecs() {
     const grid   = $('recGrid');
-    const totalSave = RECS.reduce((s, r) => s + r.saveYearly, 0);
+    const badge  = $('recBadge');
+    const count  = RECS.length;
     grid.innerHTML = '';
+    if (badge) {
+        badge.textContent = count + ' ' + (count > 1 ? 'opportunités' : 'opportunité');
+    }
 
     RECS.forEach(rec => {
         const card = document.createElement('div');
@@ -561,7 +565,7 @@ function loadDynamicRec(rec, card) {
             let timestampLabel = '';
             if (streamingPricesUpdatedAt) {
                 const d = new Date(streamingPricesUpdatedAt);
-                timestampLabel = 'Scraped le ' + d.toLocaleDateString('fr-CA', { day:'numeric', month:'long', year:'numeric' }) + ' à ' + d.toLocaleTimeString('fr-CA', { hour:'2-digit', minute:'2-digit' });
+                timestampLabel = 'Actualisé le ' + d.toLocaleDateString('fr-CA', { day:'numeric', month:'long', year:'numeric' }) + ' à ' + d.toLocaleTimeString('fr-CA', { hour:'2-digit', minute:'2-digit' });
             } else {
                 timestampLabel = 'Prix estimés — <a href="https://github.com/propea33/depensa/tree/main/streaming-scraper" target="_blank" style="color:var(--accent)">configurer le scraper</a>';
             }
@@ -647,7 +651,7 @@ function loadDynamicRec(rec, card) {
             let timestampLabel = '';
             if (gymPricesUpdatedAt) {
                 const d = new Date(gymPricesUpdatedAt);
-                timestampLabel = 'Scraped le ' + d.toLocaleDateString('fr-CA', { day:'numeric', month:'long', year:'numeric' }) + ' à ' + d.toLocaleTimeString('fr-CA', { hour:'2-digit', minute:'2-digit' });
+                timestampLabel = 'Actualisé le ' + d.toLocaleDateString('fr-CA', { day:'numeric', month:'long', year:'numeric' }) + ' à ' + d.toLocaleTimeString('fr-CA', { hour:'2-digit', minute:'2-digit' });
             } else {
                 timestampLabel = 'Prix estimés — <a href="https://github.com/propea33/depensa/tree/main/gym-scraper" target="_blank" style="color:var(--accent)">configurer le scraper</a>';
             }
@@ -703,7 +707,7 @@ function loadDynamicRec(rec, card) {
     if (rec.id === 'internet') {
         const currentCost = expenses
             .filter(e => e.cat === 'internet')
-            .reduce((s, e) => s + e.amount, 0);
+            .reduce((s, e) => s + monthlyAmount(e), 0);
 
         bodyInner.innerHTML = `
             <div class="search-loading">
@@ -720,7 +724,7 @@ function loadDynamicRec(rec, card) {
             let timestampLabel = '';
             if (ispPricesUpdatedAt) {
                 const d = new Date(ispPricesUpdatedAt);
-                timestampLabel = 'Scraped le ' + d.toLocaleDateString('fr-CA', { day:'numeric', month:'long', year:'numeric' }) + ' à ' + d.toLocaleTimeString('fr-CA', { hour:'2-digit', minute:'2-digit' });
+                timestampLabel = 'Actualisé le ' + d.toLocaleDateString('fr-CA', { day:'numeric', month:'long', year:'numeric' }) + ' à ' + d.toLocaleTimeString('fr-CA', { hour:'2-digit', minute:'2-digit' });
             } else {
                 timestampLabel = 'Prix estimés — <a href="https://github.com/TON_USER/isp-scraper" target="_blank" style="color:var(--accent)">configurer le scraper</a>';
             }
@@ -783,7 +787,7 @@ function loadDynamicRec(rec, card) {
     if (rec.id === 'cell') {
         const currentCost = expenses
             .filter(e => e.cat === 'cell')
-            .reduce((s, e) => s + e.amount, 0);
+            .reduce((s, e) => s + monthlyAmount(e), 0);
 
         bodyInner.innerHTML = `
             <div class="search-loading">
@@ -799,7 +803,7 @@ function loadDynamicRec(rec, card) {
             let timestampLabel = '';
             if (cellPricesUpdatedAt) {
                 const d = new Date(cellPricesUpdatedAt);
-                timestampLabel = 'Scraped le ' + d.toLocaleDateString('fr-CA', { day:'numeric', month:'long', year:'numeric' }) + ' à ' + d.toLocaleTimeString('fr-CA', { hour:'2-digit', minute:'2-digit' });
+                timestampLabel = 'Actualisé le ' + d.toLocaleDateString('fr-CA', { day:'numeric', month:'long', year:'numeric' }) + ' à ' + d.toLocaleTimeString('fr-CA', { hour:'2-digit', minute:'2-digit' });
             } else {
                 timestampLabel = 'Prix estimés — <a href="https://planhub.ca/cell-phone-plans/quebec" target="_blank" style="color:var(--accent)">voir planhub.ca</a>';
             }

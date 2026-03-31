@@ -69,7 +69,7 @@ function initDonut() {
             c.textBaseline = 'middle';
 
             // Always show total in center (reflects selected month)
-            const centreTotal = getSelectedExpenses().reduce((s,e) => s + e.amount, 0);
+            const centreTotal = getSelectedExpenses().reduce((s,e) => s + monthlyAmount(e), 0);
             c.font      = '600 12px Figtree, sans-serif';
             c.fillStyle = labelColor;
             c.fillText('Total / mois', cx, cy - 14);
@@ -240,7 +240,7 @@ function initSavings() {
                     ticks: {
                         color: tickColor,
                         font: { size: 10, family: 'Figtree' },
-                        callback: v => '$' + v.toLocaleString('fr-CA'),
+                        callback: v => fmt(v),
                         maxTicksLimit: 4,
                     },
                 },
@@ -334,20 +334,23 @@ function initSavings() {
             const month  = data[idx];
             const label  = FULL_LABELS[month.month] || month.month.replace(' ●', '');
             const expList = getExpList(idx);
-            const top3   = [...expList].sort((a, b) => b.amount - a.amount).slice(0, 3);
+            const monthTotal = expList.reduce((s, e) => s + monthlyAmount(e), 0);
+            const top3   = [...expList]
+                .sort((a, b) => monthlyAmount(b) - monthlyAmount(a))
+                .slice(0, 3);
 
             const pills = top3.map(e => {
                 const cat = getCAT(e.cat);
                 return `<div class="ctip-pill">
                     <span class="ctip-pill-icon">${cat.icon}</span>
                     <span class="ctip-pill-name">${e.name}</span>
-                    <span class="ctip-pill-amount">${fmt(e.amount)}</span>
+                    <span class="ctip-pill-amount">${fmt(monthlyAmount(e))}</span>
                 </div>`;
             }).join('');
 
             tip.innerHTML = `
                 <div class="ctip-month">${label}</div>
-                <div class="ctip-total">${fmt(month.total)}</div>
+                <div class="ctip-total">${fmt(monthTotal)}</div>
                 <div class="ctip-pills">${pills}</div>
                 <div class="ctip-hint">Cliquez pour voir le détail →</div>
             `;

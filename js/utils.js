@@ -3,7 +3,18 @@
 // ═══════════════════════════════════════════════════════
 
 const $ = id => document.getElementById(id);
-const fmt = n => '$' + Math.round(n).toLocaleString('fr-CA');
+const MONEY_FMT = new Intl.NumberFormat('fr-CA', {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+});
+
+function roundMoney(n) {
+    const v = Number(n);
+    if (!Number.isFinite(v)) return 0;
+    return Math.round(v * 100) / 100;
+}
+
+const fmt = n => '$' + MONEY_FMT.format(roundMoney(n));
 
 function allCats() { return [...CATS, ...customCats]; }
 
@@ -49,7 +60,7 @@ function appliedSavingsMonthly() {
 function projectedYearly() {
     const allTotals = [...HISTORY.map(h => h.total), totalMonthly()];
     const avg = allTotals.reduce((s, t) => s + t, 0) / allTotals.length;
-    return Math.round(avg * 12);
+    return roundMoney(avg * 12);
 }
 
 // Blend a hex color 65% towards amber (#f59e0b) to create simulation palette
@@ -117,8 +128,8 @@ function savingsMessage(s) {
 }
 
 function buildShareText(s) {
-    const saved  = Math.round(s.saved);
-    const yearly = Math.round(s.saved * 12);
+    const saved  = roundMoney(s.saved).toFixed(2);
+    const yearly = roundMoney(s.saved * 12).toFixed(2);
     return `Youpi! 🎉 Depensa m'a fait économiser ${saved}$/mois sur mes dépenses récurrentes. En maintenant ce rythme, c'est ${yearly}$ de plus dans mes poches sur 1 an!`;
 }
 

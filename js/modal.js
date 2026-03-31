@@ -165,7 +165,7 @@ function updateAmountLabel() {
     if (ONE_TIME_CATS.has(selCat)) return; // label stays "Montant ($)"
     const isAnnual = $('eFrequency').value === 'annuel';
     $('amountLabel').textContent = isAnnual ? 'Montant annuel ($)' : 'Montant mensuel ($)';
-    const amount = parseFloat($('eAmount').value) || 0;
+    const amount = roundMoney(parseFloat($('eAmount').value) || 0);
     const hint = $('amountHint');
     if (isAnnual && amount > 0) {
         hint.textContent = `≈ ${fmt(amount / 12)}/mois`;
@@ -237,15 +237,17 @@ function closeModal() {
 function openHistoryModal(monthLabel, expList) {
     $('historyModalTitle').textContent = 'Dépenses — ' + monthLabel;
 
-    const total = expList.reduce((s, e) => s + e.amount, 0);
+    const total = expList.reduce((s, e) => s + monthlyAmount(e), 0);
 
     const rows = expList.map(exp => {
         const cat = getCAT(exp.cat);
+        const monthly = monthlyAmount(exp);
+        const yearly  = exp.frequency === 'annuel' ? exp.amount : (monthly * 12);
         return `
             <tr>
                 <td><div class="td-icon" style="background:${cat.color}1a">${getExpenseIconHTML(exp.name, exp.cat)}</div></td>
                 <td>${exp.name}</td>
-                <td><span class="td-amount">${fmt(exp.amount)}</span><br><span class="td-yearly">${fmt(exp.amount * 12)}/an</span></td>
+                <td><span class="td-amount">${fmt(monthly)}</span><br><span class="td-yearly">${fmt(yearly)}/an</span></td>
             </tr>
         `;
     }).join('');
@@ -322,7 +324,7 @@ function openSimModal(expId) {
 
     function updateSimPreview() {
         const hidden = $('simHideCheck').checked;
-        const newAmt = hidden ? 0 : (parseFloat($('simAmountInput').value) || 0);
+        const newAmt = hidden ? 0 : roundMoney(parseFloat($('simAmountInput').value) || 0);
         const newFreq = $('simFreqInput').value;
         const newMonthly = newFreq === 'annuel' ? newAmt / 12 : newAmt;
         const diff = monthly - newMonthly;

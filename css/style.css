@@ -354,6 +354,10 @@
             letter-spacing: 0.1px;
         }
 
+        .annual-cost-title {
+            font-size: 13.5px;
+        }
+
         .card-meta {
             font-size: 12px;
             color: var(--text-2);

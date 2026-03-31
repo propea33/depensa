@@ -108,7 +108,9 @@ const HIST_DATA = [
 // ─── Helpers ──────────────────────────────────────────
 
 function fmtAmt(n) {
-  return '$\u00a0' + n.toLocaleString('fr-CA');
+  const val = Number(n);
+  const safe = Number.isFinite(val) ? Math.round(val * 100) / 100 : 0;
+  return '$\u00a0' + safe.toLocaleString('fr-CA', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 }
 
 function expIconHTML(e) {
@@ -250,7 +252,7 @@ window.addEventListener('load', () => {
           ticks: {
             color: '#4d5a72',
             font: { size: 10, family: 'Figtree' },
-            callback: v => '$' + v.toLocaleString('fr-CA'),
+            callback: v => fmtAmt(v),
             maxTicksLimit: 4,
           },
         },

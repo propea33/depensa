@@ -40,7 +40,7 @@ $('modalOverlay').addEventListener('click', e => { if (e.target === e.currentTar
 $('expenseForm').addEventListener('submit', e => {
     e.preventDefault();
     const name   = $('eName').value.trim();
-    const amount = parseFloat($('eAmount').value);
+    const amount = roundMoney(parseFloat($('eAmount').value));
     if (!name || isNaN(amount) || amount <= 0) return;
 
     // Handle custom category
@@ -85,7 +85,7 @@ $('expenseForm').addEventListener('submit', function simFormPatch(e) {
     if (editingTarget !== 'sim') return;
     e.preventDefault(); e.stopImmediatePropagation();
     const name   = $('eName').value.trim();
-    const amount = parseFloat($('eAmount').value);
+    const amount = roundMoney(parseFloat($('eAmount').value));
     if (!name || isNaN(amount) || amount <= 0) return;
 
     let finalCat = selCat;
