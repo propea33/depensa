@@ -250,7 +250,7 @@ function renderExpenses() {
                 if (!s) return;
 
                 const shareText = buildShareText(s);
-                const shareUrl  = window.location.origin + '/landing.html';
+                const shareUrl  = window.location.origin + '/';
 
                 // Native share on mobile
                 if (navigator.share) {

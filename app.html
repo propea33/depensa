@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Depensa — Finances Intelligentes</title>
+    <meta name="robots" content="noindex, nofollow">
+    <link rel="icon" type="image/svg+xml" href="./favicon.svg">
+    <link rel="apple-touch-icon" href="./favicon.svg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./css/style.css?v=20260390">
+    <link rel="stylesheet" href="./css/onboarding.css?v=20260345">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="./js/data.js?v=20260390" defer></script>
+    <script src="./js/utils.js?v=20260373" defer></script>
+    <script src="./js/icons.js?v=20260345" defer></script>
+    <script src="./js/db.js?v=20260345" defer></script>
+    <script src="./js/auth.js?v=20260345" defer></script>
+    <script src="./js/months.js?v=20260345" defer></script>
+    <script src="./js/charts.js?v=20260373" defer></script>
+    <script src="./js/modal.js?v=20260386" defer></script>
+    <script src="./js/ui.js?v=20260390" defer></script>
+    <script src="./js/onboarding.js?v=20260373" defer></script>
+    <script src="./js/main.js?v=20260388" defer></script>
+</head>
+<body>
+
+<!-- ════════════════════════════════════════════ -->
+<!--  AUTH SCREEN                                -->
+<!-- ════════════════════════════════════════════ -->
+<div class="auth-overlay" id="authOverlay">
+    <div class="auth-card">
+        <div class="auth-logo">💰 dep<em>ensa</em></div>
+        <div class="auth-tagline">Vos finances, simplifiées.</div>
+
+        <div class="auth-tabs">
+            <button class="auth-tab active" id="tabLogin">Connexion</button>
+            <button class="auth-tab" id="tabSignup">Créer un compte</button>
+        </div>
+
+        <form id="authForm" novalidate onsubmit="event.preventDefault(); _authSubmit();">
+            <div class="auth-field">
+                <label for="authEmail">Courriel</label>
+                <input id="authEmail" class="auth-input" type="email" placeholder="votre@email.com" autocomplete="email">
+            </div>
+            <div class="auth-field">
+                <label for="authPassword">Mot de passe</label>
+                <input id="authPassword" class="auth-input" type="password" placeholder="••••••••" autocomplete="current-password">
+            </div>
+            <div class="auth-field" id="authConfirmField" style="display:none;">
+                <label for="authConfirm">Confirmer le mot de passe</label>
+                <input id="authConfirm" class="auth-input" type="password" placeholder="••••••••" autocomplete="new-password">
+            </div>
+            <button type="submit" class="auth-submit-btn" id="authSubmitBtn">Se connecter</button>
+        </form>
+
+        <div class="auth-msg" id="authMsg"></div>
+
+        <div class="auth-divider">ou</div>
+
+        <button class="auth-skip-btn" id="authSkipBtn">Continuer sans compte →</button>
+    </div>
+</div>
+
+<!-- ════════════════════════════════════════════ -->
+<!--  ONBOARDING WIZARD                         -->
+<!-- ════════════════════════════════════════════ -->
+<div class="onb-overlay" id="onboardingOverlay">
+    <div class="onb-card">
+        <div class="onb-header">
+            <div class="onb-logo">💰 dep<em>ensa</em></div>
+            <div class="onb-progress">
+                <div class="onb-progress-bar" id="onbProgressBar" style="width:0%"></div>
+            </div>
+        </div>
+        <div class="onb-body onb-fade" id="onbBody"></div>
+        <div class="onb-footer">
+            <button class="onb-skip-btn" id="onbSkipBtn">Passer →</button>
+            <div class="onb-spacer"></div>
+            <button class="onb-back-btn" id="onbBackBtn" style="display:none;">← Retour</button>
+            <button class="onb-next-btn" id="onbNextBtn">Continuer →</button>
+        </div>
+    </div>
+</div>
+
+<!-- TICKER -->
+<div class="ticker-wrap">
+    <div class="ticker-bar" id="tickerBar">
+        <div class="ticker-track" id="tickerTrack"></div>
+    </div>
+    <button class="ticker-toggle" id="tickerToggle" title="Masquer/afficher">▲</button>
+</div>
+
+<div class="page-wrapper">
+
+    <!-- HEADER -->
+    <header>
+        <div class="logo">
+            <div class="logo-mark">💰</div>
+            <div class="logo-text">dep<em>ensa</em></div>
+        </div>
+        <div class="header-right">
+            <span class="header-greeting">Bonjour, Marco 👋</span>
+            <button class="theme-toggle" id="themeBtn" title="Changer le thème" aria-label="Changer le thème">
+                <div class="toggle-knob" id="toggleKnob">🌙</div>
+            </button>
+            <div class="avatar-wrap">
+                <div class="avatar" id="userAvatar">MR</div>
+                <div class="avatar-menu" id="avatarMenu" style="display:none;">
+                    <div class="avatar-menu-identity" id="avatarIdentity" style="display:none;"></div>
+                    <div class="avatar-menu-divider" id="avatarDivider" style="display:none;"></div>
+                    <button class="avatar-menu-item" id="settingsBtn">⚙&nbsp; Paramètres</button>
+                    <button class="avatar-menu-item" id="budgetAlertsBtn">🔔&nbsp; Alertes de dépenses</button>
+                    <a class="avatar-menu-item" href="./aide.html" target="_blank">?&nbsp; Aide</a>
+                    <div class="avatar-menu-divider"></div>
+                    <button class="avatar-menu-item danger" id="logoutBtn">⎋&nbsp; Se déconnecter</button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- DASHBOARD GRID -->
+    <div class="dashboard" id="dashContent">
+
+        <!-- LEFT sidebar: pie + year -->
+        <div class="sidebar">
+
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-title">Répartition</span>
+                    <span class="card-meta" id="donutMonthLabel">Mars 2026</span>
+                </div>
+                <div class="donut-wrap">
+                    <canvas id="donutChart"></canvas>
+                </div>
+                <div id="donut-tooltip"></div>
+                <div class="chart-legend" id="legend"></div>
+            </div>
+
+<div class="card year-card">
+                <div class="card-header" style="margin-bottom:10px;">
+                    <span class="card-title annual-cost-title">Coût annuel</span>
+                    <span class="card-meta">2026</span>
+                </div>
+                <div class="year-figure" id="yearTotal">$0</div>
+                <div class="year-sub">projeté pour l'année</div>
+            </div>
+
+
+            <!-- SIM DONUT CARD (shown during inline simulation overlay mode) -->
+            <div class="card sim-donut-card" id="simDonutCard">
+                <div class="card-header">
+                    <span class="card-title">Répartition simulée</span>
+                    <span class="sim-card-label">🔬 Simulation</span>
+                </div>
+                <div class="donut-wrap">
+                    <canvas id="simDonutChart"></canvas>
+                </div>
+                <div id="simDonutTooltip"></div>
+                <div class="chart-legend" id="simLegend"></div>
+                <div class="sim-diff-row" id="simDiffRow"></div>
+            </div>
+
+        </div><!-- /.sidebar -->
+
+        <!-- CENTER/MAIN -->
+        <div class="expense-main">
+
+            <!-- Demo banner (shown when user skipped onboarding) -->
+            <div class="demo-banner" id="demoBanner">
+                <div class="demo-banner-icon">💡</div>
+                <div class="demo-banner-content">
+                    <div class="demo-banner-title">Données de démonstration</div>
+                    <div class="demo-banner-sub">Voici des données rentrées au hasard. Maintenant c'est à vous d'entrer vos vraies dépenses.</div>
+                    <div class="demo-banner-actions">
+                        <button class="demo-erase-btn" id="demoEraseBtn">🗑 Effacer toutes les données</button>
+                        <button class="demo-dismiss-btn" id="demoDismissBtn">Masquer</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Simulation banner (shown when simulation overlay mode is active) -->
+            <div class="sim-banner" id="simBanner">
+                <span>🔬</span>
+                <span class="sim-banner-text">Mode simulation actif — vos données réelles ne sont pas modifiées.</span>
+                <button class="sim-quit-btn" id="simQuitBtn">Quitter</button>
+            </div>
+
+            <!-- Expense header -->
+            <div class="expense-main-header">
+                <span class="expense-main-title">Dépenses mensuelles <span id="expenseCount" style="font-size:13px;font-weight:500;color:var(--text-2);"></span><span id="selectedMonthLabel" style="font-size:13px;font-weight:600;color:var(--accent);margin-left:8px;"></span></span>
+                <div style="display:flex;gap:10px;align-items:center;">
+                    <button class="recurring-filter-btn" id="recurringFilter">
+                        <span>↻</span> Récurrentes seulement
+                    </button>
+                    <div class="export-wrap" id="exportWrap">
+                        <button class="export-btn" id="exportBtn">⬇ Exporter ce Mois <span class="export-chevron">▼</span></button>
+                        <div class="export-menu" id="exportMenu">
+                            <button class="export-item" id="exportPDFBtn"><span class="item-icon">📄</span> Exporter en PDF</button>
+                            <button class="export-item" id="exportCSVBtn"><span class="item-icon">📊</span> Exporter en CSV</button>
+                        </div>
+                    </div>
+                    <button class="add-btn" id="openModal">
+                        <span class="add-btn-plus">+</span><span class="add-btn-label"> Ajouter</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Month selector -->
+            <div class="month-nav" id="monthTabs">
+                <div class="month-nav-inner">
+                    <div class="month-nav-main">
+                        <div class="year-badge-wrap">
+                            <button class="year-badge" id="yearBadge" aria-expanded="false">
+                                2026
+                                <svg class="year-chevron" width="10" height="10" viewBox="0 0 10 10" fill="none">
+                                    <path d="M2 3.5L5 6.5L8 3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </button>
+                            <div class="year-popover" id="yearPopover">
+                                <div class="year-popover-label">2025</div>
+                                <div class="year-popover-months">
+                                    <button class="month-tab" data-month="oct">Oct</button>
+                                    <button class="month-tab" data-month="nov">Nov</button>
+                                    <button class="month-tab" data-month="dec">Déc</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="month-pills" id="monthPills">
+                            <button class="month-tab" data-month="jan">Jan</button>
+                            <button class="month-tab" data-month="fev">Fév</button>
+                            <button class="month-tab active live-tab" data-month="mars">Mars</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="expense-view-row" id="expenseViewRow">
+                <div class="sort-wrap" id="sortWrap">
+                    <button class="sort-btn" id="sortBtn" type="button">
+                        ⇅ <span id="sortBtnLabel">Par Catégories</span> <span class="sort-chevron">▼</span>
+                    </button>
+                    <div class="sort-menu" id="sortMenu">
+                        <button class="sort-item active" type="button" data-sort="categories">Par Catégories</button>
+                        <button class="sort-item" type="button" data-sort="amount_desc">Plus grande dépense à la plus petite</button>
+                        <button class="sort-item" type="button" data-sort="amount_asc">Plus petite à la plus grande</button>
+                    </div>
+                </div>
+                <div class="view-toggle" role="group" aria-label="Mode d'affichage des dépenses">
+                    <button class="view-toggle-btn active" id="expenseViewIcons" type="button" title="Affichage Icônes">
+                        ▦ <span class="view-toggle-label">Icônes</span>
+                    </button>
+                    <button class="view-toggle-btn" id="expenseViewList" type="button" title="Affichage Liste">
+                        ☰ <span class="view-toggle-label">Liste</span>
+                    </button>
+                </div>
+            </div>
+
+            <div id="budgetAlertBanners"></div>
+            <div class="expense-grid" id="expenseList"></div>
+
+            <div class="total-bar">
+                <span class="total-label">Total mensuel</span>
+                <span class="total-amount" id="totalMonthly">$0</span>
+            </div>
+
+
+            <!-- Historique des dépenses -->
+            <div class="card" style="margin-top:32px;">
+                <div class="card-header">
+                    <span class="card-title">Historique des dépenses</span>
+                    <span class="history-trend" id="historyTrend"></span>
+                </div>
+                <div class="history-chart-wrap">
+                    <div class="ctip-card" id="chartTooltipCard"></div>
+                    <canvas id="savingsChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Façons d'économiser -->
+            <div class="recs-section" style="margin-top:20px;">
+                <div class="section-header">
+                    <span class="section-title">Façons d'économiser</span>
+                    <span class="section-badge" id="recBadge">4 opportunités</span>
+                </div>
+                <div class="rec-grid" id="recGrid"></div>
+            </div>
+
+        </div><!-- /.expense-main -->
+
+    </div><!-- /.dashboard -->
+
+    <!-- ════════════════════════════════════════════ -->
+    <!--  SIMULATION SECTION                         -->
+    <!-- ════════════════════════════════════════════ -->
+    <div id="simContent" style="display:none;">
+
+        <div class="sim-zone-banner">
+            <div class="sim-zone-icon">🔬</div>
+            <div class="sim-zone-text">
+                <div class="sim-zone-title">Zone Simulation</div>
+                <div class="sim-zone-desc">
+                    Ceci est une zone simulation. Faites autant de tests que vous voulez.<br>
+                    <strong style="color:#d97706;">Ça n'affecte absolument pas vos dépenses réelles.</strong>
+                </div>
+            </div>
+            <div class="sim-zone-actions">
+                <button class="sim-reset-btn" id="simResetBtn">↺ Réinitialiser</button>
+                <button class="sim-back-btn" id="simBackBtn">← Retour au tableau de bord</button>
+            </div>
+        </div>
+
+        <div class="dashboard">
+
+            <div class="sidebar">
+                <div class="card sim-section-card">
+                    <div class="card-header">
+                        <span class="card-title">Répartition</span>
+                        <span class="sim-card-label">Simulée</span>
+                    </div>
+                    <div class="donut-wrap">
+                        <canvas id="simDonutCanvas"></canvas>
+                    </div>
+                    <div id="simDonutTip"></div>
+                    <div class="chart-legend" id="simDonutLegend"></div>
+                </div>
+                <div class="card year-card sim-section-card">
+                    <div class="card-header" style="margin-bottom:10px;">
+                        <span class="card-title annual-cost-title">Coût annuel</span>
+                        <span class="card-meta">Simulé</span>
+                    </div>
+                    <div class="year-figure" id="simYearFigure" style="font-size:40px;">$0</div>
+                    <div class="year-sub">projection annuelle simulée</div>
+                    <div class="sim-diff-row" id="simDiffSummary" style="margin-top:14px;padding-top:12px;border-top:1px solid var(--border);justify-content:space-around;"></div>
+                </div>
+            </div>
+
+            <div class="expense-main">
+                <div class="expense-main-header">
+                    <span class="expense-main-title">Dépenses simulées <span id="simExpCount" style="font-size:13px;font-weight:500;color:var(--text-2);"></span></span>
+                    <button class="add-btn" id="simAddBtn" style="background:linear-gradient(135deg,#d97706,#f59e0b);box-shadow:0 3px 10px rgba(245,158,11,0.3);">
+                        <span class="add-btn-plus">+</span> Ajouter
+                    </button>
+                </div>
+                <div class="expense-grid" id="simExpenseGrid"></div>
+                <div class="total-bar">
+                    <span class="total-label">Total mensuel simulé</span>
+                    <span class="total-amount" id="simMonthlyTotal" style="background:linear-gradient(130deg,#d97706,#f59e0b);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">$0</span>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</div><!-- /.page-wrapper -->
+
+<!-- SIM OVERLAY MODAL -->
+<div class="modal-overlay" id="simOverlay">
+    <div class="modal">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;">
+            <div class="modal-title">🔬 Simuler cette dépense</div>
+            <button id="closeSimOverlay" style="background:none;border:none;color:var(--text-2);font-size:20px;cursor:pointer;line-height:1;">×</button>
+        </div>
+        <div id="simModalBody"></div>
+        <div class="modal-actions" style="margin-top:18px;">
+            <button type="button" class="btn-cancel" id="simModalCancel">Annuler</button>
+            <button type="button" class="btn-submit" id="simModalApply" style="background:linear-gradient(135deg,#d97706,#f59e0b);box-shadow:0 4px 14px rgba(245,158,11,0.3);">Appliquer ✓</button>
+        </div>
+    </div>
+</div>
+
+<!-- ADD EXPENSE MODAL -->
+<div class="modal-overlay" id="modalOverlay">
+    <div class="modal modal-wide">
+        <div class="modal-title" id="modal-title">Ajouter une dépense</div>
+        <form id="expenseForm" novalidate>
+            <div class="modal-cols">
+                <!-- LEFT: categories -->
+                <div class="modal-col-left">
+                    <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+                        <label class="form-label" style="margin-bottom:0;">Catégorie</label>
+                        <input type="text" id="catSearch" class="cat-search-input" placeholder="Rechercher…" autocomplete="off">
+                    </div>
+                    <div class="cat-grid cat-grid-left" id="catGrid"></div>
+                    <div class="custom-cat-wrap" id="customCatWrap">
+                        <input id="customCatName" class="form-input" type="text" placeholder="Nom de la catégorie…" autocomplete="off">
+                    </div>
+                </div>
+                <!-- RIGHT: details -->
+                <div class="modal-col-right">
+                    <div id="providerPicker" class="provider-picker" style="display:none;"></div>
+
+                    <div class="form-group">
+                        <div class="icon-name-row">
+                            <label class="form-label" for="eName" id="eNameLabel">Nom de la dépense</label>
+                            <div class="icon-preview" id="iconPreview"></div>
+                        </div>
+                        <input id="eName" class="form-input" type="text" placeholder="ex: Loyer, Netflix, Telus…" required autocomplete="off">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="eAmount" id="amountLabel">Montant ($)</label>
+                        <input id="eAmount" class="form-input" type="number" placeholder="0.00" step="0.01" min="0.01" required>
+                        <div class="amount-hint" id="amountHint"></div>
+                    </div>
+                    <div class="form-group" id="typeFreqGroup">
+                        <label class="form-label" for="eFrequency">Fréquence</label>
+                        <select id="eFrequency" class="form-input">
+                            <option value="mensuel">Mensuel</option>
+                            <option value="annuel">Annuel</option>
+                        </select>
+                    </div>
+                    <div class="form-group" id="recurringToggle" style="margin-bottom:14px;">
+                        <div class="recurring-toggle-row">
+                            <span class="recurring-toggle-label">↻ &nbsp;Dépense récurrente</span>
+                            <div class="recurring-switch"></div>
+                        </div>
+                    </div>
+                    <div class="form-group" id="alertsToggle" style="margin-bottom:14px;">
+                        <div class="alerts-toggle-row active">
+                            <span class="alerts-toggle-label">🔔 &nbsp;Alertes de variation</span>
+                            <div class="alerts-switch"></div>
+                        </div>
+                    </div>
+                    <div class="form-group" style="margin-bottom:0;">
+                        <label class="form-label" for="eNotes">Notes (optionnel)</label>
+                        <textarea id="eNotes" class="form-input" rows="3" placeholder="Détails, rappels…"></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-actions modal-actions-centered">
+                <button type="button" class="btn-cancel" id="closeModal">Annuler</button>
+                <button type="submit" class="btn-submit" id="modal-submit">Ajouter ✓</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- HISTORY MODAL -->
+<div class="modal-overlay" id="historyOverlay">
+    <div class="modal" style="max-width:520px;">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:22px;">
+            <div class="modal-title" id="historyModalTitle">Dépenses — Janvier</div>
+            <button id="closeHistoryModal" style="background:none;border:none;color:var(--text-2);font-size:20px;cursor:pointer;line-height:1;">×</button>
+        </div>
+        <div id="historyTableWrap"></div>
+    </div>
+</div>
+
+
+<!-- STICKY MOBILE CTA -->
+<button class="sticky-add-btn" id="stickyAdd">
+    <span style="font-size:20px;font-weight:300;line-height:1">+</span> Ajouter une dépense
+</button>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<!-- ════════════════════════════════════════════ -->
+<!--  SETTINGS MODAL                             -->
+<!-- ════════════════════════════════════════════ -->
+<div class="settings-overlay" id="settingsOverlay" style="display:none;">
+    <div class="settings-card">
+        <div class="settings-header">
+            <span class="settings-title">Paramètres</span>
+            <button class="settings-close" id="settingsClose">✕</button>
+        </div>
+
+        <div class="settings-section">
+            <div class="settings-section-label">Identité</div>
+            <form id="settingsNameForm" autocomplete="off">
+                <div class="settings-row">
+                    <input type="text" id="sFirstName" class="settings-input" placeholder="Prénom" autocomplete="given-name">
+                    <input type="text" id="sLastName" class="settings-input" placeholder="Nom de famille" autocomplete="family-name">
+                </div>
+                <button type="submit" class="settings-save-btn" id="settingsNameBtn">Enregistrer</button>
+                <div class="settings-msg" id="settingsNameMsg"></div>
+            </form>
+        </div>
+
+        <div class="settings-divider"></div>
+
+        <div class="settings-section">
+            <div class="settings-section-label">Mot de passe</div>
+            <form id="settingsPasswordForm" autocomplete="off">
+                <input type="password" id="sNewPassword" class="settings-input" placeholder="Nouveau mot de passe" autocomplete="new-password">
+                <input type="password" id="sConfirmPassword" class="settings-input" placeholder="Confirmer le mot de passe" autocomplete="new-password">
+                <button type="submit" class="settings-save-btn" id="settingsPasswordBtn">Changer le mot de passe</button>
+                <div class="settings-msg" id="settingsPasswordMsg"></div>
+            </form>
+        </div>
+
+        <div class="settings-divider"></div>
+
+        <div class="settings-section">
+            <div class="settings-section-label">Notifications</div>
+            <div class="settings-toggle-row">
+                <span class="settings-toggle-label">Alertes de hausse de prix</span>
+                <button type="button" class="settings-toggle-btn" id="toggleHikeAlerts" aria-pressed="true"></button>
+            </div>
+            <div class="settings-toggle-row">
+                <span class="settings-toggle-label">Alertes de baisse de prix</span>
+                <button type="button" class="settings-toggle-btn" id="toggleSavingsAlerts" aria-pressed="true"></button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- BUDGET ALERTS PANEL -->
+<div class="settings-overlay" id="budgetAlertsOverlay" style="display:none;">
+    <div class="settings-card">
+        <div class="settings-header">
+            <span class="settings-title">🔔 Alertes de dépenses</span>
+            <button class="settings-close" id="budgetAlertsClose">✕</button>
+        </div>
+        <div class="settings-section">
+            <p style="font-size:12px;color:var(--text-2);margin-bottom:14px;line-height:1.5;">Recevez une alerte lorsque le total mensuel d'une catégorie dépasse votre seuil.</p>
+            <div id="budgetAlertsList"></div>
+            <button type="button" class="settings-save-btn" id="addBudgetAlertBtn" style="margin-top:10px;">+ Ajouter une alerte</button>
+        </div>
+    </div>
+</div>
+
+
+</body>
+</html>
