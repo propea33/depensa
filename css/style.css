@@ -2775,9 +2775,9 @@
             .score-stats { gap: 6px; }
             .score-stat-val { font-size: 15px; }
 
-            /* ── Mobile modal: compact bottom-sheet ───── */
+            /* ── Mobile modal: compact centered sheet ───── */
             #modalOverlay.modal-overlay {
-                padding: 0;
+                padding: 12px 0 0;
                 align-items: flex-end;
             }
             #modalOverlay .modal {
@@ -2787,34 +2787,40 @@
                 border-left: none;
                 border-right: none;
                 border-bottom: none;
-                box-shadow: 0 -10px 28px rgba(0,0,0,0.18);
-                transform: translateY(24px);
-                padding: 14px 12px 10px;
+                box-shadow: 0 -8px 24px rgba(0,0,0,0.15);
+                transform: none;
+                padding: 14px 12px 0;
             }
             #modalOverlay .modal.modal-wide {
                 width: 100%;
                 max-width: 100%;
-                max-height: min(85dvh, 640px);
-                padding: 12px 12px 8px;
+                max-height: 80dvh;
+                padding: 12px 12px 0;
+                display: flex;
+                flex-direction: column;
             }
             #modalOverlay .modal-title {
-                font-size: 14px;
+                font-size: 13px;
                 margin-bottom: 8px;
                 line-height: 1.2;
+                flex-shrink: 0;
             }
             #modalOverlay .modal-cols {
+                flex: 1;
+                min-height: 0;
                 overflow-y: auto;
+                -webkit-overflow-scrolling: touch;
                 padding-right: 0;
-                gap: 10px;
+                gap: 8px;
             }
             #modalOverlay .modal-col-right .form-group,
             #modalOverlay .modal-col-left .form-group {
-                margin-bottom: 8px;
+                margin-bottom: 7px;
             }
             #modalOverlay .modal-actions {
-                margin-top: 8px;
-                padding-top: 8px;
-                padding-bottom: calc(6px + env(safe-area-inset-bottom, 0px));
+                flex-shrink: 0;
+                margin-top: 0;
+                padding: 8px 0 calc(10px + env(safe-area-inset-bottom, 0px));
                 background: var(--bg-card);
                 position: sticky;
                 bottom: 0;
@@ -2828,42 +2834,38 @@
             }
             .form-label {
                 font-size: 10px;
-                margin-bottom: 4px;
+                margin-bottom: 3px;
             }
             .form-input {
                 font-size: 16px;
-                padding: 9px 11px;
+                padding: 8px 10px;
             }
+            /* Category grid: 5 cols, tiny icons */
             .cat-grid-left {
-                grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
-                gap: 5px !important;
+                grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
+                gap: 4px !important;
             }
             .cat-grid-left .cat-btn {
-                padding: 6px 2px;
-                min-height: 50px;
+                padding: 5px 2px 4px;
+                min-height: 0;
+                gap: 2px;
+                border-width: 1.5px;
             }
-            .cat-grid-left .cat-btn-icon { font-size: 15px; }
-            .cat-grid-left .cat-btn-name { font-size: 8px; }
+            .cat-grid-left .cat-btn-icon { font-size: 13px; }
+            .cat-grid-left .cat-btn-name { font-size: 7px; line-height: 1.1; }
+            #modalOverlay .modal-col-left > div:first-child { margin-bottom: 5px !important; }
+            .cat-search-input { font-size: 13px; padding: 6px 9px; }
+            /* Provider grid */
             .provider-grid {
-                grid-template-columns: repeat(4, minmax(0, 1fr));
-                max-height: 120px;
-                gap: 4px;
+                grid-template-columns: repeat(5, minmax(0, 1fr));
+                max-height: 100px;
+                gap: 3px;
             }
-            .provider-btn {
-                padding: 4px 1px 3px;
-            }
-            .provider-name {
-                font-size: 8px;
-                max-width: 100%;
-            }
-            .cat-search-input {
-                font-size: 13px;
-                padding: 7px 10px;
-            }
-            /* Reduce spacing inside modal-col-left */
-            #modalOverlay .modal-col-left > div:first-child {
-                margin-bottom: 6px !important;
-            }
+            .provider-btn { padding: 4px 1px 3px; }
+            .provider-name { font-size: 7.5px; max-width: 100%; }
+            /* Recurring toggle compact */
+            .recurring-toggle-row { padding: 8px 10px; }
+            .recurring-toggle-label { font-size: 12px; }
 
             /* ── Sim donut diff row ───────────────────── */
             .sim-diff-row { gap: 10px; }
