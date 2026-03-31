@@ -19,7 +19,9 @@ function getSelectedExpenses() {
 // Set by main.js after a successful add so we can auto-focus the new card.
 let pendingScrollExpenseId = null;
 const EXPENSE_VIEW_STORAGE_KEY = 'depensa_expense_view';
-let expenseViewMode = localStorage.getItem(EXPENSE_VIEW_STORAGE_KEY) === 'icons' ? 'icons' : 'list';
+const _isMobile = window.matchMedia('(max-width: 700px)').matches;
+const _savedView = localStorage.getItem(EXPENSE_VIEW_STORAGE_KEY);
+let expenseViewMode = _savedView ? _savedView : (_isMobile ? 'list' : 'icons');
 const EXPENSE_SORT_STORAGE_KEY = 'depensa_expense_sort';
 const EXPENSE_SORT_LABELS = {
     categories: 'Par Catégories',
