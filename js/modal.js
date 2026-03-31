@@ -174,7 +174,17 @@ function buildCatGrid() {
             <span class="cat-group-chevron">${isActive ? '▲' : '▼'}</span>
         `;
         groupBtn.addEventListener('click', () => {
-            _activeCatGroup = isActive ? null : group.id;
+            if (isActive) {
+                _activeCatGroup = null;
+            } else {
+                _activeCatGroup = group.id;
+                // Auto-select if only one subcategory
+                const groupCats = allCats().filter(c => group.cats.includes(c.id));
+                if (groupCats.length === 1) {
+                    selCat = groupCats[0].id;
+                    _selectCat(selCat);
+                }
+            }
             buildCatGrid();
         });
         grid.appendChild(groupBtn);
