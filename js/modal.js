@@ -183,7 +183,7 @@ function openAddModal() {
     $('modal-title').textContent  = 'Ajouter une dépense';
     $('modal-submit').textContent = 'Ajouter ✓';
     setRecurring(false);
-    setAlerts(true);
+    setAlerts(false);
     $('eFrequency').value = 'mensuel';
     $('amountHint').classList.remove('visible');
     buildCatGrid();
