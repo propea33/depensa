@@ -1,7 +1,7 @@
 {
-  "updated_at": "2026-03-30T22:47:56Z",
-  "scraped_count": 1,
-  "fallback_count": 8,
+  "updated_at": "2026-03-31T13:45:12Z",
+  "scraped_count": 4,
+  "fallback_count": 5,
   "region": "ca",
   "currency": "CAD",
   "plans": [
@@ -12,8 +12,8 @@
       "currency": "CAD",
       "url": "https://www.netflix.com/ca/",
       "note": "",
-      "scraped_ok": false,
-      "source": "fetch_error",
+      "scraped_ok": true,
+      "source": "http_regex",
       "previous_price": 8.99,
       "delta": 0.0,
       "price_drop": false
@@ -39,7 +39,7 @@
       "url": "https://www.crave.ca/en/subscribe",
       "note": "",
       "scraped_ok": false,
-      "source": "fetch_error",
+      "source": "no_price_found",
       "previous_price": 11.99,
       "delta": 0.0,
       "price_drop": false
@@ -51,8 +51,8 @@
       "currency": "CAD",
       "url": "https://www.disneyplus.com/en-ca",
       "note": "",
-      "scraped_ok": false,
-      "source": "fetch_error",
+      "scraped_ok": true,
+      "source": "http_regex",
       "previous_price": 8.99,
       "delta": 0.0,
       "price_drop": false
@@ -78,7 +78,7 @@
       "url": "https://ici.tou.tv/abonnement",
       "note": "",
       "scraped_ok": false,
-      "source": "fetch_error",
+      "source": "no_price_found",
       "previous_price": 7.99,
       "delta": 0.0,
       "price_drop": false
@@ -90,8 +90,8 @@
       "currency": "CAD",
       "url": "https://tv.apple.com/ca",
       "note": "",
-      "scraped_ok": false,
-      "source": "fetch_error",
+      "scraped_ok": true,
+      "source": "http_regex",
       "previous_price": 14.99,
       "delta": 0.0,
       "price_drop": false
@@ -104,7 +104,7 @@
       "url": "https://www.paramountplus.com/ca/",
       "note": "",
       "scraped_ok": false,
-      "source": "fetch_error",
+      "source": "out_of_range",
       "previous_price": 8.99,
       "delta": 0.0,
       "price_drop": false
