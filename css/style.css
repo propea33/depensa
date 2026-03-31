@@ -2371,6 +2371,22 @@
         }
         .savings-share-btn:hover { background: #dcece4; border-color: #b7d1c4; }
         .savings-share-btn:active { background: #d4e6dd; }
+        .savings-never-btn {
+            flex-shrink: 0;
+            padding: 5px 10px;
+            font-size: 10px; font-weight: 700; letter-spacing: .01em;
+            color: #3d6a54;
+            background: transparent;
+            border: 1.5px dashed #a7c9b8;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: border-color 0.15s, background 0.15s;
+            font-family: 'DM Sans', sans-serif;
+            white-space: nowrap;
+        }
+        .savings-never-btn:hover { background: rgba(33,95,73,0.07); border-color: #88b5a0; }
+        [data-theme="dark"] .savings-never-btn { color: #a3e4c7; border-color: #3d6a5a; }
+        [data-theme="dark"] .savings-never-btn:hover { background: rgba(163,228,199,0.07); }
         .share-popover {
             position: absolute; bottom: calc(100% + 8px); right: 0;
             background: #fffdf9;

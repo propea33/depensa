@@ -211,7 +211,7 @@ function renderExpenses() {
         grid.parentElement.insertBefore(savingsBanner, hikeBanner);
     }
     if (!isPast && prefs.savingsAlertsEnabled) {
-        const pendingSavings = detectSavings().filter(s => !dismissedSavingsIds.has(s.id));
+        const pendingSavings = detectSavings().filter(s => !dismissedSavingsIds.has(s.id) && !neverSavingsIds.has(s.id));
         savingsBanner.innerHTML = pendingSavings.map(s => `
             <div class="savings-alert-banner" data-savings-id="${s.id}">
                 <span class="savings-icon">🎉</span>
@@ -222,12 +222,22 @@ function renderExpenses() {
                         Partager
                     </button>
                     <button class="savings-dismiss-btn" data-savings-id="${s.id}">✓ Merci!</button>
+                    <button class="savings-never-btn" data-savings-id="${s.id}">Ne plus jamais m'afficher</button>
                 </div>
             </div>`).join('');
 
         savingsBanner.querySelectorAll('.savings-dismiss-btn').forEach(btn => {
             btn.addEventListener('click', () => {
                 dismissedSavingsIds.add(Number(btn.dataset.savingsId));
+                renderExpenses();
+            });
+        });
+
+        savingsBanner.querySelectorAll('.savings-never-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const sid = Number(btn.dataset.savingsId);
+                saveNeverSavingsId(sid);
+                neverSavingsIds.add(sid);
                 renderExpenses();
             });
         });

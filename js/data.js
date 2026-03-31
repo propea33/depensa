@@ -447,6 +447,18 @@ function saveNeverHikeId(id) {
 }
 const neverHikeIds = loadNeverHikeIds();
 
+// Persistent: expense IDs for which user never wants savings alerts again
+const NEVER_SAVINGS_KEY = 'depensa_never_savings_ids';
+function loadNeverSavingsIds() {
+    try { return new Set(JSON.parse(localStorage.getItem(NEVER_SAVINGS_KEY) || '[]')); } catch (_) { return new Set(); }
+}
+function saveNeverSavingsId(id) {
+    const s = loadNeverSavingsIds();
+    s.add(id);
+    localStorage.setItem(NEVER_SAVINGS_KEY, JSON.stringify([...s]));
+}
+const neverSavingsIds = loadNeverSavingsIds();
+
 // Alert preferences (global toggles)
 const ALERT_PREFS_KEY = 'depensa_alert_prefs';
 function loadAlertPrefs() {
