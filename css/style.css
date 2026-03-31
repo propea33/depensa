@@ -3086,6 +3086,59 @@
             font-size: 13px; color: var(--red); font-weight: 600; margin-bottom: 8px;
             animation: popIn 0.25s ease both;
         }
+        .budget-alert-exceeded span { flex: 1; }
+        .budget-alert-ok-btn {
+            flex-shrink: 0; padding: 4px 10px;
+            font-size: 11px; font-weight: 700; font-family: 'DM Sans', sans-serif;
+            color: #9b1c1c; background: rgba(220,38,38,0.08); border: 1.5px solid rgba(220,38,38,0.3);
+            border-radius: 7px; cursor: pointer;
+            transition: background 0.15s, border-color 0.15s;
+        }
+        .budget-alert-ok-btn:hover { background: rgba(220,38,38,0.15); border-color: rgba(220,38,38,0.5); }
+
+        /* Hike banner button group */
+        .hike-btns { display: flex; gap: 6px; flex-shrink: 0; align-items: center; }
+        .hike-never-btn {
+            flex-shrink: 0;
+            padding: 5px 10px;
+            font-size: 10px; font-weight: 700; letter-spacing: .01em;
+            color: #7a3030;
+            background: transparent;
+            border: 1.5px dashed #d9b8ab;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: border-color 0.15s, background 0.15s;
+            font-family: 'DM Sans', sans-serif;
+            white-space: nowrap;
+        }
+        .hike-never-btn:hover { background: rgba(74,43,35,0.07); border-color: #c0a090; }
+        [data-theme="dark"] .hike-never-btn { color: #ffc4b0; border-color: #6a4038; }
+        [data-theme="dark"] .hike-never-btn:hover { background: rgba(255,200,180,0.07); }
+
+        /* Settings notification toggles */
+        .settings-toggle-row {
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 10px 0; border-bottom: 1px solid var(--border-light, rgba(0,0,0,0.07));
+        }
+        .settings-toggle-row:last-child { border-bottom: none; }
+        .settings-toggle-label { font-size: 13px; font-weight: 500; color: var(--text); }
+        .settings-toggle-btn {
+            position: relative; width: 40px; height: 22px; border-radius: 100px;
+            border: 2px solid var(--border); background: #d1d5db; cursor: pointer;
+            transition: background 0.2s, border-color 0.2s; flex-shrink: 0;
+        }
+        .settings-toggle-btn::after {
+            content: ''; position: absolute; top: 1px; left: 1px;
+            width: 16px; height: 16px; border-radius: 50%;
+            background: #fff; transition: transform 0.2s;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+        }
+        .settings-toggle-btn[aria-pressed="true"] {
+            background: var(--accent); border-color: var(--accent);
+        }
+        .settings-toggle-btn[aria-pressed="true"]::after { transform: translateX(18px); }
+        [data-theme="dark"] .settings-toggle-btn { background: #374151; border-color: var(--border); }
+        [data-theme="dark"] .settings-toggle-btn[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); }
 
         .settings-msg { font-size: 12px; margin-top: 8px; }
         .settings-msg.ok  { color: var(--green); }

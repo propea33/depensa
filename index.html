@@ -7,11 +7,11 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="./css/style.css?v=20260387">
+    <link rel="stylesheet" href="./css/style.css?v=20260388">
     <link rel="stylesheet" href="./css/onboarding.css?v=20260345">
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="./js/data.js?v=20260372" defer></script>
+    <script src="./js/data.js?v=20260388" defer></script>
     <script src="./js/utils.js?v=20260373" defer></script>
     <script src="./js/icons.js?v=20260345" defer></script>
     <script src="./js/db.js?v=20260345" defer></script>
@@ -19,9 +19,9 @@
     <script src="./js/months.js?v=20260345" defer></script>
     <script src="./js/charts.js?v=20260373" defer></script>
     <script src="./js/modal.js?v=20260386" defer></script>
-    <script src="./js/ui.js?v=20260387" defer></script>
+    <script src="./js/ui.js?v=20260388" defer></script>
     <script src="./js/onboarding.js?v=20260373" defer></script>
-    <script src="./js/main.js?v=20260387" defer></script>
+    <script src="./js/main.js?v=20260388" defer></script>
 </head>
 <body>
 
@@ -487,6 +487,20 @@
                 <button type="submit" class="settings-save-btn" id="settingsPasswordBtn">Changer le mot de passe</button>
                 <div class="settings-msg" id="settingsPasswordMsg"></div>
             </form>
+        </div>
+
+        <div class="settings-divider"></div>
+
+        <div class="settings-section">
+            <div class="settings-section-label">Notifications</div>
+            <div class="settings-toggle-row">
+                <span class="settings-toggle-label">Alertes de hausse de prix</span>
+                <button type="button" class="settings-toggle-btn" id="toggleHikeAlerts" aria-pressed="true"></button>
+            </div>
+            <div class="settings-toggle-row">
+                <span class="settings-toggle-label">Alertes de baisse de prix</span>
+                <button type="button" class="settings-toggle-btn" id="toggleSavingsAlerts" aria-pressed="true"></button>
+            </div>
         </div>
     </div>
 </div>

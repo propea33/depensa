@@ -176,18 +176,27 @@ function renderExpenses() {
         hikeBanner.id = 'hikeBanner';
         grid.parentElement.insertBefore(hikeBanner, grid);
     }
-    const pendingHikes = hikes.filter(h => !dismissedHikeIds.has(h.id));
-    if (pendingHikes.length > 0) {
+    const prefs = loadAlertPrefs();
+    const pendingHikes = hikes.filter(h => !dismissedHikeIds.has(h.id) && !neverHikeIds.has(h.id));
+    if (prefs.hikeAlertsEnabled && pendingHikes.length > 0) {
         const h = pendingHikes[0];
         const counter = pendingHikes.length > 1 ? `<span class="hike-counter">${pendingHikes.length} alertes</span>` : '';
         hikeBanner.innerHTML = `<div class="hike-alert-banner">
             <span class="hike-icon">⚠️</span>
             <div class="hike-text">Hausse détectée sur <strong>${h.name}</strong> (+${Math.round(h.pct * 100)}% vs mois dernier) — Vérifie ton contrat ou compare les offres.</div>
             ${counter}
-            <button class="hike-dismiss-btn" data-hike-id="${h.id}">Ok</button>
+            <div class="hike-btns">
+                <button class="hike-dismiss-btn" data-hike-id="${h.id}">Ok</button>
+                <button class="hike-never-btn" data-hike-id="${h.id}">Ne plus jamais m'avertir</button>
+            </div>
         </div>`;
         hikeBanner.querySelector('.hike-dismiss-btn').addEventListener('click', () => {
             dismissedHikeIds.add(h.id);
+            renderExpenses();
+        });
+        hikeBanner.querySelector('.hike-never-btn').addEventListener('click', () => {
+            saveNeverHikeId(h.id);
+            neverHikeIds.add(h.id);
             renderExpenses();
         });
     } else {
@@ -201,7 +210,7 @@ function renderExpenses() {
         savingsBanner.id = 'savingsBanner';
         grid.parentElement.insertBefore(savingsBanner, hikeBanner);
     }
-    if (!isPast) {
+    if (!isPast && prefs.savingsAlertsEnabled) {
         const pendingSavings = detectSavings().filter(s => !dismissedSavingsIds.has(s.id));
         savingsBanner.innerHTML = pendingSavings.map(s => `
             <div class="savings-alert-banner" data-savings-id="${s.id}">

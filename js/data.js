@@ -432,8 +432,29 @@ const MONTH_LABELS = {};
 // Optimization score state
 let savingsGoal = 150;
 let appliedRecs  = new Set();
-let dismissedHikeIds    = new Set(); // hike alert IDs dismissed by user
+let dismissedHikeIds    = new Set(); // hike alert IDs dismissed by user (session)
 let dismissedSavingsIds = new Set(); // savings alert IDs dismissed by user
+
+// Persistent: expense IDs for which user never wants hike alerts again
+const NEVER_HIKE_KEY = 'depensa_never_hike_ids';
+function loadNeverHikeIds() {
+    try { return new Set(JSON.parse(localStorage.getItem(NEVER_HIKE_KEY) || '[]')); } catch (_) { return new Set(); }
+}
+function saveNeverHikeId(id) {
+    const s = loadNeverHikeIds();
+    s.add(id);
+    localStorage.setItem(NEVER_HIKE_KEY, JSON.stringify([...s]));
+}
+const neverHikeIds = loadNeverHikeIds();
+
+// Alert preferences (global toggles)
+const ALERT_PREFS_KEY = 'depensa_alert_prefs';
+function loadAlertPrefs() {
+    try { return { hikeAlertsEnabled: true, savingsAlertsEnabled: true, ...JSON.parse(localStorage.getItem(ALERT_PREFS_KEY) || '{}') }; } catch (_) { return { hikeAlertsEnabled: true, savingsAlertsEnabled: true }; }
+}
+function saveAlertPrefs(prefs) {
+    localStorage.setItem(ALERT_PREFS_KEY, JSON.stringify(prefs));
+}
 
 // Simulation state
 let simulationMode = false;

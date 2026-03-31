@@ -305,6 +305,14 @@ $('logoutBtn').addEventListener('click', async () => {
 // Forcer hidden au démarrage (indépendant du CSS/cache)
 $('settingsOverlay').style.display = 'none';
 
+function _syncAlertToggles() {
+    const prefs = loadAlertPrefs();
+    const hikeBtn    = $('toggleHikeAlerts');
+    const savingsBtn = $('toggleSavingsAlerts');
+    if (hikeBtn)    hikeBtn.setAttribute('aria-pressed', prefs.hikeAlertsEnabled ? 'true' : 'false');
+    if (savingsBtn) savingsBtn.setAttribute('aria-pressed', prefs.savingsAlertsEnabled ? 'true' : 'false');
+}
+
 function _openSettings() {
     _avatarMenuOpen = false;
     $('avatarMenu').style.display = 'none';
@@ -316,6 +324,7 @@ function _openSettings() {
     $('settingsNameMsg').className = 'settings-msg';
     $('settingsPasswordMsg').textContent = '';
     $('settingsPasswordMsg').className = 'settings-msg';
+    _syncAlertToggles();
     $('settingsOverlay').style.display = 'flex';
 }
 
@@ -327,6 +336,22 @@ $('settingsBtn').addEventListener('click', _openSettings);
 $('settingsClose').addEventListener('click', _closeSettings);
 $('settingsOverlay').addEventListener('click', e => {
     if (e.target === $('settingsOverlay')) _closeSettings();
+});
+
+$('toggleHikeAlerts')?.addEventListener('click', () => {
+    const prefs = loadAlertPrefs();
+    prefs.hikeAlertsEnabled = !prefs.hikeAlertsEnabled;
+    saveAlertPrefs(prefs);
+    _syncAlertToggles();
+    renderExpenses();
+});
+
+$('toggleSavingsAlerts')?.addEventListener('click', () => {
+    const prefs = loadAlertPrefs();
+    prefs.savingsAlertsEnabled = !prefs.savingsAlertsEnabled;
+    saveAlertPrefs(prefs);
+    _syncAlertToggles();
+    renderExpenses();
 });
 
 // ─── Budget alerts panel ───────────────────────────────
@@ -409,6 +434,8 @@ $('addBudgetAlertBtn')?.addEventListener('click', () => {
     _renderBudgetAlerts();
 });
 
+const dismissedBudgetAlertKeys = new Set();
+
 function checkBudgetAlerts() {
     const alerts = _loadBudgetAlerts();
     if (!alerts.length) return;
@@ -441,10 +468,15 @@ function checkBudgetAlerts() {
 
     alerts.forEach(a => {
         const total = totals[a.cat] || 0;
-        if (a.amount > 0 && total > a.amount) {
+        const key = a.cat;
+        if (a.amount > 0 && total > a.amount && !dismissedBudgetAlertKeys.has(key)) {
             const div = document.createElement('div');
             div.className = 'budget-alert-exceeded';
-            div.innerHTML = `⚠️ <span><strong>${GROUP_LABELS[a.cat] || a.cat}</strong> : ${fmt(total)} / limite ${fmt(a.amount)}</span>`;
+            div.innerHTML = `⚠️ <span><strong>${GROUP_LABELS[a.cat] || a.cat}</strong> : ${fmt(total)} / limite ${fmt(a.amount)}</span><button class="budget-alert-ok-btn">Ok</button>`;
+            div.querySelector('.budget-alert-ok-btn').addEventListener('click', () => {
+                dismissedBudgetAlertKeys.add(key);
+                div.remove();
+            });
             container.appendChild(div);
         }
     });
