@@ -1,7 +1,7 @@
 {
-  "updated_at": "2026-03-31T01:31:42Z",
-  "scraped_count": 2,
-  "fallback_count": 3,
+  "updated_at": "2026-03-31T14:01:03Z",
+  "scraped_count": 1,
+  "fallback_count": 4,
   "region": "ca",
   "currency": "CAD",
   "plans": [
@@ -25,8 +25,8 @@
       "currency": "CAD",
       "url": "https://www.progym.ca/abonnements/",
       "note": "Prix par 2 semaines converti en mensuel",
-      "scraped_ok": true,
-      "source": "progym_biweekly_to_monthly",
+      "scraped_ok": false,
+      "source": "fetch_error",
       "previous_price": 23.81,
       "delta": 0.0,
       "price_drop": false
@@ -40,8 +40,8 @@
       "note": "Prix variable selon centre; estimation locale (pas de tarif mensuel public national)",
       "scraped_ok": false,
       "source": "no_public_monthly_price",
-      "previous_price": 35.0,
-      "delta": 23.0,
+      "previous_price": 58.0,
+      "delta": 0.0,
       "price_drop": false
     },
     {
@@ -53,8 +53,8 @@
       "note": "Prix variable selon succursale; estimation locale (pas de tarif mensuel public national)",
       "scraped_ok": false,
       "source": "no_public_monthly_price",
-      "previous_price": 30.0,
-      "delta": 4.99,
+      "previous_price": 34.99,
+      "delta": 0.0,
       "price_drop": false
     },
     {
@@ -66,8 +66,8 @@
       "note": "Prix variable selon club; estimation locale (pas de tarif mensuel public national)",
       "scraped_ok": false,
       "source": "no_public_monthly_price",
-      "previous_price": 28.0,
-      "delta": 1.99,
+      "previous_price": 29.99,
+      "delta": 0.0,
       "price_drop": false
     }
   ],
