@@ -741,12 +741,14 @@
             border: 2px solid var(--border-2);
             background: var(--bg-input);
             cursor: pointer;
-            transition: border-color 0.15s, background 0.15s;
+            transition: border-color 0.15s, background 0.15s, box-shadow 0.15s, transform 0.15s;
             min-width: 0;
         }
 
         .provider-btn:hover {
             border-color: var(--border);
+            box-shadow: 3px 3px 0 #0a0a0a;
+            transform: translate(-1px, -1px);
         }
 
         .provider-btn.sel {
@@ -1571,11 +1573,11 @@
             border: 2px solid var(--border-2);
             border-radius: var(--radius-sm);
             cursor: pointer;
-            transition: border-color 0.15s, background 0.15s;
+            transition: border-color 0.15s, background 0.15s, box-shadow 0.15s, transform 0.15s;
             color: var(--text);
         }
 
-        .cat-btn:hover { border-color: var(--border); }
+        .cat-btn:hover { border-color: var(--border); box-shadow: 3px 3px 0 #0a0a0a; transform: translate(-1px, -1px); }
 
         .cat-btn.sel {
             border-color: var(--border);
