@@ -29,7 +29,7 @@
             --bg-card:       #1a1f26;
             --bg-card-hover: #232a33;
             --bg-input:      #202631;
-            --border:        #e5e7eb;
+            --border:        #4a5568;
             --border-2:      #3a4453;
             --border-focus:  #a78bfa;
             --text:          #f5f7fb;
@@ -1812,6 +1812,18 @@
         [data-theme="dark"] #modalOverlay .btn-cancel:hover { background: #2a3040; }
         [data-theme="dark"] #modalOverlay .form-input::placeholder,
         [data-theme="dark"] #modalOverlay .cat-search-input::placeholder { color: #7f8ca1; }
+        [data-theme="dark"] #modalOverlay .btn-submit { background: #6d28d9; border-color: #5b21b6; }
+
+        /* ── Dark mode: accent-bg elements use deeper purple ── */
+        [data-theme="dark"] .add-btn,
+        [data-theme="dark"] .sticky-add-btn { background: #6d28d9; border-color: #5b21b6; }
+        [data-theme="dark"] .avatar { background: #6d28d9; border-color: #5b21b6; }
+        [data-theme="dark"] .month-tab.active { background: #5b21b6; border-color: #4c1d95; color: #f5f7fb; }
+        [data-theme="dark"] .section-badge { background: #5b21b6; border-color: #4c1d95; }
+        [data-theme="dark"] .action-btn-edit { background: #6d28d9; border-color: #5b21b6; }
+        [data-theme="dark"] .action-btn-del { background: #202631; }
+        [data-theme="dark"] .action-btn { border-color: #3a4453; box-shadow: 2px 2px 0 #0a0d12; }
+        [data-theme="dark"] .action-btn:hover { box-shadow: 3px 3px 0 #0a0d12; }
 
         /* ─── MONTH TABS ─────────────────────────────── */
 
