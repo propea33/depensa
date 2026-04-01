@@ -11,7 +11,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="./css/style.css?v=20260392">
+    <link rel="stylesheet" href="./css/style.css?v=20260398">
     <link rel="stylesheet" href="./css/onboarding.css?v=20260345">
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -375,65 +375,94 @@
 
 <!-- ADD EXPENSE MODAL -->
 <div class="modal-overlay" id="modalOverlay">
-    <div class="modal modal-wide">
-        <div class="modal-title" id="modal-title">Ajouter une dépense</div>
+    <div class="modal modal-wide nb-modal">
+
+        <!-- ── Brutalist header ── -->
+        <div class="nb-hd">
+            <span class="nb-hd-title" id="modal-title">Ajouter une dépense</span>
+            <button type="button" class="nb-hd-x" onclick="closeModal()">✕</button>
+        </div>
+
         <form id="expenseForm" novalidate>
-            <div class="modal-cols">
-                <!-- LEFT: categories -->
-                <div class="modal-col-left">
-                    <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
-                        <label class="form-label" style="margin-bottom:0;">Catégorie</label>
-                        <input type="text" id="catSearch" class="cat-search-input" placeholder="Rechercher…" autocomplete="off">
+            <div class="nb-body">
+
+                <!-- Catégorie -->
+                <div class="nb-field">
+                    <div class="nb-field-top">
+                        <span class="nb-label">Catégorie</span>
+                        <input type="text" id="catSearch" class="nb-cat-search" placeholder="Filtrer…" autocomplete="off">
                     </div>
-                    <div class="cat-grid cat-grid-left" id="catGrid"></div>
+                    <div class="cat-grid nb-cat-grid" id="catGrid"></div>
                     <div class="custom-cat-wrap" id="customCatWrap">
-                        <input id="customCatName" class="form-input" type="text" placeholder="Nom de la catégorie…" autocomplete="off">
+                        <input id="customCatName" class="nb-input" type="text" placeholder="Nom de la catégorie…" autocomplete="off">
                     </div>
                 </div>
-                <!-- RIGHT: details -->
-                <div class="modal-col-right">
-                    <div id="providerPicker" class="provider-picker" style="display:none;"></div>
 
-                    <div class="form-group">
-                        <div class="icon-name-row">
-                            <label class="form-label" for="eName" id="eNameLabel">Nom de la dépense</label>
-                            <div class="icon-preview" id="iconPreview"></div>
-                        </div>
-                        <input id="eName" class="form-input" type="text" placeholder="ex: Loyer, Netflix, Telus…" required autocomplete="off">
+                <!-- Provider picker -->
+                <div id="providerPicker" class="provider-picker" style="display:none;"></div>
+
+                <!-- Nom -->
+                <div class="nb-field">
+                    <div class="nb-icon-row">
+                        <span class="nb-label" id="eNameLabel">Nom de la dépense</span>
+                        <div class="icon-preview" id="iconPreview"></div>
                     </div>
-                    <div class="form-group">
-                        <label class="form-label" for="eAmount" id="amountLabel">Montant ($)</label>
-                        <input id="eAmount" class="form-input" type="number" placeholder="0.00" step="0.01" min="0.01" required>
+                    <input id="eName" class="nb-input nb-input-lg" type="text" placeholder="ex: Loyer, Netflix, Telus…" required autocomplete="off">
+                </div>
+
+                <!-- Montant + Fréquence -->
+                <div class="nb-grid-2">
+                    <div class="nb-field">
+                        <span class="nb-label" id="amountLabel">Montant ($)</span>
+                        <div class="nb-money-wrap">
+                            <span class="nb-dollar">$</span>
+                            <input id="eAmount" class="nb-input nb-input-lg nb-money-input" type="number" placeholder="0.00" step="0.01" min="0.01" required>
+                        </div>
                         <div class="amount-hint" id="amountHint"></div>
                     </div>
-                    <div class="form-group" id="typeFreqGroup">
-                        <label class="form-label" for="eFrequency">Fréquence</label>
-                        <select id="eFrequency" class="form-input">
+                    <div class="nb-field" id="typeFreqGroup">
+                        <span class="nb-label">Fréquence</span>
+                        <select id="eFrequency" class="nb-input nb-input-lg">
                             <option value="mensuel">Mensuel</option>
                             <option value="annuel">Annuel</option>
                         </select>
                     </div>
-                    <div class="form-group" id="recurringToggle" style="margin-bottom:14px;">
-                        <div class="recurring-toggle-row">
-                            <span class="recurring-toggle-label">↻ &nbsp;Dépense récurrente</span>
-                            <div class="recurring-switch"></div>
+                </div>
+
+                <!-- Toggles -->
+                <div class="nb-toggles">
+                    <div id="recurringToggle">
+                        <div class="recurring-toggle-row nb-toggle">
+                            <div class="nb-toggle-left">
+                                <span class="nb-toggle-ico nb-toggle-ico-purple">↻</span>
+                                <span class="recurring-toggle-label">Dépense récurrente</span>
+                            </div>
+                            <div class="recurring-switch nb-switch"></div>
                         </div>
                     </div>
-                    <div class="form-group" id="alertsToggle" style="margin-bottom:14px;">
-                        <div class="alerts-toggle-row active">
-                            <span class="alerts-toggle-label">🔔 &nbsp;Alertes de variation</span>
-                            <div class="alerts-switch"></div>
+                    <div id="alertsToggle">
+                        <div class="alerts-toggle-row nb-toggle">
+                            <div class="nb-toggle-left">
+                                <span class="nb-toggle-ico nb-toggle-ico-amber">🔔</span>
+                                <span class="alerts-toggle-label">Alertes de variation</span>
+                            </div>
+                            <div class="alerts-switch nb-switch"></div>
                         </div>
-                    </div>
-                    <div class="form-group" style="margin-bottom:0;">
-                        <label class="form-label" for="eNotes">Notes (optionnel)</label>
-                        <textarea id="eNotes" class="form-input" rows="3" placeholder="Détails, rappels…"></textarea>
                     </div>
                 </div>
+
+                <!-- Notes -->
+                <div class="nb-field">
+                    <span class="nb-label">Notes (optionnel)</span>
+                    <textarea id="eNotes" class="nb-input" rows="3" placeholder="Détails, rappels…"></textarea>
+                </div>
+
             </div>
-            <div class="modal-actions modal-actions-centered">
-                <button type="button" class="btn-cancel" id="closeModal">Annuler</button>
-                <button type="submit" class="btn-submit" id="modal-submit">Ajouter ✓</button>
+
+            <!-- Footer -->
+            <div class="nb-ft modal-actions modal-actions-centered">
+                <button type="button" class="btn-cancel nb-cancel" id="closeModal">Annuler</button>
+                <button type="submit" class="btn-submit nb-submit" id="modal-submit">Ajouter ✓</button>
             </div>
         </form>
     </div>
