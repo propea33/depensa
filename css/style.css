@@ -1152,7 +1152,7 @@
             padding: 4px 8px;
             font-size: 11px;
         }
-        .ctip-pill-icon { font-size: 12px; flex-shrink: 0; line-height: 1; }
+        .ctip-pill-icon { font-size: 12px; flex-shrink: 0; line-height: 1; display: flex; align-items: center; }
         .ctip-pill-name { flex: 1; color: var(--text-2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
         .ctip-pill-amount { color: var(--text); font-weight: 600; white-space: nowrap; }
         .ctip-hint {
