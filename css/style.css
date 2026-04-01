@@ -1433,7 +1433,7 @@
 
         /* Add-expense modal: keep footer actions always visible */
         #modalOverlay .modal.modal-wide {
-            max-height: calc(100dvh - 40px);
+            max-height: calc(100dvh - 24px);
             display: flex;
             flex-direction: column;
             overflow: hidden;
@@ -1788,8 +1788,8 @@
         #modalOverlay .recurring-toggle-row,
         #modalOverlay .alerts-toggle-row { background: #F6F3ED; }
         #modalOverlay .modal-actions { background: #F6F3ED; }
-        #modalOverlay .btn-cancel { background: #F6F3ED; }
-        #modalOverlay .btn-cancel:hover { background: #ede9e0; color: var(--text); }
+        #modalOverlay .btn-cancel { background: #fff; }
+        #modalOverlay .btn-cancel:hover { background: #f5f2eb; color: var(--text); }
         #modalOverlay .btn-submit { background: var(--accent); }
 
         /* ─── MONTH TABS ─────────────────────────────── */
