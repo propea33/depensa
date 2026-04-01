@@ -1586,7 +1586,7 @@
             transform: translate(-1px, -1px);
         }
 
-        .cat-btn-icon { font-size: 20px; line-height: 1; }
+        .cat-btn-icon { font-size: 20px; line-height: 1; display: flex; align-items: center; justify-content: center; }
         .cat-btn-name { font-size: 9.5px; color: var(--text-2); text-align: center; line-height: 1.2; }
 
         /* ── Grouped category selector ──────────────────── */

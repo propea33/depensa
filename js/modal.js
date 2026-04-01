@@ -110,7 +110,7 @@ function buildCatGrid() {
         const btn = document.createElement('button');
         btn.type      = 'button';
         btn.className = 'cat-btn' + (cat.id === selCat ? ' sel' : '');
-        btn.innerHTML = `<span class="cat-btn-icon">${cat.icon}</span><span class="cat-btn-name">${cat.name}</span>`;
+        btn.innerHTML = `<span class="cat-btn-icon">${catIconSVG(cat.id, 20)}</span><span class="cat-btn-name">${cat.name}</span>`;
         btn.addEventListener('click', () => {
             selCat = cat.id;
             grid.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('sel'));

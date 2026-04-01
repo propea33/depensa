@@ -504,9 +504,8 @@ function getExpenseIconHTML(name, catId) {
     const cat = getCAT(catId);
     const url = getExpenseIcon(name, catId);
 
-    if (!url || _iconLoadCache.get(url) === 'error') return cat.icon;
-
-    const fb = cat.icon.replace(/`/g, '\\`');
+    const svgFallback = catIconSVG(catId, 22, cat.color);
+    if (!url || _iconLoadCache.get(url) === 'error') return svgFallback;
 
     const imgStyle = 'width:22px;height:22px;max-width:22px;max-height:22px;object-fit:contain;display:block;flex-shrink:0;border-radius:5px;';
 
@@ -514,9 +513,10 @@ function getExpenseIconHTML(name, catId) {
         return `<img src="${url}" class="expense-img-icon" width="22" height="22" style="${imgStyle}" alt="">`;
     }
 
+    const fb = cat.icon.replace(/`/g, '\\`');
     return `<img src="${url}" class="expense-img-icon" width="22" height="22" style="${imgStyle}" alt=""
         onload="_iconLoadCache.set('${url}','ok')"
-        onerror="_iconLoadCache.set('${url}','error');this.replaceWith(document.createTextNode(\`${fb}\`))">`;
+        onerror="_iconLoadCache.set('${url}','error');this.outerHTML=catIconSVG('${catId}',22,'${cat.color}')">`;
 }
 
 /**
@@ -530,12 +530,11 @@ function refreshIconPreview() {
     const url  = getExpenseIcon(name, selCat);
 
     if (!name.trim() || !url || _iconLoadCache.get(url) === 'error') {
-        preview.innerHTML = `<span class="icon-preview-emoji">${cat.icon}</span>`;
+        preview.innerHTML = `<span class="icon-preview-emoji">${catIconSVG(selCat, 28, cat.color)}</span>`;
         return;
     }
 
-    const fb = cat.icon.replace(/`/g, '\\`');
     preview.innerHTML = `<img src="${url}" class="icon-preview-img" alt=""
         onload="_iconLoadCache.set('${url}','ok')"
-        onerror="_iconLoadCache.set('${url}','error');this.replaceWith(document.createTextNode(\`${fb}\`))">`;
+        onerror="_iconLoadCache.set('${url}','error');this.outerHTML='<span class=icon-preview-emoji>'+catIconSVG('${selCat}',28,'${cat.color}')+'</span>'">`;
 }
