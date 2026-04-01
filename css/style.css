@@ -1779,7 +1779,7 @@
 
         .btn-submit:hover { transform: translate(-1px,-1px); box-shadow: 4px 4px 0 var(--border); }
 
-        /* ─── ADD-EXPENSE MODAL: beige bg, white fields ─ */
+        /* ─── ADD-EXPENSE MODAL: beige bg, white fields (light) ─ */
         #modalOverlay .modal { background: #F6F3ED; }
         #modalOverlay .form-input,
         #modalOverlay .cat-search-input { background: #fff; }
@@ -1793,6 +1793,25 @@
         #modalOverlay .btn-cancel { background: #fff; }
         #modalOverlay .btn-cancel:hover { background: #f5f2eb; color: var(--text); }
         #modalOverlay .btn-submit { background: var(--accent); }
+
+        /* ─── ADD-EXPENSE MODAL: dark mode overrides ─── */
+        [data-theme="dark"] #modalOverlay .modal { background: #1a1f26; }
+        [data-theme="dark"] #modalOverlay .form-input,
+        [data-theme="dark"] #modalOverlay .cat-search-input { background: #202631; border-color: #3a4453; color: var(--text); }
+        [data-theme="dark"] #modalOverlay .cat-btn { background: #202631 !important; border-color: #3a4453 !important; }
+        [data-theme="dark"] #modalOverlay .cat-btn:hover { border-color: #a78bfa !important; }
+        [data-theme="dark"] #modalOverlay .cat-btn.sel { background: rgba(167,139,250,0.15) !important; border-color: #a78bfa !important; }
+        [data-theme="dark"] #modalOverlay .provider-btn { background: #202631 !important; border-color: #3a4453 !important; }
+        [data-theme="dark"] #modalOverlay .icon-preview { background: #202631; border-color: #3a4453; }
+        [data-theme="dark"] #modalOverlay .recurring-toggle-row,
+        [data-theme="dark"] #modalOverlay .alerts-toggle-row { background: #202631; border-color: #3a4453; }
+        [data-theme="dark"] #modalOverlay .recurring-toggle-row.active,
+        [data-theme="dark"] #modalOverlay .alerts-toggle-row.active { background: rgba(167,139,250,0.08); border-color: #a78bfa; }
+        [data-theme="dark"] #modalOverlay .modal-actions { background: #1a1f26; border-top-color: #3a4453; }
+        [data-theme="dark"] #modalOverlay .btn-cancel { background: #202631; color: var(--text); border-color: #3a4453; }
+        [data-theme="dark"] #modalOverlay .btn-cancel:hover { background: #2a3040; }
+        [data-theme="dark"] #modalOverlay .form-input::placeholder,
+        [data-theme="dark"] #modalOverlay .cat-search-input::placeholder { color: #7f8ca1; }
 
         /* ─── MONTH TABS ─────────────────────────────── */
 
