@@ -1783,8 +1783,10 @@
         #modalOverlay .modal { background: #F6F3ED; }
         #modalOverlay .form-input,
         #modalOverlay .cat-search-input { background: #fff; }
-        #modalOverlay .cat-btn { background: #fff !important; }
+        #modalOverlay .cat-btn { background: #fff !important; border-color: var(--border-2) !important; }
         #modalOverlay .cat-btn.sel { background: rgba(124,58,237,0.08) !important; }
+        #modalOverlay .provider-btn { background: #fff !important; }
+        #modalOverlay .icon-preview { background: #fff; }
         #modalOverlay .recurring-toggle-row,
         #modalOverlay .alerts-toggle-row { background: #F6F3ED; }
         #modalOverlay .modal-actions { background: #F6F3ED; }
