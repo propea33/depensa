@@ -746,14 +746,14 @@
         }
 
         .provider-btn:hover {
-            border-color: var(--accent);
-            background: rgba(124,58,237,0.06);
+            border-color: var(--border);
         }
 
         .provider-btn.sel {
-            border-color: var(--accent);
-            background: rgba(124,58,237,0.1);
-            box-shadow: 2px 2px 0 var(--accent);
+            border-color: #0a0a0a;
+            background: var(--bg-input);
+            box-shadow: 3px 3px 0 #0a0a0a;
+            transform: translate(-1px, -1px);
         }
 
         .provider-logo-wrap {
@@ -1787,6 +1787,7 @@
         #modalOverlay .cat-btn { background: #fff !important; border-color: var(--border-2) !important; }
         #modalOverlay .cat-btn.sel { background: #fff !important; border-color: #0a0a0a !important; box-shadow: 3px 3px 0 #0a0a0a !important; transform: translate(-1px, -1px); }
         #modalOverlay .provider-btn { background: #fff !important; }
+        #modalOverlay .provider-btn.sel { background: #fff !important; border-color: #0a0a0a !important; box-shadow: 3px 3px 0 #0a0a0a !important; transform: translate(-1px, -1px); }
         #modalOverlay .icon-preview { background: #fff; }
         #modalOverlay .recurring-toggle-row,
         #modalOverlay .alerts-toggle-row { background: #F6F3ED; }
@@ -1803,6 +1804,7 @@
         [data-theme="dark"] #modalOverlay .cat-btn:hover { border-color: #5a6580 !important; }
         [data-theme="dark"] #modalOverlay .cat-btn.sel { background: #202631 !important; border-color: #c4c9d4 !important; box-shadow: 3px 3px 0 #0a0d12 !important; transform: translate(-1px, -1px); }
         [data-theme="dark"] #modalOverlay .provider-btn { background: #202631 !important; border-color: #3a4453 !important; }
+        [data-theme="dark"] #modalOverlay .provider-btn.sel { background: #202631 !important; border-color: #c4c9d4 !important; box-shadow: 3px 3px 0 #0a0d12 !important; transform: translate(-1px, -1px); }
         [data-theme="dark"] #modalOverlay .icon-preview { background: #202631; border-color: #3a4453; }
         [data-theme="dark"] #modalOverlay .recurring-toggle-row,
         [data-theme="dark"] #modalOverlay .alerts-toggle-row { background: #202631; border-color: #3a4453; }
