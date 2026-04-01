@@ -11,7 +11,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="./css/style.css?v=20260412">
+    <link rel="stylesheet" href="./css/style.css?v=20260413">
     <link rel="stylesheet" href="./css/onboarding.css?v=20260413">
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -23,9 +23,10 @@
     <script src="./js/months.js?v=20260345" defer></script>
     <script src="./js/charts.js?v=20260412" defer></script>
     <script src="./js/modal.js?v=20260411" defer></script>
+    <script src="./js/billing.js?v=20260413" defer></script>
     <script src="./js/ui.js?v=20260411" defer></script>
     <script src="./js/onboarding.js?v=20260373" defer></script>
-    <script src="./js/main.js?v=20260394" defer></script>
+    <script src="./js/main.js?v=20260413" defer></script>
 </head>
 <body>
 
@@ -134,6 +135,12 @@
             </div>
         </div>
     </header>
+
+    <!-- TRIAL BANNER -->
+    <div class="trial-banner" id="trialBanner" style="display:none">
+        <span class="trial-banner-text"></span>
+        <button class="trial-banner-btn" onclick="billingCreateCheckout()">S'abonner — 5 $/mois</button>
+    </div>
 
     <!-- DASHBOARD GRID -->
     <div class="dashboard" id="dashContent">
@@ -467,6 +474,25 @@
 <button class="sticky-add-btn" id="stickyAdd">
     <span style="font-size:20px;font-weight:300;line-height:1">+</span> Ajouter une dépense
 </button>
+
+<!-- UPGRADE MODAL -->
+<div class="modal-overlay" id="upgradeOverlay">
+    <div class="modal upgrade-modal">
+        <div class="upgrade-icon">⚡</div>
+        <h2 class="upgrade-title">Passez à Depensa Pro</h2>
+        <p class="upgrade-sub">Votre essai est terminé. Vous avez atteint la limite de <strong>4 dépenses</strong> du plan gratuit.</p>
+        <ul class="upgrade-features">
+            <li><span class="upgrade-check">✓</span> Dépenses illimitées</li>
+            <li><span class="upgrade-check">✓</span> Synchronisation cloud</li>
+            <li><span class="upgrade-check">✓</span> Alertes de variation</li>
+            <li><span class="upgrade-check">✓</span> Historique complet</li>
+        </ul>
+        <button class="upgrade-cta" id="upgradeCheckoutBtn" onclick="billingCreateCheckout()">
+            S'abonner — 5 $/mois
+        </button>
+        <button class="upgrade-skip" onclick="billingHideUpgradeModal()">Pas maintenant</button>
+    </div>
+</div>
 
 <!-- TOAST -->
 <div class="toast" id="toast"></div>

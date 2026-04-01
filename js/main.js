@@ -33,9 +33,14 @@ $('catSearch').addEventListener('input', () => buildCatGrid());
 $('eFrequency').addEventListener('change', updateAmountLabel);
 $('eAmount').addEventListener('input', updateAmountLabel);
 
-$('openModal').addEventListener('click', openAddModal);
+$('openModal').addEventListener('click', _guardedOpenModal);
 $('closeModal').addEventListener('click', closeModal);
 $('modalOverlay').addEventListener('click', e => { if (e.target === e.currentTarget) closeModal(); });
+
+function _guardedOpenModal() {
+    if (!billingCanAddExpense()) { billingShowUpgradeModal(); return; }
+    openAddModal();
+}
 
 $('expenseForm').addEventListener('submit', e => {
     e.preventDefault();
@@ -244,7 +249,7 @@ $('simAddBtn').addEventListener('click', openSimAddModal);
 
 // ─── Sticky mobile CTA ────────────────────────────────
 
-$('stickyAdd').addEventListener('click', openAddModal);
+$('stickyAdd').addEventListener('click', _guardedOpenModal);
 
 // ─── Auth screen ──────────────────────────────────────
 
@@ -603,6 +608,10 @@ $('settingsPasswordForm').addEventListener('submit', async e => {
     }
     // Vérifier si le mois a changé depuis la dernière visite
     await checkMonthRollover();
+
+    await billingLoadProfile();
+    billingRenderTrialBanner();
+    await billingHandleReturn();
 
     updateHeaderName();
     renderExpenses();
