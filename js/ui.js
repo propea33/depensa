@@ -1156,7 +1156,7 @@ function exportPDF() {
     const catMap = {};
     source.forEach(exp => {
         const cat = getCAT(exp.cat);
-        if (!catMap[cat.name]) catMap[cat.name] = { total:0, icon:cat.icon, color:cat.color };
+        if (!catMap[cat.name]) catMap[cat.name] = { total:0, icon:catIconSVG(exp.cat, 14, cat.color), color:cat.color };
         catMap[cat.name].total += monthlyAmount(exp);
     });
     const catRows = Object.entries(catMap).sort((a,b) => b[1].total - a[1].total).map(([name, d]) => `

@@ -342,7 +342,7 @@ function initSavings() {
             const pills = top3.map(e => {
                 const cat = getCAT(e.cat);
                 return `<div class="ctip-pill">
-                    <span class="ctip-pill-icon">${cat.icon}</span>
+                    <span class="ctip-pill-icon">${catIconSVG(e.cat, 14, cat.color)}</span>
                     <span class="ctip-pill-name">${e.name}</span>
                     <span class="ctip-pill-amount">${fmt(monthlyAmount(e))}</span>
                 </div>`;
