@@ -727,8 +727,7 @@
             overflow-x: hidden;
             scrollbar-width: thin;
             scrollbar-color: var(--border-2) transparent;
-            padding-right: 2px;
-            padding-bottom: 2px;
+            padding: 4px 6px 4px 4px;
         }
 
         .provider-btn {
@@ -1561,6 +1560,7 @@
             display: grid;
             grid-template-columns: repeat(5, 1fr);
             gap: 8px;
+            padding: 4px;
         }
 
         .cat-btn {
