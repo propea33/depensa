@@ -1784,6 +1784,18 @@
            ═══════════════════════════════════════════════ */
 
         /* Override base modal for nb-modal */
+        .modal.nb-modal { background: #F6F3ED; }
+        .modal.nb-modal .nb-input { background: #fff; border-color: var(--border); }
+        .modal.nb-modal .nb-input:focus { border-color: var(--accent); box-shadow: 3px 3px 0 var(--accent); }
+        .modal.nb-modal .nb-cat-search { background: #fff; border-color: var(--border); }
+        .modal.nb-modal .cat-btn { background: #fff !important; border-color: var(--border) !important; }
+        .modal.nb-modal .cat-btn.sel { background: rgba(124,58,237,0.1) !important; }
+        .modal.nb-modal .nb-toggle { background: #fff; border-color: var(--border); }
+        .modal.nb-modal .nb-cancel { background: #fff !important; border-right: 3px solid var(--border) !important; }
+        .modal.nb-modal .nb-cancel:hover { background: #f0ede5 !important; }
+        .modal.nb-modal .nb-submit { background: var(--accent) !important; color: #fff !important; }
+        .modal.nb-modal .nb-submit:hover { background: #6d28d9 !important; }
+        .modal.nb-modal .nb-submit:active { background: #5b21b6 !important; }
         .modal.nb-modal {
             border-radius: 0;
             border: 3px solid var(--border);
