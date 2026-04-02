@@ -50,7 +50,11 @@ async function billingCreateCheckout() {
     if (btn) { btn.disabled = true; btn.textContent = 'Redirection…' }
     try {
         const { data, error: fnError } = await _db.functions.invoke('create-checkout', { body: {} })
-        if (fnError) throw new Error(fnError.message)
+        if (fnError) {
+            let msg = fnError.message
+            try { const j = await fnError.context?.json(); msg = j?.error || j?.msg || msg } catch {}
+            throw new Error(msg)
+        }
         if (!data?.url) throw new Error('Réponse inattendue : ' + JSON.stringify(data))
         window.location.href = data.url
     } catch (err) {
