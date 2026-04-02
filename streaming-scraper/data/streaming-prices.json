@@ -1,7 +1,7 @@
 {
-  "updated_at": "2026-04-01T13:46:45Z",
-  "scraped_count": 4,
-  "fallback_count": 5,
+  "updated_at": "2026-04-02T13:26:09Z",
+  "scraped_count": 5,
+  "fallback_count": 4,
   "region": "ca",
   "currency": "CAD",
   "plans": [
@@ -103,8 +103,8 @@
       "currency": "CAD",
       "url": "https://www.paramountplus.com/ca/",
       "note": "",
-      "scraped_ok": false,
-      "source": "out_of_range",
+      "scraped_ok": true,
+      "source": "http_regex",
       "previous_price": 8.99,
       "delta": 0.0,
       "price_drop": false
