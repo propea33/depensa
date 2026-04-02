@@ -20,17 +20,23 @@ Deno.serve(async (req) => {
             httpClient: Stripe.createFetchHttpClient(),
         })
 
+        const authHeader = req.headers.get('Authorization')
+        if (!authHeader) throw new Error('Non autorisé')
+
+        // Valider le JWT avec le client user-scoped (pattern recommandé Supabase)
+        const supabaseUser = createClient(
+            Deno.env.get('SUPABASE_URL')!,
+            Deno.env.get('SUPABASE_ANON_KEY')!,
+            { global: { headers: { Authorization: authHeader } } }
+        )
+        const { data: { user }, error: userError } = await supabaseUser.auth.getUser()
+        if (userError || !user) throw new Error('Session invalide : ' + userError?.message)
+
+        // Client admin pour lire/écrire les profils
         const supabase = createClient(
             Deno.env.get('SUPABASE_URL')!,
             Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!
         )
-
-        const authHeader = req.headers.get('Authorization')
-        if (!authHeader) throw new Error('Non autorisé')
-
-        const token = authHeader.replace('Bearer ', '')
-        const { data: { user }, error: userError } = await supabase.auth.getUser(token)
-        if (userError || !user) throw new Error('Session invalide')
 
         // Récupérer ou créer le client Stripe
         const { data: profile } = await supabase
