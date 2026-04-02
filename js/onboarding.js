@@ -1017,10 +1017,10 @@ function updateHeaderName() {
     if (!firstName) return;
 
     const greeting = document.querySelector('.header-greeting');
-    if (greeting) greeting.textContent = `Bonjour, ${firstName} 👋`;
+    if (greeting) { greeting.textContent = `Bonjour, ${firstName} 👋`; greeting.style.visibility = 'visible'; }
 
     const avatar = document.getElementById('userAvatar');
-    if (avatar) avatar.textContent = authUserInitials();
+    if (avatar) { avatar.textContent = authUserInitials(); avatar.style.visibility = 'visible'; }
 
     const identity = document.getElementById('avatarIdentity');
     const divider  = document.getElementById('avatarDivider');

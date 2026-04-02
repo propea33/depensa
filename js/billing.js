@@ -52,7 +52,14 @@ async function billingCreateCheckout() {
         const { data, error: fnError } = await _db.functions.invoke('create-checkout', { body: {} })
         if (fnError) {
             let msg = fnError.message
-            try { const j = await fnError.context?.json(); msg = j?.error || j?.msg || msg } catch {}
+            try {
+                const text = await fnError.context?.text()
+                console.error('[Billing] fn error body:', text)
+                const j = text ? JSON.parse(text) : null
+                msg = j?.error || j?.msg || msg
+            } catch (e) {
+                console.error('[Billing] fn error context:', fnError.context, e)
+            }
             throw new Error(msg)
         }
         if (!data?.url) throw new Error('Réponse inattendue : ' + JSON.stringify(data))
