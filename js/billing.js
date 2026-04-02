@@ -60,11 +60,13 @@ async function billingCreateCheckout() {
                 },
             }
         )
-        const { url, error } = await res.json()
-        if (error) throw new Error(error)
-        window.location.href = url
+        const json = await res.json()
+        if (json.error) throw new Error(json.error)
+        if (!json.url) throw new Error('URL de paiement non reçue — vérifiez les secrets Supabase.')
+        window.location.href = json.url
     } catch (err) {
         console.error('[Billing]', err)
+        alert('Erreur paiement : ' + err.message)
         if (btn) { btn.disabled = false; btn.textContent = "S'abonner — 5 $/mois" }
     }
 }
