@@ -49,22 +49,10 @@ async function billingCreateCheckout() {
     const btn = document.getElementById('upgradeCheckoutBtn')
     if (btn) { btn.disabled = true; btn.textContent = 'Redirection…' }
     try {
-        const { data: { session } } = await _db.auth.getSession()
-        const res = await fetch(
-            'https://wmgrztzkgbrquaadwgjb.supabase.co/functions/v1/create-checkout',
-            {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${session.access_token}`,
-                },
-            }
-        )
-        const json = await res.json()
-        const errMsg = json.error || json.msg || json.message
-        if (errMsg) throw new Error(errMsg)
-        if (!json.url) throw new Error('Réponse inattendue de la fonction : ' + JSON.stringify(json))
-        window.location.href = json.url
+        const { data, error: fnError } = await _db.functions.invoke('create-checkout', { body: {} })
+        if (fnError) throw new Error(fnError.message)
+        if (!data?.url) throw new Error('Réponse inattendue : ' + JSON.stringify(data))
+        window.location.href = data.url
     } catch (err) {
         console.error('[Billing]', err)
         alert('Erreur paiement : ' + err.message)
