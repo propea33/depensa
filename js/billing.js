@@ -61,8 +61,9 @@ async function billingCreateCheckout() {
             }
         )
         const json = await res.json()
-        if (json.error) throw new Error(json.error)
-        if (!json.url) throw new Error('URL de paiement non reçue — vérifiez les secrets Supabase.')
+        const errMsg = json.error || json.msg || json.message
+        if (errMsg) throw new Error(errMsg)
+        if (!json.url) throw new Error('Réponse inattendue de la fonction : ' + JSON.stringify(json))
         window.location.href = json.url
     } catch (err) {
         console.error('[Billing]', err)
