@@ -147,12 +147,12 @@ function _onbStepHTML(step) {
         <div class="onb-subtitle">Quel type de logement avez-vous et quel est votre coût mensuel?</div>
         <div class="onb-choice-grid">
             <button type="button" class="onb-choice-btn${_onbData.housing.type==='loyer'?' sel':''}" data-choice="loyer">
-                <span class="onb-choice-icon">🏠</span>
+                <span class="onb-choice-icon">${catIconSVG('habitation', 30)}</span>
                 <span class="onb-choice-label">Loyer</span>
                 <span class="onb-choice-sub">Appartement ou maison en location</span>
             </button>
             <button type="button" class="onb-choice-btn${_onbData.housing.type==='hypotheque'?' sel':''}" data-choice="hypotheque">
-                <span class="onb-choice-icon">🏡</span>
+                <span class="onb-choice-icon"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:block"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M9 22V12h6v10"/><path d="M12 7v2"/></svg></span>
                 <span class="onb-choice-label">Hypothèque</span>
                 <span class="onb-choice-sub">Propriétaire avec paiements mensuels</span>
             </button>
@@ -183,17 +183,17 @@ function _onbStepHTML(step) {
         <div class="onb-subtitle">Quel est votre mode de déplacement principal?</div>
         <div class="onb-choice-grid cols-3">
             <button type="button" class="onb-choice-btn${_onbData.transport.mode==='auto'?' sel':''}" data-choice="auto">
-                <span class="onb-choice-icon">🚗</span>
+                <span class="onb-choice-icon">${catIconSVG('auto', 30)}</span>
                 <span class="onb-choice-label">Auto</span>
                 <span class="onb-choice-sub">Voiture personnelle</span>
             </button>
             <button type="button" class="onb-choice-btn${_onbData.transport.mode==='transit'?' sel':''}" data-choice="transit">
-                <span class="onb-choice-icon">🚇</span>
+                <span class="onb-choice-icon">${catIconSVG('transport', 30)}</span>
                 <span class="onb-choice-label">Transport en commun</span>
                 <span class="onb-choice-sub">STM, exo, RTC…</span>
             </button>
             <button type="button" class="onb-choice-btn${_onbData.transport.mode==='actif'?' sel':''}" data-choice="actif">
-                <span class="onb-choice-icon">🚲</span>
+                <span class="onb-choice-icon"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:block"><circle cx="5.5" cy="17.5" r="3.5"/><circle cx="18.5" cy="17.5" r="3.5"/><path d="M15 6a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm-3 11.5L9 14l3-3 2 3h4"/><path d="m12 14-2-4.5 4.5-1"/></svg></span>
                 <span class="onb-choice-label">Vélo / Marche</span>
                 <span class="onb-choice-sub">Transport actif, aucun coût</span>
             </button>
@@ -447,7 +447,7 @@ function _onbStepHTML(step) {
                 const cat = CATS.find(c => c.id === e.cat) || { color:'#64748b', icon:'📦' };
                 return `
                 <div class="onb-summary-item">
-                    <div class="onb-summary-icon" style="background:${cat.color}22;">${cat.icon}</div>
+                    <div class="onb-summary-icon" style="background:${cat.color}22;">${catIconSVG(cat.id, 22, cat.color)}</div>
                     <div>
                         <div class="onb-summary-name">${_esc(e.name)}</div>
                         <div class="onb-summary-cat">${cat.name}${e.frequency==='annuel'?' · annuel':''}</div>
