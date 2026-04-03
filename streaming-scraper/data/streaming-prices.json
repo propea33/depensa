@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-04-02T13:26:09Z",
+  "updated_at": "2026-04-03T13:14:41Z",
   "scraped_count": 5,
   "fallback_count": 4,
   "region": "ca",
@@ -26,7 +26,7 @@
       "url": "https://www.primevideo.com/",
       "note": "",
       "scraped_ok": false,
-      "source": "no_price_found",
+      "source": "fetch_error",
       "previous_price": 9.99,
       "delta": 0.0,
       "price_drop": false
