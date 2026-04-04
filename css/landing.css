@@ -179,14 +179,31 @@ nav {
 .brand-ticker-outer::before { left: 0; background: linear-gradient(to right, var(--bg) 20%, transparent); }
 .brand-ticker-outer::after  { right: 0; background: linear-gradient(to left,  var(--bg) 20%, transparent); }
 
+.brand-ticker-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.brand-ticker-month {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  font-weight: 500;
+  background: var(--accent);
+  color: #fff;
+  padding: 3px 9px;
+  border-radius: 20px;
+  letter-spacing: .04em;
+}
+
 .brand-ticker-label {
-  text-align: center;
   font-size: 11px;
   font-weight: 700;
-  letter-spacing: .1em;
+  letter-spacing: .08em;
   text-transform: uppercase;
   color: var(--text-3);
-  margin-bottom: 14px;
 }
 
 @keyframes brand-ticker {
@@ -256,21 +273,45 @@ nav {
   filter: invert(1);
 }
 
+.brand-info {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
 .brand-name {
   font-family: 'Plus Jakarta Sans', sans-serif;
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 700;
   color: var(--text);
+  line-height: 1.2;
+}
+
+.brand-cat {
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--text-3);
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  line-height: 1;
 }
 
 .brand-price {
   font-family: 'DM Mono', monospace;
   font-size: 13px;
-  font-weight: 500;
-  color: var(--text-3);
-  padding-left: 4px;
+  font-weight: 600;
+  color: var(--text);
+  padding-left: 10px;
   border-left: 1px solid var(--border-2);
-  margin-left: 2px;
+  margin-left: 4px;
+  white-space: nowrap;
+}
+
+.brand-price em {
+  font-style: normal;
+  font-size: 10px;
+  color: var(--text-3);
+  font-weight: 400;
 }
 
 /* ── MOCKUP ───────────────────────────────────────────── */
