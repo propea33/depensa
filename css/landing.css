@@ -141,7 +141,7 @@ nav {
 
 .hero-ctas {
   display: flex; align-items: center; gap: 14px; flex-wrap: wrap;
-  justify-content: center; position: relative; z-index: 1; margin-bottom: 72px;
+  justify-content: center; position: relative; z-index: 1; margin-bottom: 40px;
 }
 
 .btn-hero { padding: 14px 30px; font-size: 16px; border-radius: var(--radius); }
@@ -155,6 +155,99 @@ nav {
   box-shadow: 3px 3px 0 var(--border);
 }
 .btn-ghost:hover { transform: translate(-1px,-1px); box-shadow: 4px 4px 0 var(--border); }
+
+/* ── BRAND TICKER ─────────────────────────────────────── */
+
+.brand-ticker-outer {
+  width: 100vw;
+  margin-left: calc(50% - 50vw);
+  overflow: hidden;
+  position: relative;
+  z-index: 1;
+  margin-bottom: 64px;
+}
+
+.brand-ticker-outer::before,
+.brand-ticker-outer::after {
+  content: '';
+  position: absolute;
+  top: 0; bottom: 0;
+  width: 140px;
+  z-index: 2;
+  pointer-events: none;
+}
+.brand-ticker-outer::before { left: 0; background: linear-gradient(to right, var(--bg) 20%, transparent); }
+.brand-ticker-outer::after  { right: 0; background: linear-gradient(to left,  var(--bg) 20%, transparent); }
+
+.brand-ticker-label {
+  text-align: center;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--text-3);
+  margin-bottom: 14px;
+}
+
+@keyframes brand-ticker {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+.brand-ticker-track {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: max-content;
+  animation: brand-ticker 38s linear infinite;
+}
+.brand-ticker-track:hover { animation-play-state: paused; }
+
+.brand-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--bg-card);
+  border: 1.5px solid var(--border-2);
+  border-radius: 50px;
+  padding: 7px 16px 7px 8px;
+  white-space: nowrap;
+  box-shadow: 2px 2px 0 rgba(0,0,0,.07);
+  user-select: none;
+  flex-shrink: 0;
+}
+
+.brand-badge {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: 800;
+  color: #fff;
+  flex-shrink: 0;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  letter-spacing: -.5px;
+}
+
+.brand-name {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.brand-price {
+  font-family: 'DM Mono', monospace;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-3);
+  padding-left: 4px;
+  border-left: 1px solid var(--border-2);
+  margin-left: 2px;
+}
 
 /* ── MOCKUP ───────────────────────────────────────────── */
 
