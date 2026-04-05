@@ -103,7 +103,7 @@ nav {
   display: flex; flex-direction: column; align-items: center;
   justify-content: center; text-align: center;
   padding: 100px 24px 80px;
-  position: relative; overflow: hidden; background: var(--bg);
+  position: relative; background: var(--bg);
 }
 
 .hero-glow { display: none; }
@@ -1078,4 +1078,14 @@ footer {
   .mock-exp-card { min-height: 96px; padding: 10px 11px; }
   .mock-exp-card-name { font-size: 18px; }
   .mock-exp-card-amount { font-size: 19px; }
+
+  /* Ticker mobile */
+  .brand-ticker-outer::before,
+  .brand-ticker-outer::after { width: 40px; }
+  .brand-item { padding: 6px 12px 6px 7px; gap: 8px; }
+  .brand-logo-wrap { width: 30px; height: 30px; }
+  .brand-logo { width: 20px; height: 20px; }
+  .brand-name { font-size: 12px; }
+  .brand-cat { font-size: 9px; }
+  .brand-price { font-size: 12px; padding-left: 8px; }
 }
