@@ -159,8 +159,9 @@ nav {
 /* ── BRAND TICKER ─────────────────────────────────────── */
 
 .brand-ticker-outer {
-  width: 100vw;
-  margin-left: calc(50% - 50vw);
+  align-self: stretch;
+  margin-left: -24px;
+  margin-right: -24px;
   overflow: hidden;
   position: relative;
   z-index: 1;
@@ -1080,8 +1081,9 @@ footer {
   .mock-exp-card-amount { font-size: 19px; }
 
   /* Ticker mobile */
+  .brand-ticker-outer { margin-left: -16px; margin-right: -16px; }
   .brand-ticker-outer::before,
-  .brand-ticker-outer::after { width: 40px; }
+  .brand-ticker-outer::after { width: 32px; }
   .brand-item { padding: 6px 12px 6px 7px; gap: 8px; }
   .brand-logo-wrap { width: 30px; height: 30px; }
   .brand-logo { width: 20px; height: 20px; }
