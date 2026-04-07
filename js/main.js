@@ -261,15 +261,6 @@ $('tabSignup').addEventListener('click', () => {
     _authMode = 'signup';
     _authRender();
 });
-$('authSkipBtn').addEventListener('click', async () => {
-    closeAuthScreen();
-    // Pas de compte → données démo en mémoire + bannière
-    showDemoBanner();
-    renderExpenses();
-    renderRecs();
-    renderTicker();
-    requestAnimationFrame(() => { initDonut(); initSavings(); });
-});
 
 // ─── Onboarding wizard ────────────────────────────────
 
