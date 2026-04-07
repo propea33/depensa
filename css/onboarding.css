@@ -2,22 +2,59 @@
    ONBOARDING + AUTH — Styles
    ═══════════════════════════════════════════════════════ */
 
+/* ─── App veil — masque le dashboard pendant le boot ──── */
+#appVeil {
+    position: fixed;
+    inset: 0;
+    background: var(--bg, #f5f3ef);
+    z-index: 200;
+    transition: opacity 0.35s ease;
+    pointer-events: none;
+}
+#appVeil.veil-hidden {
+    opacity: 0;
+}
+
 /* ─── Shared overlay base ──────────────────────────────── */
 .auth-overlay,
 .onb-overlay {
     display: none;
     position: fixed;
     inset: 0;
-    background: var(--bg);
     z-index: 300;
     overflow-y: auto;
     align-items: center;
     justify-content: center;
     padding: 24px 16px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+.auth-overlay {
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+}
+.onb-overlay {
+    background: var(--bg);
 }
 .auth-overlay.open,
 .onb-overlay.open {
     display: flex;
+}
+.auth-overlay.open.visible,
+.onb-overlay.open.visible {
+    opacity: 1;
+}
+
+/* ─── Auth card — animation d'entrée ──────────────────── */
+.auth-card {
+    transform: translateY(18px) scale(0.98);
+    transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.35s ease;
+    opacity: 0;
+}
+.auth-overlay.open.visible .auth-card {
+    transform: translateY(0) scale(1);
+    opacity: 1;
 }
 
 /* ═══════════════════════════════════════════════════════
@@ -31,7 +68,7 @@
     padding: 40px;
     width: 100%;
     max-width: 420px;
-    box-shadow: 0 24px 70px rgba(0,0,0,.45);
+    box-shadow: 0 24px 70px rgba(0,0,0,.22);
 }
 
 .auth-logo {

@@ -564,6 +564,7 @@ $('settingsPasswordForm').addEventListener('submit', async e => {
 
     // ── Mode offline (file://) → dashboard directement ──
     if (DB_OFFLINE) {
+        _removeVeil();
         renderExpenses();
         renderRecs();
         renderTicker();
@@ -576,12 +577,13 @@ $('settingsPasswordForm').addEventListener('submit', async e => {
     const session = await authGetSession();
 
     if (!session) {
-        openAuthScreen();
+        openAuthScreen(); // _removeVeil() est appelé dans openAuthScreen
         return;
     }
 
     // Session active → vérifier si l'onboarding est fait
     if (!authHasCompletedOnboarding()) {
+        _removeVeil();
         openOnboarding();
         return;
     }
@@ -609,6 +611,7 @@ $('settingsPasswordForm').addEventListener('submit', async e => {
     await billingHandleReturn();
 
     updateHeaderName();
+    _removeVeil();
     renderExpenses();
     renderRecs();
     renderTicker();

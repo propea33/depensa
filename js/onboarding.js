@@ -68,12 +68,16 @@ function openOnboarding() {
         cell:      { provider: null, amount: null },
         streaming: [],
     };
-    document.getElementById('onboardingOverlay').classList.add('open');
+    const overlay = document.getElementById('onboardingOverlay');
+    overlay.classList.add('open');
     _onbRender();
+    requestAnimationFrame(() => requestAnimationFrame(() => overlay.classList.add('visible')));
 }
 
 function closeOnboarding() {
-    document.getElementById('onboardingOverlay').classList.remove('open');
+    const overlay = document.getElementById('onboardingOverlay');
+    overlay.classList.remove('visible');
+    setTimeout(() => overlay.classList.remove('open'), 300);
 }
 
 // ── Rendu principal ───────────────────────────────────────────────────────────
@@ -856,14 +860,29 @@ function _esc(str) {
 
 let _authMode = 'login'; // 'login' | 'signup'
 
+function _removeVeil() {
+    const veil = document.getElementById('appVeil');
+    if (!veil) return;
+    veil.classList.add('veil-hidden');
+    setTimeout(() => veil.remove(), 380);
+}
+
 function openAuthScreen() {
     _authMode = 'login';
-    document.getElementById('authOverlay').classList.add('open');
+    const overlay = document.getElementById('authOverlay');
+    overlay.classList.add('open');
     _authRender();
+    // Retire le veil puis anime l'overlay/carte en entrée
+    _removeVeil();
+    requestAnimationFrame(() => requestAnimationFrame(() => {
+        overlay.classList.add('visible');
+    }));
 }
 
 function closeAuthScreen() {
-    document.getElementById('authOverlay').classList.remove('open');
+    const overlay = document.getElementById('authOverlay');
+    overlay.classList.remove('visible');
+    setTimeout(() => overlay.classList.remove('open'), 300);
 }
 
 function _authRender() {
