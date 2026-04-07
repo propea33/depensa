@@ -1037,20 +1037,26 @@ async function eraseAllData() {
 
 function updateHeaderName() {
     const firstName = authUserFirstName();
-    if (!firstName) return;
+    const email     = authUserEmail() || '';
 
     const greeting = document.querySelector('.header-greeting');
-    if (greeting) { greeting.textContent = `Bonjour, ${firstName} 👋`; greeting.style.visibility = 'visible'; }
+    if (greeting && firstName) {
+        greeting.textContent = `Bonjour, ${firstName} 👋`;
+        greeting.style.visibility = 'visible';
+    }
 
+    // L'avatar est toujours visible quand l'utilisateur est connecté
     const avatar = document.getElementById('userAvatar');
-    if (avatar) { avatar.textContent = authUserInitials(); avatar.style.visibility = 'visible'; }
+    if (avatar && authUserId()) {
+        avatar.textContent = authUserInitials();
+        avatar.style.visibility = 'visible';
+    }
 
     const identity = document.getElementById('avatarIdentity');
     const divider  = document.getElementById('avatarDivider');
     if (identity) {
-        const fullName = authUserFullName() || firstName;
-        const email    = authUserEmail()    || '';
-        identity.innerHTML = `<strong>${_esc(fullName)}</strong>${email ? _esc(email) : ''}`;
+        const displayName = authUserFullName() || firstName || email || 'Compte';
+        identity.innerHTML = `<strong>${_esc(displayName)}</strong>${email && email !== displayName ? _esc(email) : ''}`;
         identity.style.display = 'block';
         if (divider) divider.style.display = 'block';
     }

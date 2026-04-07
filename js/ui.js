@@ -384,11 +384,14 @@ function renderExpenses() {
     // Empty state
     if (filtered.length === 0) {
         if (!isPast && !DB_OFFLINE && authUserId() && expenses.length === 0) {
+            const email = authUserEmail() || '';
             grid.innerHTML = `<div class="empty-state-auth">
                 <div class="empty-state-icon">📋</div>
                 <div class="empty-state-title">Aucune dépense configurée</div>
+                ${email ? `<div class="empty-state-email">Connecté en tant que <strong>${email}</strong></div>` : ''}
                 <div class="empty-state-desc">Configurez votre profil pour que Depensa génère vos dépenses automatiquement.</div>
                 <button class="empty-state-btn" onclick="resetAndReOpenOnboarding()">Configurer mes dépenses</button>
+                <button class="empty-state-logout" onclick="authSignOut().then(() => location.reload())">Se déconnecter</button>
             </div>`;
         } else {
             grid.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:32px;color:var(--text-2);font-size:13px;">Aucune dépense trouvée.</div>`;

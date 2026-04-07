@@ -3615,3 +3615,19 @@
     transition: opacity 0.15s;
 }
 .empty-state-btn:hover { opacity: 0.85; }
+.empty-state-email {
+    font-size: 12px;
+    color: var(--text-2);
+}
+.empty-state-logout {
+    background: none;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 8px 18px;
+    font-size: 13px;
+    color: var(--text-2);
+    cursor: pointer;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    transition: color 0.15s, border-color 0.15s;
+}
+.empty-state-logout:hover { color: var(--text-1); border-color: var(--text-2); }
