@@ -586,11 +586,15 @@ $('settingsPasswordForm').addEventListener('submit', async e => {
         return;
     }
 
-    // Onboarding terminé → charger les données
+    // Onboarding terminé → charger les données (vider les données démo d'abord)
+    expenses = [];
+    nextId   = 1;
     const dbData = await dbBootstrap();
     if (dbData !== null && dbData.length > 0) {
         expenses = dbData;
         nextId   = Math.max(...dbData.map(e => e.id)) + 1;
+    } else if (dbData === null) {
+        showToast('⚠️ Erreur de chargement des données. Vérifiez votre connexion.');
     }
 
     // Enregistrer le mois courant si c'est la première connexion

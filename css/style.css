@@ -3577,3 +3577,41 @@
             font-family: 'DM Sans', sans-serif;
         }
         .upgrade-skip:hover { color: var(--text-2); }
+
+
+/* ── Empty state (authenticated, no data) ──────────── */
+.empty-state-auth {
+    grid-column: 1 / -1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    padding: 48px 24px;
+    text-align: center;
+}
+.empty-state-icon { font-size: 36px; }
+.empty-state-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--text-1);
+}
+.empty-state-desc {
+    font-size: 13px;
+    color: var(--text-2);
+    max-width: 320px;
+    line-height: 1.5;
+}
+.empty-state-btn {
+    margin-top: 8px;
+    padding: 10px 22px;
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    transition: opacity 0.15s;
+}
+.empty-state-btn:hover { opacity: 0.85; }

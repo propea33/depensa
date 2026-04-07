@@ -964,10 +964,16 @@ function _authTranslateError(msg) {
 // ── Bootstrap complet du dashboard après auth ─────────────────────────────────
 
 async function _bootDashboard() {
+    // Clear demo data — les utilisateurs authentifiés partent de zéro
+    expenses = [];
+    nextId   = 1;
+
     const dbData = await dbBootstrap();
     if (dbData !== null && dbData.length > 0) {
         expenses = dbData;
         nextId   = Math.max(...dbData.map(e => e.id)) + 1;
+    } else if (dbData === null) {
+        showToast('⚠️ Erreur de chargement des données. Vérifiez votre connexion.');
     }
     updateHeaderName();
     renderExpenses();
@@ -977,6 +983,23 @@ async function _bootDashboard() {
         if (typeof initDonut   === 'function') initDonut();
         if (typeof initSavings === 'function') initSavings();
     });
+}
+
+// ── Reset + relancer l'onboarding ─────────────────────────────────────────────
+
+async function resetAndReOpenOnboarding() {
+    if (!_db || !authUserId()) return;
+    // Remettre onboarding_done à false dans Supabase
+    try {
+        const { data, error } = await _db.auth.updateUser({ data: { onboarding_done: false } });
+        if (!error && data?.user) {
+            // Mettre à jour l'utilisateur local
+            const { data: { user } } = await _db.auth.getUser();
+            if (user) { /* _authUser updated via authGetSession below */ }
+            await authGetSession();
+        }
+    } catch (_) {}
+    openOnboarding();
 }
 
 // ═══════════════════════════════════════════════════════
