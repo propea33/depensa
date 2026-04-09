@@ -1043,6 +1043,14 @@ async function eraseAllData() {
     if (!confirm('Effacer toutes les dépenses? Cette action est irréversible.')) return;
     expenses = [];
     nextId   = 1;
+
+    // Vider l'historique démo + localStorage
+    HISTORY.splice(0);
+    localStorage.removeItem('depensa_history_extra');
+    Object.keys(MONTH_MAP).forEach(k => delete MONTH_MAP[k]);
+    initMonthSystem();
+    buildMonthTabs();
+
     if (!DB_OFFLINE && authUserId()) {
         await dbDeleteAllForUser();
     }
@@ -1050,7 +1058,7 @@ async function eraseAllData() {
     renderExpenses();
     renderRecs();
     if (typeof updateDonut   === 'function') updateDonut();
-    if (typeof updateSavings === 'function') updateSavings();
+    if (typeof initSavings   === 'function') initSavings();
     showToast('✓ Toutes les dépenses ont été effacées.');
 }
 
