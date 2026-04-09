@@ -594,6 +594,13 @@ $('settingsPasswordForm').addEventListener('submit', async e => {
     // Onboarding terminé → charger les données (vider les données démo d'abord)
     expenses = [];
     nextId   = 1;
+
+    // Vider l'historique démo — un utilisateur authentifié n'a pas cet historique fictif
+    HISTORY.splice(0);
+    Object.keys(MONTH_MAP).forEach(k => delete MONTH_MAP[k]);
+    initMonthSystem();
+    buildMonthTabs();
+
     const dbData = await dbBootstrap();
     if (dbData !== null && dbData.length > 0) {
         expenses = dbData;

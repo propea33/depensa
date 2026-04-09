@@ -983,9 +983,13 @@ function _authTranslateError(msg) {
 // ── Bootstrap complet du dashboard après auth ─────────────────────────────────
 
 async function _bootDashboard() {
-    // Clear demo data — les utilisateurs authentifiés partent de zéro
+    // Clear demo data + historique fictif — les utilisateurs authentifiés partent de zéro
     expenses = [];
     nextId   = 1;
+    HISTORY.splice(0);
+    Object.keys(MONTH_MAP).forEach(k => delete MONTH_MAP[k]);
+    initMonthSystem();
+    buildMonthTabs();
 
     const dbData = await dbBootstrap();
     if (dbData !== null && dbData.length > 0) {
