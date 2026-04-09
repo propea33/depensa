@@ -872,6 +872,11 @@ footer {
 .footer-left { display: flex; flex-direction: column; gap: 6px; }
 .footer-tagline { font-size: 13px; color: var(--text-3); }
 .footer-love { font-size: 12px; color: var(--text-3); }
+.footer-contact {
+  font-size: 13px; color: var(--text-2); text-align: center; line-height: 1.6;
+}
+.footer-contact a { color: var(--accent); text-decoration: none; font-weight: 500; }
+.footer-contact a:hover { text-decoration: underline; }
 .footer-links { display: flex; align-items: center; gap: 4px; }
 .footer-link {
   font-size: 13px; color: var(--text-2); text-decoration: none;

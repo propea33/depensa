@@ -369,3 +369,17 @@ nav {
   .help-cta-card { padding: 28px 20px; }
   .nav-right .btn-outline { display: none; }
 }
+
+.aide-footer {
+  border-top: 1px solid var(--border, #e5e7eb);
+  padding: 28px 24px;
+  text-align: center;
+  font-size: 13px;
+  color: var(--text-2, #6b7280);
+}
+.aide-footer a {
+  color: var(--accent, #7c3aed);
+  text-decoration: none;
+  font-weight: 500;
+}
+.aide-footer a:hover { text-decoration: underline; }
