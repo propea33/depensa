@@ -5,6 +5,7 @@
 const TRIAL_DAYS  = 7
 const FREE_LIMIT  = 4
 let _billingProfile = null
+let _trialBannerDismissed = false  // reset à chaque chargement de page
 
 // ── Chargement ────────────────────────────────────────
 
@@ -46,8 +47,17 @@ function billingCanAddExpense() {
 // ── Checkout Stripe ───────────────────────────────────
 
 async function billingCreateCheckout() {
-    const btn = document.getElementById('upgradeCheckoutBtn')
-    if (btn) { btn.disabled = true; btn.textContent = 'Redirection…' }
+    // Feedback immédiat sur tous les boutons Stripe
+    const modalBtn  = document.getElementById('upgradeCheckoutBtn')
+    const bannerBtn = document.querySelector('.trial-banner-btn')
+    if (modalBtn)  { modalBtn.disabled = true; modalBtn.textContent = '⏳ Connexion à Stripe…' }
+    if (bannerBtn) {
+        bannerBtn.disabled = true
+        const lbl = bannerBtn.querySelector('.trial-btn-label')
+        const spn = bannerBtn.querySelector('.trial-btn-spinner')
+        if (lbl) lbl.style.display = 'none'
+        if (spn) spn.style.display = ''
+    }
     try {
         const { data, error: fnError } = await _db.functions.invoke('create-checkout', { body: {} })
         if (fnError) {
@@ -67,7 +77,14 @@ async function billingCreateCheckout() {
     } catch (err) {
         console.error('[Billing]', err)
         alert('Erreur paiement : ' + err.message)
-        if (btn) { btn.disabled = false; btn.textContent = "S'abonner — 5 $/mois" }
+        if (modalBtn)  { modalBtn.disabled = false; modalBtn.textContent = "S'abonner — 5 $/mois" }
+        if (bannerBtn) {
+            bannerBtn.disabled = false
+            const lbl = bannerBtn.querySelector('.trial-btn-label')
+            const spn = bannerBtn.querySelector('.trial-btn-spinner')
+            if (lbl) lbl.style.display = ''
+            if (spn) spn.style.display = 'none'
+        }
     }
 }
 
@@ -83,10 +100,20 @@ function billingHideUpgradeModal() {
     if (overlay) overlay.classList.remove('open')
 }
 
+function billingDismissBanner() {
+    _trialBannerDismissed = true
+    const banner = document.getElementById('trialBanner')
+    if (banner) {
+        banner.style.transition = 'opacity 0.2s'
+        banner.style.opacity = '0'
+        setTimeout(() => { banner.style.display = 'none'; banner.style.opacity = '' }, 200)
+    }
+}
+
 function billingRenderTrialBanner() {
     const banner = document.getElementById('trialBanner')
     if (!banner) return
-    if (!authUserId() || DB_OFFLINE || billingIsSubscribed()) {
+    if (!authUserId() || DB_OFFLINE || billingIsSubscribed() || _trialBannerDismissed) {
         banner.style.display = 'none'
         return
     }
@@ -96,8 +123,10 @@ function billingRenderTrialBanner() {
         return
     }
     banner.style.display = 'flex'
+    const urgency = days <= 2 ? '🚨' : '⏳'
+    banner.querySelector('.trial-banner-icon').textContent = urgency
     banner.querySelector('.trial-banner-text').textContent =
-        days === 1 ? 'Dernier jour de votre essai gratuit.' : `Essai gratuit — ${days} jours restants.`
+        days === 1 ? 'Dernier jour de votre essai gratuit!' : `Essai gratuit — ${days} jours restants.`
 }
 
 // ── Gestion retour Stripe ─────────────────────────────

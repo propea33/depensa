@@ -3482,28 +3482,46 @@
         .trial-banner {
             display: flex;
             align-items: center;
-            justify-content: space-between;
-            gap: 12px;
-            padding: 10px 24px;
-            background: linear-gradient(90deg, rgba(124,58,237,0.08), rgba(124,58,237,0.04));
-            border-bottom: 1.5px solid rgba(124,58,237,0.2);
+            gap: 10px;
+            padding: 10px 20px;
+            background: linear-gradient(90deg, #7c3aed, #4f46e5);
             font-size: 13px;
-            color: var(--text-2);
+            font-weight: 500;
+            color: #fff;
         }
+        .trial-banner-icon { font-size: 15px; flex-shrink: 0; }
+        .trial-banner-text { flex: 1; }
         .trial-banner-btn {
             flex-shrink: 0;
-            padding: 6px 14px;
-            background: var(--accent);
-            color: #fff;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 7px 16px;
+            background: #fff;
+            color: #7c3aed;
             border: none;
             border-radius: 8px;
             font-size: 12px;
-            font-weight: 600;
+            font-weight: 700;
             cursor: pointer;
-            font-family: 'DM Sans', sans-serif;
-            transition: opacity 0.15s;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            transition: transform 0.15s, box-shadow 0.15s;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.18);
         }
-        .trial-banner-btn:hover { opacity: 0.88; }
+        .trial-banner-btn:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(0,0,0,0.22); }
+        .trial-banner-btn:disabled { opacity: 0.7; cursor: default; transform: none; }
+        .trial-banner-close {
+            flex-shrink: 0;
+            background: none;
+            border: none;
+            color: rgba(255,255,255,0.7);
+            font-size: 14px;
+            cursor: pointer;
+            padding: 4px 6px;
+            line-height: 1;
+            transition: color 0.15s;
+        }
+        .trial-banner-close:hover { color: #fff; }
 
 /* ─── UPGRADE MODAL ──────────────────────────── */
 
