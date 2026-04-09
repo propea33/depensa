@@ -3649,3 +3649,12 @@
     transition: color 0.15s, border-color 0.15s;
 }
 .empty-state-logout:hover { color: var(--text-1); border-color: var(--text-2); }
+
+/* ─── Recs disclaimer ────────────────────────────── */
+.recs-disclaimer {
+    margin-top: 12px;
+    font-size: 11px;
+    font-style: italic;
+    color: var(--text-3);
+    line-height: 1.5;
+}
