@@ -253,6 +253,9 @@ $('stickyAdd').addEventListener('click', _guardedOpenModal);
 
 // ─── Auth screen ──────────────────────────────────────
 
+$('authOverlay').addEventListener('click', e => {
+    if (e.target === e.currentTarget) closeAuthScreen();
+});
 $('tabLogin').addEventListener('click', () => {
     _authMode = 'login';
     _authRender();
