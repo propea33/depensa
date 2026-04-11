@@ -296,7 +296,7 @@ $('logoutBtn').addEventListener('click', async () => {
     _avatarMenuOpen = false;
     $('avatarMenu').style.display = 'none';
     await authSignOut();
-    location.reload();
+    location.href = '/';
 });
 
 // ─── Settings modal ───────────────────────────────────
