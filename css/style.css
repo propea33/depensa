@@ -46,7 +46,7 @@
             --shadow-card:   4px 4px 0 #0f1115;
         }
 
-        html { transition: none; }
+        html { transition: none; overflow-x: hidden; }
 
         body {
             font-family: 'DM Sans', sans-serif;
@@ -1240,7 +1240,7 @@
 
         .rec-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(min(310px, 100%), 1fr));
             gap: 18px;
             align-items: start;
         }
@@ -3005,6 +3005,36 @@
             /* ── Add btn: show full label on mobile (sticky removed) ──── */
             .add-btn .add-btn-label { display: inline; }
             .add-btn .add-btn-plus  { display: none; }
+
+            /* ── Recs grid: force single col on mobile ── */
+            .rec-grid { grid-template-columns: 1fr !important; }
+
+            /* ── Section header: wrap on small screens ── */
+            .section-header { flex-wrap: wrap; gap: 8px; }
+
+            /* ── Export button: shorter label ──────────── */
+            .export-btn { font-size: 12px; padding: 6px 10px; }
+
+            /* ── Trial banner: stack on mobile ─────────── */
+            .trial-banner { flex-wrap: wrap; gap: 8px; padding: 12px 14px; }
+            .trial-banner-close { margin-left: auto; }
+
+            /* ── Total bar: readable ────────────────────── */
+            .total-bar { font-size: 14px; }
+
+            /* ── Card header: prevent overflow ─────────── */
+            .card-header { flex-wrap: wrap; gap: 4px; }
+            .card-meta { font-size: 11px; }
+
+            /* ── History chart: full width ──────────────── */
+            .history-chart-wrap { overflow-x: auto; }
+            #savingsChart { max-width: 100%; }
+
+            /* ── Donut wrap: constrain on mobile ────────── */
+            .donut-wrap { max-width: 220px; }
+
+            /* ── Header logo: smaller on tiny screens ───── */
+            .logo-text { font-size: 18px; }
         }
 
         /* ═══════════════════════════════════════════════
@@ -3657,4 +3687,7 @@
     font-style: italic;
     color: var(--text-3);
     line-height: 1.5;
+    overflow-wrap: break-word;
+    word-break: break-word;
+    max-width: 100%;
 }
