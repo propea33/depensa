@@ -900,15 +900,14 @@ section { padding: 100px 24px; position: relative; z-index: 1; }
   border: 2px solid var(--border);
   overflow: hidden;
   box-shadow: 6px 6px 0 var(--border);
-  background: var(--border);
-  aspect-ratio: 16/10;
+  background: #000;
   width: 100%;
 }
 
 .demo-video-wrap video {
-  width: 100%; height: 100%;
+  width: 100%;
+  height: auto;
   display: block;
-  object-fit: cover;
 }
 
 @media (max-width: 860px) {
@@ -918,7 +917,7 @@ section { padding: 100px 24px; position: relative; z-index: 1; }
     direction: ltr;
   }
   .demo-row-reverse { direction: ltr; }
-  .demo-video-wrap { aspect-ratio: 16/9; }
+  .demo-video-wrap { width: 100%; }
   .demo-title { font-size: 22px; }
   .demo-desc { max-width: 100%; }
   .demos-header { margin-bottom: 48px; }
