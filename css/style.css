@@ -3006,6 +3006,16 @@
             .add-btn .add-btn-label { display: inline; }
             .add-btn .add-btn-plus  { display: none; }
 
+            /* ── Bouton Ajouter: pleine largeur sur mobile ── */
+            #openModal.add-btn {
+                width: 100%;
+                justify-content: center;
+                padding: 14px;
+                font-size: 16px;
+                border-radius: 10px;
+                box-shadow: 4px 4px 0 var(--border);
+            }
+
             /* ── Recs grid: force single col on mobile ── */
             .rec-grid { grid-template-columns: 1fr !important; }
 
