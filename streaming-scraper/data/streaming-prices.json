@@ -1,7 +1,7 @@
 {
-  "updated_at": "2026-04-28T14:24:31Z",
-  "scraped_count": 5,
-  "fallback_count": 4,
+  "updated_at": "2026-04-29T14:10:30Z",
+  "scraped_count": 4,
+  "fallback_count": 5,
   "region": "ca",
   "currency": "CAD",
   "plans": [
@@ -12,8 +12,8 @@
       "currency": "CAD",
       "url": "https://www.netflix.com/ca/",
       "note": "",
-      "scraped_ok": true,
-      "source": "http_regex",
+      "scraped_ok": false,
+      "source": "no_price_found",
       "previous_price": 8.99,
       "delta": 0.0,
       "price_drop": false
