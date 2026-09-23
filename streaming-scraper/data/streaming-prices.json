@@ -1,22 +1,22 @@
 {
-  "updated_at": "2026-09-22T16:37:36Z",
-  "scraped_count": 3,
-  "fallback_count": 6,
+  "updated_at": "2026-09-23T16:29:44Z",
+  "scraped_count": 4,
+  "fallback_count": 5,
   "region": "ca",
   "currency": "CAD",
   "plans": [
     {
       "provider": "Netflix",
       "plan_name": "Standard avec pub",
-      "price": 8.99,
+      "price": 7.99,
       "currency": "CAD",
       "url": "https://www.netflix.com/ca/",
       "note": "",
-      "scraped_ok": false,
-      "source": "no_price_found",
+      "scraped_ok": true,
+      "source": "http_regex",
       "previous_price": 8.99,
-      "delta": 0.0,
-      "price_drop": false
+      "delta": -1.0,
+      "price_drop": true
     },
     {
       "provider": "Amazon Prime",
@@ -99,15 +99,15 @@
     {
       "provider": "Paramount+",
       "plan_name": "Mensuel",
-      "price": 8.99,
+      "price": 7.99,
       "currency": "CAD",
       "url": "https://www.paramountplus.com/ca/",
       "note": "",
       "scraped_ok": true,
       "source": "http_regex",
       "previous_price": 8.99,
-      "delta": 0.0,
-      "price_drop": false
+      "delta": -1.0,
+      "price_drop": true
     },
     {
       "provider": "Tubi",
@@ -123,5 +123,18 @@
       "price_drop": false
     }
   ],
-  "drops": []
+  "drops": [
+    {
+      "provider": "Netflix",
+      "from": 8.99,
+      "to": 7.99,
+      "delta": -1.0
+    },
+    {
+      "provider": "Paramount+",
+      "from": 8.99,
+      "to": 7.99,
+      "delta": -1.0
+    }
+  ]
 }
