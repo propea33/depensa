@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-10-14T16:51:42Z",
+  "updated_at": "2026-10-15T16:38:24Z",
   "scraped_count": 3,
   "fallback_count": 6,
   "region": "ca",
@@ -105,8 +105,8 @@
       "note": "",
       "scraped_ok": true,
       "source": "http_regex",
-      "previous_price": 7.99,
-      "delta": 1.0,
+      "previous_price": 8.99,
+      "delta": 0.0,
       "price_drop": false
     },
     {
