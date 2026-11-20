@@ -1,7 +1,7 @@
 {
-  "updated_at": "2026-11-19T20:16:02Z",
-  "scraped_count": 2,
-  "fallback_count": 7,
+  "updated_at": "2026-11-20T19:48:25Z",
+  "scraped_count": 1,
+  "fallback_count": 8,
   "region": "ca",
   "currency": "CAD",
   "plans": [
@@ -90,8 +90,8 @@
       "currency": "CAD",
       "url": "https://tv.apple.com/ca",
       "note": "",
-      "scraped_ok": true,
-      "source": "http_regex",
+      "scraped_ok": false,
+      "source": "out_of_range",
       "previous_price": 14.99,
       "delta": 0.0,
       "price_drop": false
