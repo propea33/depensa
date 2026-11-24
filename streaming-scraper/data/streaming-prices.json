@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-11-23T23:37:42Z",
+  "updated_at": "2026-11-24T22:08:16Z",
   "scraped_count": 1,
   "fallback_count": 8,
   "region": "ca",
@@ -26,7 +26,7 @@
       "url": "https://www.primevideo.com/",
       "note": "",
       "scraped_ok": false,
-      "source": "fetch_error",
+      "source": "no_price_found",
       "previous_price": 9.99,
       "delta": 0.0,
       "price_drop": false
@@ -52,7 +52,7 @@
       "url": "https://www.disneyplus.com/en-ca",
       "note": "",
       "scraped_ok": false,
-      "source": "no_price_found",
+      "source": "out_of_range",
       "previous_price": 8.99,
       "delta": 0.0,
       "price_drop": false
